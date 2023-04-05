@@ -18,7 +18,7 @@
     @if (count($recipes) > 0)
         @foreach ($recipes as $value)
             <div
-                class=" max-w-sm mx-2 my-1 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                class=" max-w-sm my-1 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                 <a href="#">
                     <img class="w-full rounded-t-lg" src="{{ asset('images/' . $value->img) }}" alt="" />
                 </a>
@@ -38,6 +38,8 @@
                                 clip-rule="evenodd"></path>
                         </svg>
                     </a>
+                    {{-- <i onclick="myFunction(this,{{Auth::user()->id}},{{$value->id}})" id="bookmark_id" class="fa-regular fa-bookmark fa-2xl" style="color: #700ada;"></i> --}}
+
                 </div>
             </div>
         @endforeach
@@ -48,5 +50,6 @@
             <h1 class="text-center">No Data Found</h1>
         </div>
     @endif
-    
+    <script src="{{asset('js/bookmarks.js')}}"></script>
+
 @endsection

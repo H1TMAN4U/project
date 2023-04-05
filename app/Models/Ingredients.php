@@ -17,5 +17,4 @@ class Ingredients extends Model
     'id',
     'name',
     ];
-
 }

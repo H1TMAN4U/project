@@ -20,6 +20,8 @@ return new class extends Migration
 
         $table->foreign('recipes_id')->references('id')->on('recipes')->onDelete('cascade');
         $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
+        $table->timestamps();
+
     });
     }
 

@@ -67,8 +67,8 @@
                                 <td class="px-6 py-4">
                                     <!-- Modal toggle -->
 
-                                    <a href="{{ route('admin.users.show', $user->id) }}" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit user</a>
-                                    <form class="" method="POST" action="{{ route('admin.users.destroy', $user->id) }}" onsubmit="return confirm('Are you sure?');">
+                                    <a href="{{ route('admin.user.show', $user->id) }}" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit user</a>
+                                    <form class="" method="POST" action="{{ route('admin.user.destroy', $user->id) }}" onsubmit="return confirm('Are you sure?');">
                                     @csrf
                                     @method('DELETE')
                                     <button class="font-medium text-red-600 dark:text-red-600 hover:underline" type="submit">Delete</button>

@@ -6,8 +6,6 @@ use App\Models\Category;
 use App\Models\Ingredients;
 use App\Models\Recipes;
 use App\Models\User;
-use Illuminate\Foundation\Auth\User as AuthUser;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -142,29 +140,16 @@ class RecipesController extends Controller
         $RecipeData = Recipes::find($id);
         $ingredients = Ingredients::orderBy('name')->get();
         $recipes = Recipes::with('getCategory')->where('id', $id)->get();
-        return view("access.show-full",
-            ["recipes" => $recipes, "ingredients" => $ingredients],
+        return view('access.show-full',
+            ['recipes' => $recipes, 'ingredients' => $ingredients],
             compact('recipes')
         );
     }
-
     public function search_recipes()
     {
         $search_text=$_GET["search-recipes"];
-        $data = Recipes::where('name','LIKE', '%'.$search_text.'%')->get();
-        return view('recipes.search-recipes',
-        compact('data'));
+        $recipes = Recipes::where('name','LIKE', '%'.$search_text.'%')->get()->paginate(8);
+        return view('access.guest.search-recipes',
+        compact('recipes'));
     }
-    public function bookmarks()
-    {
-        $recipes = Recipes::all();
-        return view("access.user.bookmarks", compact('recipes'));
-    }
-    public function destroy_bookmark(Recipes $recipes,$id )
-    {
-        $recipes=Recipes::find($id)->delete();
-        // return dd($recipes);
-        return redirect()->route('bookmarks')->with('success', 'Student Data deleted successfully');
-    }
-
 }

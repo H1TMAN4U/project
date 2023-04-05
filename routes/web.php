@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\ProfileController;
@@ -18,8 +19,11 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/show-all/{id}', [RecipesController::class, 'IDrecipe']);
+Route::get('/search-recipes',[RecipesController::class,'search_recipes'], function () {
+    return view('access.guest.search-recipes');
+})->name('search-recipes');
 
+Route::get('/show-all/{id}', [RecipesController::class, 'IDrecipe']);
 
 Route::get('/', function () {
     return view('welcome');
@@ -33,8 +37,20 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+    /*
+    Bookmarks
+    */
+    Route::get('/bookmarks',[BookmarkController::class,'index'], function () {
+    return view('access.user.bookmarks');
+    })->name('bookmarks');
+    Route::post('/bookmarks/store', [BookmarkController::class, 'store'])->name('bookmarks.store');
+    Route::delete('/bookmarks/delete', [BookmarkController::class, 'destroy'])->name('bookmarks.destroy');
 
+    /*
+    recipes managament
+    */
+    Route::resource('/recipes', RecipesController::class);
+});
 // Breakfast
 Route::get('/breakfast',[GuestController::class,'breakfast'], function () {
     return view('access.guest.breakfast');
@@ -59,35 +75,29 @@ Route::get('/drinks',[GuestController::class,'drinks'], function () {
 Route::get('/snacks',[GuestController::class,'snacks'], function () {
     return view('access.guest.snacks');
 })->name('snacks');
-// Bookmarks
-Route::get('/bookmarks',[RecipesController::class,'bookmarks'], function () {
-    return view('access.user.bookmarks');
-})->name('bookmarks');
-Route::delete('/bookmarks/delete/{id}', [RecipesController::class, 'destroy_bookmark'])->name('user.destroy');
-/*
-Recipes managament
-*/
-Route::resource('/admin/recipes', RecipesController::class);
+// all
+Route::get('/all',[GuestController::class,'all'], function () {
+    return view('access.guest.all');
+})->name('all');
 
 /*
 Permissions & Roles
 */
-Route::middleware(['auth', 'role:Admin'])->name('admin.')->prefix('admin')->group(function () {
+Route::middleware(['auth','verified', 'role:Admin'])->name('admin.')->prefix('admin')->group(function () {
     // Route::get('/home', [RolesController::class, 'home'])->name('home');
-    // Route::get('/show', [RecipesController::class, 'guest_recipes'])->name('show');
+    // Route::get('/show', [RecipeController::class, 'guest_recipe'])->name('show');
     Route::resource('/roles', RolesController::class);
     Route::post('/roles/{role}/permissions', [RolesController::class, 'givePermission'])->name('roles.permissions');
     Route::delete('/roles/{role}/permissions/{permission}', [RolesController::class, 'revokePermission'])->name('roles.permissions.revoke');
     Route::resource('/permissions', PermissionsController::class);
     Route::post('/permissions/{permission}/roles', [PermissionsController::class, 'assignRole'])->name('permissions.roles');
     Route::delete('/permissions/{permission}/roles/{role}', [PermissionsController::class, 'removeRole'])->name('permissions.roles.remove');
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
-    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
-    Route::post('/users/{user}/roles', [UserController::class, 'assignRole'])->name('users.roles');
-    Route::delete('/users/{user}/roles/{role}', [UserController::class, 'removeRole'])->name('users.roles.remove');
-    Route::post('/users/{user}/permissions', [UserController::class, 'givePermission'])->name('users.permissions');
-    Route::delete('/users/{user}/permissions/{permission}', [UserController::class, 'revokePermission'])->name('users.permissions.revoke');
-
+    Route::get('/user', [UserController::class, 'index'])->name('user.index');
+    Route::get('/user/{user}', [UserController::class, 'show'])->name('user.show');
+    Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
+    Route::post('/user/{user}/roles', [UserController::class, 'assignRole'])->name('user.roles');
+    Route::delete('/user/{user}/roles/{role}', [UserController::class, 'removeRole'])->name('user.roles.remove');
+    Route::post('/user/{user}/permissions', [UserController::class, 'givePermission'])->name('user.permissions');
+    Route::delete('/user/{user}/permissions/{permission}', [UserController::class, 'revokePermission'])->name('user.permissions.revoke');
 });
 require __DIR__.'/auth.php';

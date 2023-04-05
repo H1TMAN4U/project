@@ -62,15 +62,6 @@ class UserController extends Controller
         $user->delete();
         return back()->with('message', 'User deleted.');
     }
-    // public function check()
-    // {
-    //     $id=Auth::user()->id;
-    //     $user=User::find($id);
-    //     // if($use ) if user  no roles gives user role -- wrong written kks ar model id
-    //         $user->assignRole();
-    //     return dd($user);
-
-    // }
     public function dashboard(){
         $id=Auth::user()->id;
         $user=User::find($id);

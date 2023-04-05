@@ -57,9 +57,4 @@ class RolesController extends Controller
         }
         return back()->with('message', 'Permission not exists.');
     }
-    // public function home()
-    // {
-    //     $users = User::all();
-    //     return view('access.admin.index', compact('users'));
-    // }
 }

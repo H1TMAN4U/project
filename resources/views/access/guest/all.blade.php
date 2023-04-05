@@ -1,15 +1,15 @@
 @extends('access.master')
 @section('content')
     <div class="bg-gray-200 flex flex-col rounded
-    dark:bg-gray-800">
+dark:bg-gray-800">
         <div class="border-b border-gray-600 mb-1">
             <div class="text-gray-700 flex flex-row justify-between items-center mb-1 p-2
-            dark:text-gray-200">
-                <h1><b>Snacks</b></h1>
+        dark:text-gray-200">
+                <h1><b>All recipes</b></h1>
             </div>
         </div>
         <div class=" m-2 p-4 bg-gray-300 rounded
-        dark:bg-gray-700">
+    dark:bg-gray-700">
             <h1>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum, odio maxime. Sapiente distinctio pariatur
                 rem odit illum tempora sequi repellat. Facilis nisi molestias ipsum laudantium incidunt cumque assumenda
                 praesentium accusamus!</h1>
@@ -50,10 +50,10 @@
     @else
         <div
             class="bg-gray-300 flex justify-center md:grid-cols-4 my-2 py-2 rounded md:flex-row
-                        dark:bg-gray-800">
+                dark:bg-gray-800">
             <h1 class="text-center">No Data Found</h1>
         </div>
     @endif
-    <script src="{{asset('js/bookmarks.js')}}"></script>
+    <script src="{{ asset('js/bookmarks.js') }}"></script>
 
 @endsection
