@@ -1,4 +1,6 @@
 <x-guest-layout>
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/dark-light-mode.js', 'resources/js/bookmarks.js' ])
+
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 

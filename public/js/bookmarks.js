@@ -37,9 +37,12 @@ $('.delete-bookmark').click(function() {
         data: { users_id: userId, recipes_id: recipeId },
         success: function(response) {
         alert('Bookmark deleted!');
+        userId.remove();
+        recipeId.remove();
         },
         error: function(response) {
         alert('Failed to delete bookmark.');
         }
     });
 });
+

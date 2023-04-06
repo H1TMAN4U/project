@@ -7,8 +7,7 @@
             dark:text-gray-200">
                 {{-- <h1><b>{{Auth::user()->name}} Recipes</b></h1> --}}
                 <a href="{{ route('recipes.create') }}">
-                    <button class="bg-indigo-800 text-white rounded px-4 hover:bg-indigo-700">Create</button>
-
+                    <button class="bg-indigo-700 text-white rounded px-4 hover:bg-indigo-800 font-bold">Create</button>
                 </a>
             </div>
         </div>
@@ -38,7 +37,18 @@
                     </a>
                 </div>
             </div>
+
+
+                {{-- <form method="post" class="flex justify-center align-center" action="{{ route('recipes.destroy', $value->id) }}">
+                    @csrf
+                    @method('DELETE')
+                    <a class="px-1" href="{{ route('recipes.show', $value->id) }}" class="btn btn-primary btn-sm">View</a>
+                    <a class="px-1"  href="{{ route('recipes.edit', $value->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                    <input class="px-1"  type="submit" class="btn btn-danger btn-sm" value="Delete" style="cursor: pointer"/>
+                </form> --}}
+
         @endforeach
+
         @else
         <div class="bg-gray-300 flex justify-center md:grid-cols-4 my-2 py-2 rounded md:flex-row
         dark:bg-gray-800">

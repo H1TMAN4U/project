@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/search-recipes',[RecipesController::class,'search_recipes'], function () {
     return view('access.guest.search-recipes');
 })->name('search-recipes');
+Route::get('/recipes/create', [RecipesController::class, 'search_ingredients']);
 
 Route::get('/show-all/{id}', [RecipesController::class, 'IDrecipe']);
 

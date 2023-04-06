@@ -148,8 +148,9 @@ class RecipesController extends Controller
     public function search_recipes()
     {
         $search_text=$_GET["search-recipes"];
-        $recipes = Recipes::where('name','LIKE', '%'.$search_text.'%')->get()->paginate(8);
+        $recipes = Recipes::where('name','LIKE', '%'.$search_text.'%')->get();
         return view('access.guest.search-recipes',
+
         compact('recipes'));
     }
 }

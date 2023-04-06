@@ -1,9 +1,5 @@
 @extends('access.master')
 @section('content')
-
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
-        integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
-
     <div class="bg-gray-200 flex flex-col rounded
         dark:bg-gray-800">
         <div class="border-b border-gray-600 mb-1">
@@ -12,7 +8,7 @@
                 dark:text-gray-200">
                 <h1><b>Bookmarks</b></h1>
                 <button onclick="DeleteBookmark()"
-                    class=" bg-zync-600 text-white rounded px-4 hover:bg-red-700">Delete</button>
+                    class=" bg-red-600 text-white rounded px-4 hover:bg-red-700">Delete</button>
             </div>
         </div>
         <div class=" m-2 p-4 bg-gray-300 rounded
@@ -24,7 +20,7 @@
     </div>
     @if (count($bookmarks) > 0)
         <div
-            class="bg-gray-300 grid justify-center md:grid-cols-3 my-2 py-4 px-4 rounded md:flex-row
+        class="bg-gray-300 grid justify-center md:grid-cols-3 my-2 py-4 px-4 rounded md:flex-row
         dark:bg-gray-800 ">
 
             @foreach ($bookmarks as $value)
@@ -55,7 +51,6 @@
                         Recipe</button>
                 </div>
             @endforeach
-
         </div>
     @else
         <div
