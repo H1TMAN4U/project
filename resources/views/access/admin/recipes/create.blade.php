@@ -223,6 +223,7 @@
                                                     clip-rule="evenodd"></path>
                                             </svg>
                                         </div>
+
                                         <input id="input-group-search" type="text"
                                             class="w-full block mr-2 p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-gray-400 focus:border-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-600"
                                             placeholder="Search your ingredient/s">
@@ -258,5 +259,5 @@
             </div>
         </form>
     </div>
-    <script src="{{ asset('js/ingredients-search') }}"></script>
+    <script src="{{ asset('js/ingredients-search.js') }}"></script>
 @endsection('content')

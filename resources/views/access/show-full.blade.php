@@ -2,8 +2,10 @@
 @section('content')
 <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
     @if (count($recipes) > 0)
-        <div class="w-full ">
-            <div class="grid justify-center md:grid-cols-4 py-2 bg-gray-800 rounded md:flex-row ">
+        <div class="w-full bg-gray-100 p-4
+        dark:bg-gray-800 ">
+            <div class="grid justify-center md:grid-cols-4 py-2 bg-gray-100 rounded md:flex-row
+            dark:bg-gray-800">
                 @foreach ($recipes as $value)
                     <div class="flex flex-col">
                         <img class="rounded-t-lg w-full" src="{{ asset('images/' . $value->img) }}" alt="" />
