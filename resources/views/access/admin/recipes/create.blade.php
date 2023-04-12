@@ -1,6 +1,6 @@
 @extends('access.master')
 @section('content')
-    <div class="bg-gray-200 flex flex-col rounded
+    <div class="bg-gray-100 flex flex-col rounded
     dark:bg-gray-800">
         <div class="border-b border-gray-600 mb-1 py-1">
             <div class="text-gray-700 flex flex-row justify-between items-center mb-1 p-2
@@ -8,7 +8,7 @@
                 <h1><b>Create Recipes</b></h1>
             </div>
         </div>
-        <div class="m-2 p-4 bg-gray-300 rounded
+        <div class="m-2 p-4 bg-gray-200 rounded
         dark:bg-gray-700">
             <h1>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum, odio maxime. Sapiente distinctio pariatur
                 rem odit illum tempora sequi repellat. Facilis nisi molestias ipsum laudantium incidunt cumque assumenda
@@ -16,7 +16,7 @@
         </div>
     </div>
 
-    <div class="mt-4 p-2 bg-gray-200 flex flex-col rounded
+    <div class="mt-4 p-2 bg-gray-100 flex flex-col rounded
     dark:bg-gray-800">
         <form method="post" action="{{ route('recipes.store') }}" enctype="multipart/form-data">
             @csrf
@@ -46,7 +46,7 @@
             {{-- Description textarea  --}}
             <div class="mb-6">
                 <div
-                    class=" bg-gray-300 w-full mb-4 border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600">
+                    class=" bg-gray-200 w-full mb-4 border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600">
                     <div class="flex items-center justify-between px-3 py-2 border-b dark:border-gray-600">
                         <div class="flex flex-wrap items-center divide-gray-200 sm:divide-x dark:divide-gray-600">
                             <div class="flex flex-wrap items-center space-x-1 sm:pl-4">
@@ -98,10 +98,10 @@
                             <div class="tooltip-arrow" data-popper-arrow></div>
                         </div>
                     </div>
-                    <div class=" bg-gray-200 px-4 py-2 rounded-b-lg dark:bg-gray-800">
+                    <div class=" bg-gray-100 px-4 py-2 rounded-b-lg dark:bg-gray-800">
                         <label for="descriptions" class="sr-only">Publish post</label>
                         <textarea id="descriptions" name="descriptions" id="descriptions" rows="8"
-                            class="bg-gray-200 block w-full px-0 text-sm text-gray-800 border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
+                            class="bg-gray-100 block w-full px-0 text-sm text-gray-800 border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
                             placeholder="Descriptions..." required></textarea>
                     </div>
                 </div>
@@ -110,7 +110,7 @@
             {{-- Instructions textarea  --}}
             <div class="mb-6">
                 <div
-                    class="bg-gray-300 w-full mb-4 border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600">
+                    class="bg-gray-200 w-full mb-4 border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600">
                     <div class="flex items-center justify-between px-3 py-2 border-b dark:border-gray-600">
                         <div class="flex flex-wrap items-center divide-gray-200 sm:divide-x dark:divide-gray-600">
                             <div class="flex flex-wrap items-center space-x-1 sm:pl-4">
@@ -162,10 +162,10 @@
                             <div class="tooltip-arrow" data-popper-arrow></div>
                         </div>
                     </div>
-                    <div class="bg-gray-200 px-4 py-2 rounded-b-lg dark:bg-gray-800">
+                    <div class="bg-gray-100 px-4 py-2 rounded-b-lg dark:bg-gray-800">
                         <label for="instructions" class="sr-only">Publish post</label>
                         <textarea name="instructions" id="instructions" rows="8"
-                            class="bg-gray-200 block w-full px-0 text-sm text-gray-800 border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
+                            class="bg-gray-100 block w-full px-0 text-sm text-gray-800 border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
                             placeholder="Instructions..." required></textarea>
                     </div>
                 </div>

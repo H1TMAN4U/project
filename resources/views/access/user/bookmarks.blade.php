@@ -52,19 +52,19 @@
                         <img class="w-full rounded-t-lg" src="{{ asset('images/' . $value->img) }}" alt="" />
                     </a>
                     <div class="p-5">
-                        <div class="flex flex-row items-center justify-between">
+                        <div class="flex items-center justify-between">
                             <h5 class="mb-2 md:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $value->name }}</h5>
-                            <div class="flex flex-col">
-                                <div class="recipe-rating">
-                                    <span class="star" data-value="1"></span>
-                                    <span class="star" data-value="2"></span>
-                                    <span class="star" data-value="3"></span>
-                                    <span class="star" data-value="4"></span>
-                                    <span class="star" data-value="5"></span>
-                                </div>
+                            <div>
+
+                            </div>
+                            <div class="recipe-rating flex-col">
+                                <span class="star" data-value="1"></span>
+                                <span class="star" data-value="2"></span>
+                                <span class="star" data-value="3"></span>
+                                <span class="star" data-value="4"></span>
+                                <span class="star" data-value="5"></span>
                                 <div class="rating-text"></div>
                             </div>
-
                         </div>
 
                         <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise</p>

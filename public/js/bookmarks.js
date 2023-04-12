@@ -10,6 +10,8 @@ function DeleteBookmark() {
     }
     }
 }
+
+
 $('.create-bookmark').click(function() {
     var userId = $(this).data('users-id');
     var recipeId = $(this).data('recipes-id');
