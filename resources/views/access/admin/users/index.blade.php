@@ -1,6 +1,5 @@
-<x-admin-layout>
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/dark-light-mode.js'])
-
+@extends('access.master')
+@section('content')
     <div class="bg-gray-100 py-12 w-full dark:bg-gray-900">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             {{-- <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg"> --}}
@@ -83,4 +82,4 @@
             {{-- </div> --}}
         </div>
     </div>
-</x-admin-layout>
+@endsection

@@ -4,18 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use phpDocumentor\Reflection\PseudoTypes\False_;
 
-class Bookmarks extends Model
+class Rating extends Model
 {
     use HasFactory;
-    protected $table = 'bookmarks';
+    protected $table = 'rating';
     protected $primaryKey = 'id';
     public $incrementing = true;
-    public $timestamp = false;
-
+    public $timestamp = true;
     protected $fillable =
     [
-    'users_id',
+    'score',
     'recipes_id',
+    'users_id,'
     ];
 }

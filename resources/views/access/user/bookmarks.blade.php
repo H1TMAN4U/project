@@ -1,28 +1,6 @@
 @extends('access.master')
 @section('content')
-<style>
-    .recipe-rating {
-  display: flex;
-}
-
-.star {
-  display: block;
-  width: 20px;
-  height: 20px;
-  background-image: url('images/star-regular.svg');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-color: red
-  cursor: pointer;
-}
-
-.active {
-    background-image: url('images/star-solid.svg');
-}
-
-</style>
-
-    <div class="bg-gray-100 flex flex-col rounded
+    <div class="bg-gray-200 flex flex-col rounded
         dark:bg-gray-800">
         <div class="border-b border-gray-600 mb-1">
             <div
@@ -30,10 +8,10 @@
                 dark:text-gray-200">
                 <h1><b>Bookmarks</b></h1>
                 <button onclick="DeleteBookmark()"
-                    class="font-semibold bg-red-600 text-white rounded px-4 hover:bg-red-700">Delete</button>
+                    class=" bg-red-600 text-white rounded px-4 hover:bg-red-700">Delete</button>
             </div>
         </div>
-        <div class=" m-2 p-4 bg-gray-200 rounded
+        <div class=" m-2 p-4 bg-gray-300 rounded
             dark:bg-gray-700">
             <h1>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum, odio maxime. Sapiente distinctio pariatur
                 rem odit illum tempora sequi repellat. Facilis nisi molestias ipsum laudantium incidunt cumque assumenda
@@ -41,34 +19,24 @@
         </div>
     </div>
     @if (count($bookmarks) > 0)
-        <div
-        class="bg-gray-100 grid justify-center md:grid-cols-3 my-2 py-4 px-4 rounded md:flex-row
+        <div id="card"
+            class="bg-gray-300 grid justify-center md:grid-cols-3 my-2 py-4 px-4 rounded md:flex-row
         dark:bg-gray-800 ">
 
             @foreach ($bookmarks as $value)
-                <div
-                    class="max-w-sm mx-2 my-1 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <div id="recipe-{{$value->id}}" class="max-w-sm mx-2 my-1 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                     <a href="#">
                         <img class="w-full rounded-t-lg" src="{{ asset('images/' . $value->img) }}" alt="" />
                     </a>
                     <div class="p-5">
+
                         <div class="flex items-center justify-between">
-                            <h5 class="mb-2 md:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $value->name }}</h5>
-                            <div>
-
-                            </div>
-                            <div class="recipe-rating flex-col">
-                                <span class="star" data-value="1"></span>
-                                <span class="star" data-value="2"></span>
-                                <span class="star" data-value="3"></span>
-                                <span class="star" data-value="4"></span>
-                                <span class="star" data-value="5"></span>
-                                <div class="rating-text"></div>
-                            </div>
+                            <h5 class="mb-2 md:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                {{ $value->name }}
+                            </h5>
                         </div>
-
                         <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise</p>
-                        <a href="/show-all/{{ $value->id }}"
+                        <a href="{{ route("recipes.show", $value->id) }}"
                             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                             Read more
                             <svg aria-hidden="true" class="w-4 h-4 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20"
@@ -78,9 +46,8 @@
                                     clip-rule="evenodd"></path>
                             </svg>
                         </a>
-
                     </div>
-                    <button class="delete hidden font-semibold text-white bg-red-600 hover:bg-red-700 rounded w-full delete-bookmark"
+                    <button class="delete hidden bg-red-700 hover:bg-red-800 rounded w-full delete-bookmark"
                         data-users-id="{{ Auth::user()->id }}" data-recipes-id="{{ $value->id }}">Bookmark
                         Recipe</button>
                 </div>
@@ -93,8 +60,10 @@
             <h1 class="text-center">No Data Found</h1>
         </div>
     @endif
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script src="{{ asset('js/bookmarks.js') }}"></script>
-    <script src="{{ asset('js/rating.js') }}"></script>
+    <script>
 
+    </script>
 @endsection

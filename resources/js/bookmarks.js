@@ -11,7 +11,3 @@ function myFunction() {
     }
 }
 
-let changeIcon = function(icon){
-    icon.classList.toggle('fa-solid')
-}
-changeIcon = (icon) = icon.classList.toggle('fa-regular')

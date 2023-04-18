@@ -1,42 +1,111 @@
 @extends('access.master')
 @section('content')
-    {{-- <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pb-8 break-all" style="width: 100%; height:100vh;">
-        <div class="grid grid-cols-2 flex w-full rounded-t-lg dark:bg-gray-800" style="height:55vh">
-            <div class="m-8">
-                @foreach ($recipes as $value)
-                    <img class="flex justify-center	w-full rounded-lg" src="{{ asset('images/' . $value->img) }}" alt=""
-                    style="height: 500px;">
-                @endforeach
-            </div>
-            <div class="max-w-2xl mx-auto mb-4 text-gray-500 lg:mb-8 m-8 pr-4 w-full break-normal">
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Solid foundation for any project</h3>
-                    <p class="my-4 font-light">Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto explicabo, recusandae maxime totam commodi sapiente veniam in consequuntur dolorum voluptatem beatae animi inventore ut repellat accusantium quibusdam perferendis? Commodi odio beatae sed, quasi obcaecati natus nisi officiis assumenda explicabo fugiat nesciunt accusantium veniam officia dicta ad, possimus facere ut doloremque!</p>
-                </div>
-                <div class="max-w-2xl mx-auto mb-4 text-gray-500 lg:mb-8 m-8 ">
-                    <p class="my-4 font-light">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad vitae est reprehenderit sint, natus harum perspiciatis laudantium officia consequuntur molestiae omnis, cum sed, quo quas nesciunt et eum. Recusandae explicabo ex hic vero qui repellat iste doloribus, possimus sed voluptatum voluptates odit repudiandae iusto quibusdam, id voluptas dolor eius rerum labore quasi. Vero nemo voluptates molestiae quae exercitationem cum architecto?</p>
-                </div>
-                <div class="max-w-2xl mx-auto mb-4 text-gray-500 lg:mb-8 m-8 ">
-                    <p class="my-4 font-light">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad vitae est reprehenderit sint, natus harum perspiciatis laudantium officia consequuntur molestiae omnis, cum sed, quo quas nesciunt et eum. Recusandae explicabo ex hic vero qui repellat iste doloribus, possimus sed voluptatum voluptates odit repudiandae iusto quibusdam, id voluptas dolor eius rerum labore quasi. Vero nemo voluptates molestiae quae exercitationem cum architecto?</p>
-                </div>
-            </div>
-        </div>
-        <div class="flex flex-col p-8 text-left rounded-b-lg md:rounded-br-lg dark:bg-gray-800 " style="width: 100%; height: 40vh;">
-            <div class="max-w-2xl text-gray-500 dark:text-gray-400">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Efficient Collaborating</h3>
-                <p class="my-4 font-light">You have many examples that can be used to create a fast prototype for your team."</p>
-            </div>
-            <div class="flex space-x-3">
-                @foreach($recipes as $value)
-                    <img class="rounded-full w-9 h-9" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/joseph-mcfall.png" alt="profile picture">
-                    <div class="space-y-0.5 font-medium dark:text-white text-left">
-                    <div>{{$value->ingredients[0]}}</div>
-                @endforeach
-                <div class="text-sm font-light text-gray-500 dark:text-gray-400">CTO at Google</div>
-                </div>
-            </div>
-        </div>
-    </main> --}}
-@endsection('content')
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+        integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <style>
+        input[type="checkbox"]:checked+i:before {
+            color: #ffd117;
+        }
+    </style>
+
+    <div class=" ">
+        <div>
+            <div class="flex flex-col p-4 w-1/2">
+                <div class="flex flex-row">
 
 
+                    @for ($i = 1; $i <= 5; $i++)
+                        @if ($i <= $rating)
+                            <i class="fas fa-star"></i>
+                        @else
+                            <i class="far fa-star"></i>
+                        @endif
+                    @endfor
+                </div>
+
+                <h5 class="mb-2 md:text-2xl font-bold tracking-tight text-center uppercase text-gray-900 dark:text-white">
+                    {{ $recipes->name }}
+                    <button type="button" onclick="myFunction()" class="fas fa-star fa-xl pr-1">
+                        {{ $recipes->rating }}
+                    </button>
+                </h5>
+
+                <img class="rounded-t-lg w-full" src="{{ asset('images/' . $recipes->img) }}" alt="" />
+                <button class="rounded-b mt-1 create-bookmark text-white font-semibold bg-blue-500 hover:bg-blue-800 w-full"
+                    data-users-id="{{ Auth::user()->id }}" data-recipes-id="{{ $recipes->id }}">Bookmark Recipe</button>
+            </div>
+
+            <div>
+                <div id="rate"  class="hidden flex w-1/2 flex-col text-center bg-gray-200 dark:bg-gray-800 p-4 rounded">
+                    {{-- <form action="{{ route('rating.store') }}" method="POST">
+                        @csrf --}}
+                        <div class="flex-row p-2 text-gray-300">
+                            <label class="">
+                                <input name="rating" class="hidden" type="checkbox" value="1"
+                                    onclick="checkPrevious(this)">
+                                <i class="fa fa-star fa-2xl"></i>
+                            </label>
+                            <label>
+                                <input name="rating" class="hidden" type="checkbox" value="2"
+                                    onclick="checkPrevious(this)">
+                                <i class="fa fa-star fa-2xl"></i>
+                            </label>
+                            <label>
+                                <input name="rating" class="hidden" type="checkbox" value="3"
+                                    onclick="checkPrevious(this)">
+                                <i class="fa fa-star fa-2xl"></i>
+                            </label>
+                            <label>
+                                <input name="rating" class="hidden" type="checkbox" value="4"
+                                    onclick="checkPrevious(this)">
+                                <i class="fa fa-star fa-2xl"></i>
+                            </label>
+                            <label>
+                                <input name="rating" class="hidden" type="checkbox" value="5"
+                                    onclick="checkPrevious(this)">
+                                <i class="fa fa-star fa-2xl"></i>
+                            </label>
+                        </div>
+                        <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter your Review</label>
+                        <textarea id="message" rows="6" name="review"
+                            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="Write your thoughts here...">
+                        </textarea>
+
+                        <button type="submit" data-users-id="{{ Auth::user()->id }}" data-recipes-id="{{ $recipes->id }}"
+                            class="bg-blue-500 hover:bg-blue-600 create-rating text-white font-semibold p-2 rounded-lg mt-2 w-1/2">Post</button>
+                </div>
+                {{-- </form> --}}
+
+            </div>
+
+        </div>
+    </div>
+
+    <script src="{{ asset('js/bookmarks.js') }}"></script>
+
+    <script>
+        function checkPrevious(current) {
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].value <= current.value) {
+                    checkboxes[i].checked = true;
+                } else {
+                    checkboxes[i].checked = false;
+                }
+            }
+        }
+
+        function myFunction() {
+            var x = document.getElementById("rate");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+    </script>
+    </body>
+
+    </html>
+@endsection

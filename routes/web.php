@@ -4,6 +4,7 @@ use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RatingController;
 use App\Http\Controllers\RecipesController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UserController;
@@ -24,7 +25,7 @@ Route::get('/search-recipes',[RecipesController::class,'search_recipes'], functi
 })->name('search-recipes');
 Route::get('/recipes/create', [RecipesController::class, 'search_ingredients']);
 
-Route::get('/show-all/{id}', [RecipesController::class, 'IDrecipe']);
+// Route::get('/show-all/{id}', [RecipesController::class, 'IDrecipe']);
 
 Route::get('/', function () {
     return view('welcome');
@@ -46,7 +47,10 @@ Route::middleware('auth')->group(function () {
     })->name('bookmarks');
     Route::post('/bookmarks/store', [BookmarkController::class, 'store'])->name('bookmarks.store');
     Route::delete('/bookmarks/delete', [BookmarkController::class, 'destroy'])->name('bookmarks.destroy');
-
+    /*
+    Rating
+    */
+    Route::post('/rating/store', [RatingController::class, 'store'])->name('rating.store');
     /*
     recipes managament
     */

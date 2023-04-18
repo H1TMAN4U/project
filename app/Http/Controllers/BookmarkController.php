@@ -18,7 +18,9 @@ class BookmarkController extends Controller
     {
         $recipes = Recipes::all();
         // $bookmarks = Bookmark::all();
-        $bookmarks=DB::table('bookmarks')->where('bookmarks.users_id',Auth::user()->id)->join('recipes','bookmarks.recipes_id','=','recipes.id')->paginate(5);
+        $bookmarks=DB::table('bookmarks')->where('bookmarks.users_id',Auth::user()->id)
+        ->join('recipes','bookmarks.recipes_id','=','recipes.id')
+        ->join('rating','rating.recipes_id','=','recipes.id')->paginate(5);
         // return dd($bookmarks);
         return view("access.user.bookmarks",['recipes'=>$recipes],compact('bookmarks'));
     }

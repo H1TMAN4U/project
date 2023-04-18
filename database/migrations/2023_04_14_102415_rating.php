@@ -11,14 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bookmarks', function (Blueprint $table) {
+        Schema::create('rating', function (Blueprint $table) {
+        $table->integer('rating');
+        $table->longText('review');
+
         $table->unsignedBigInteger('recipes_id');
         $table->unsignedBigInteger('users_id');
+
         $table->foreign('recipes_id')->references('id')->on('recipes')->onDelete('cascade');
         $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
-        $table->timestamps();
+        $table->unique(['recipes_id', 'users_id']); // Ensure each user can only rate a recipe once
 
-    });
+        $table->timestamps();
+        });
     }
 
     /**

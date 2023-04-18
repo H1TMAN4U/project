@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Ingredients;
+use App\Models\Rating;
 use App\Models\Recipes;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -61,14 +62,12 @@ class RecipesController extends Controller
      */
     public function show($id)
     {
-        // $RecipeData= Recipes::find($id);
-        // $ingredient= Ingredients::orderBy('name', 'asc')->get();
-        $category = Recipes::with('getCategory')->get();
-        $recipes = DB::table("recipes")->where('id', $id)->get();
-        return view("access.admin.recipes.show",
-            ["recipes" => $recipes, "category" => $category],
-            compact('recipes')
-        );
+        $ingredients = Ingredients::orderBy('name')->first();
+        $rating=Rating::all()->first();
+        $rating = DB::table('rating')->where('recipes_id', $id)->value('rating');
+        $recipes=Recipes::all()->where('id',$id)->first();
+        return view('access.admin.recipes.show',
+        compact('recipes','ingredients','rating'));
     }
 
     /**
@@ -123,27 +122,6 @@ class RecipesController extends Controller
         $recipes=Recipes::find($id);
         $recipes->delete();
         return redirect()->route('recipes.index')->with('success', 'Student Data deleted successfully');
-    }
-    public function guest_recipes(Recipes $recipes)
-    {
-        $recipes = Recipes::all();
-        $category = Recipes::with('getCategory')->get();
-        $data = Recipes::latest()->paginate(5);
-
-        return view("access.admin.recipes.show",
-            ["recipes" => $recipes, "category" => $category],
-            compact('data')
-        );
-    }
-    public function IDrecipe($id)
-    {
-        $RecipeData = Recipes::find($id);
-        $ingredients = Ingredients::orderBy('name')->get();
-        $recipes = Recipes::with('getCategory')->where('id', $id)->get();
-        return view('access.show-full',
-            ['recipes' => $recipes, 'ingredients' => $ingredients],
-            compact('recipes')
-        );
     }
     public function search_recipes()
     {
