@@ -27,16 +27,6 @@ class Recipes extends Model
     {
         return $this->hasOne(Category::class,'id', 'category_id');
     }
-
-    public function setIngredientsAttribute($value)
-    {
-        $this->attributes['ingredients'] = json_encode($value);
-    }
-
-    public function getIngredientsAttribute($value)
-    {
-        return $this->attributes['ingredients'] = json_decode($value);
-    }
     public function ingredients()
     {
         return $this->belongsToMany(Ingredients::class);

@@ -14,12 +14,9 @@ return new class extends Migration
         Schema::create('recipes', function (Blueprint $table) {
             $table->id();
             $table->string("name");
-            $table->longText("ingredients");
             $table->longText("descriptions");
             $table->longText("instructions");
             $table->string("img");
-            $table->boolean('approved')->nullable();
-            
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('users_id');
 

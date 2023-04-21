@@ -9,11 +9,14 @@
                     class="text-gray-700 flex flex-row justify-end items-center mb-1
                     dark:text-gray-200">
                     <a href="{{ route('create-recipe') }}">
-                        <button class="bg-indigo-700 text-white rounded px-4 mr-2 hover:bg-indigo-800 font-semibold">Create</button>
+                        <button class="bg-indigo-700 text-white rounded px-4 mx-1 hover:bg-indigo-800 font-semibold">Create</button>
                     </a>
-                    {{-- <button onclick="HideElemenet()"
-                        class=" bg-red-600 text-white rounded font-semibold px-4 hover:bg-red-700 ">Delete
-                    </button> --}}
+                    <button onclick="HideElemenet()"
+                        class=" bg-green-600 text-white rounded font-semibold px-4 mx-1 hover:bg-green-700 ">Edit
+                    </button>
+                    <button onclick="HideElemenet()"
+                        class=" bg-red-600 text-white rounded font-semibold px-4 mx-1 hover:bg-red-700 ">Delete
+                    </button>
 
                 </div>
             </div>
@@ -43,7 +46,9 @@
                         Read more
                         <svg aria-hidden="true" class="w-4 h-4 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                     </a>
-                    <a class="px-1"  href="{{ route('edit-recipe', $value->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{{ route('edit-recipe',$value->id) }}">
+                        <button class="hide hidden bg-green-500 text-white rounded px-4 mr-2 hover:bg-green-600 font-semibold">EDIT</button>
+                    </a>
                     <button class="hide hidden bg-red-700 hover:bg-red-800 rounded w-full delete-bookmark"
                         data-users-id="{{ Auth::user()->id }}" data-recipes-id="{{ $value->id }}">Bookmark Recipe
                     </button>
@@ -59,7 +64,7 @@
         @endif
     </div>
     <script src="{{ asset('js/recipes.js') }}"></script>
-    {{-- <script src="{{ asset('js/design.js') }}"></script> --}}
+    <script src="{{ asset('js/design.js') }}"></script>
 
 
 @endsection

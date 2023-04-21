@@ -14,7 +14,11 @@ class Ingredients extends Model
     public $timestamp = false;
     protected $fillable =
     [
-    'id',
-    'name',
+        'id',
+        'name',
     ];
+    public function recipes()
+    {
+        return $this->belongsToMany(Recipes::class, 'ingredient_recipe');
+    }
 }

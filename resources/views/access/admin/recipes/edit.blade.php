@@ -378,9 +378,8 @@
                             aria-labelledby="dropdownSearchButton">
                             @foreach ($ingredients as $value)
                                 <li>
-                                    <input id="checkbox-item-{{ $value->id }}" type="checkbox" name="ingredients[]" value="{{ $value->id }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                                    <input id="checkbox-item-{{ $value->id }}" type="checkbox" name="ingredients" value="{{ $value->id }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                                     @if (in_array($value->id, $selectedIngredients)) checked @endif>
-                                    {{-- <input id="checkbox-item-{{ $value->id}}" type="checkbox"  name="ingredients[]" value="{{ $value->id }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"> --}}
                                     <label for="checkbox-item-{{ $value->id}}" class="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">{{$value->name}}</label>
                                 </li>
                             @endforeach

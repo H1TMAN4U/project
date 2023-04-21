@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class AdminSeeder extends Seeder
 {
@@ -22,5 +24,14 @@ class AdminSeeder extends Seeder
 
         ]);
         $user->assignRole('Admin');
+        $role = Role::findByName('Admin');
+        $permission = Permission::findByName('Publish');
+        $role->givePermissionTo($permission);
+
+        if ($user->hasPermissionTo('Publish')) {
+            echo "Permission assigned to user successfully!";
+        }
+
+
     }
 }

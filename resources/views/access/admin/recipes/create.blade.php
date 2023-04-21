@@ -237,19 +237,19 @@
                                 <div class="grid items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
 
                                     @foreach ($ingredients as $value)
-                                        <div>
-                                            <input id="checkbox-item-{{ $value->id }}" type="checkbox"  name="ingredients[]" value="{{$value->name}}"
-                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-
-                                            <label for="checkbox-item-{{ $value->id }}"
-                                            class="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">
-                                                {{$value->name}}
-                                            </label>
-                                        </div>
-                                    @endforeach
+                                    <li>
+                                        <input id="checkbox-item-{{ $value->id }}" type="checkbox" name="ingredients" value="{{ $value->id }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                        <label for="checkbox-item-{{ $value->id}}" class="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">{{$value->name}}</label>
+                                    </li>
+                                @endforeach
                                 </div>
                             </li>
                         </ul>
+                    </div>
+                    <div>
+                        <input type="submit"
+                            class="bg-gray-900 border border-gray-300 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-blue-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="Category" required>
                     </div>
                 </div>
 

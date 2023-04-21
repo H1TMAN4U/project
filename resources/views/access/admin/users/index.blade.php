@@ -26,7 +26,7 @@
                                     Position
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Status
+                                    Permissions
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     Action
@@ -58,10 +58,14 @@
                                         @endforeach
                                     @endif
                                 </td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center">
-                                        <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div> Online
-                                    </div>
+                                <td class="px-6 py-4 text-gray-500 dark:text-white" >
+                                    @if ($user->permissions)
+                                        @foreach ($user->permissions as $user_permissions)
+                                            <div class="">
+                                                {{ $user_permissions->name }}
+                                            </div>
+                                        @endforeach
+                                    @endif                                    </div>
                                 </td>
                                 <td class="px-6 py-4">
                                     <!-- Modal toggle -->

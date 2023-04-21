@@ -48,13 +48,16 @@ class RecipesController extends Controller
 
         $recipes = new Recipes;
         $recipes->name = $request->name;
-        $recipes->ingredients = $request->input('ingredients');
+        // $recipes->ingredients = $request->input('ingredients');
         $recipes->descriptions = $request->descriptions;
         $recipes->instructions = $request->instructions;
         $recipes->img = $file_name;
         $recipes->category_id = $request->category_id;
         $recipes->users_id = $users_id;
         $recipes->save();
+
+        $recipes->ingredients()->attach($request->ingredients);
+
 
         return redirect()->route('index-recipe');
     }
@@ -80,17 +83,20 @@ class RecipesController extends Controller
      */
     public function edit($id)
     {
-        $ingredients = Ingredients::get()->all();
-        $category = Category::get()->all();
-        $recipes = Recipes::all()->where('id', $id)->first();
-
-        // Retrieve the IDs of the selected ingredients from the database
-        $selectedIngredients = $recipes->ingredients()->pluck('id')->toArray();
-
+        $ingredients = Ingredients::all();
+        $category = Category::all();
+        $recipes = Recipes::find($id);
+        $selectedIngredients = DB::table('ingredients')
+            ->select('ingredients.id')
+            ->join('ingredients_recipes', 'ingredients.id', '=', 'ingredients_recipes.ingredients_id')
+            ->where('ingredients_recipes.recipes_id', $id)
+            ->pluck('id')
+            ->toArray();
         return view("access.admin.recipes.edit",
             compact('recipes', 'category', 'ingredients', 'selectedIngredients')
         );
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -108,12 +114,15 @@ class RecipesController extends Controller
         }
         $recipes = Recipes::find($request->hidden_id);
         $recipes->name = $request->name;
-        $recipes->ingredients = $request->input('ingredients');
+        // $recipes->ingredients = $request->input('ingredients');
         $recipes->descriptions = $request->descriptions;
         $recipes->instructions = $request->instructions;
         $recipes->img = $img;
         $recipes->approved = $request->approved;
         $recipes->save();
+        $ingredients = $request->ingredients;
+        $recipes->ingredients()->sync($ingredients);
+
         return redirect()->route('index-recipe')->with('success', 'recipe Data has been updated successfully');
     }
 

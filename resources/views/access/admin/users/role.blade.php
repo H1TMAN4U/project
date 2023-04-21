@@ -25,7 +25,7 @@
                                     </p>
                                 </header>
                                 <div>
-                                    <form method="POST" action="{{ route('admin.user.roles', $users->id) }}">
+                                    <form method="POST" action="{{ route('admin.user.roles', $user->id) }}">
                                         @csrf
                                         <div class="pt-6">
                                         <label for="role" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role name</label>
@@ -59,7 +59,7 @@
                                     </p>
                                 </header>
                                 <div>
-                                    <form method="POST" action="{{ route('admin.user.permissions', $users->id) }}">
+                                    <form method="POST" action="{{ route('admin.user.permissions', $user->id) }}">
                                         @csrf
                                         <div class="pt-6">
                                             <label for="permission" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Permission</label>
