@@ -15,8 +15,10 @@ class Rating extends Model
     public $timestamp = true;
     protected $fillable =
     [
-    'score',
+    'id',
+    'rating',
+    'review',
     'recipes_id',
-    'users_id,'
+    'users_id'
     ];
 }

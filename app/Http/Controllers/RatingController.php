@@ -31,14 +31,15 @@ class RatingController extends Controller
      */
     public function store(Request $request)
     {
-        $users_id = Auth::id();
-        $rating = new Rating;
-        $rating->rating = $request->rating;
-        $rating->review = $request->review;
-        $rating->recipes_id = $request->recipes_id;
-        $rating->users_id = $users_id;
-        $rating->save();
+        $userId = Auth::id();
+        $recipeId = $request->input('recipes_id');
+        $rating = Rating::updateOrCreate(
+            ['users_id' => $userId, 'recipes_id' => $recipeId],
+            ['rating' => $request->input('rating'), 'review' => $request->input('review')]
+        );
+        return response()->json($rating);
     }
+
 
     /**
      * Display the specified resource.
@@ -59,17 +60,11 @@ class RatingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        $users_id = Auth::id();
-        $rating = Rating::find($request->recipes_id);
-        $rating->rating = $request->rating;
-        $rating->review = $request->review;
-        $rating->recipes_id = $request->recipes_id;
-        $rating->users_id = $users_id;
-        $rating->save();
-        return dd();
+
     }
+
 
     /**
      * Remove the specified resource from storage.

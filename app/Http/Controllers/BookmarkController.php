@@ -16,13 +16,10 @@ class BookmarkController extends Controller
      */
     public function index(Request $request)
     {
-        $recipes = Recipes::all();
         // $bookmarks = Bookmark::all();
-        $bookmarks=DB::table('bookmarks')->where('bookmarks.users_id',Auth::user()->id)
-        ->join('recipes','bookmarks.recipes_id','=','recipes.id')
-        ->join('rating','rating.recipes_id','=','recipes.id')->paginate(5);
-        // return dd($bookmarks);
-        return view("access.user.bookmarks",['recipes'=>$recipes],compact('bookmarks'));
+        $bookmarks=DB::table('bookmarks')->where('bookmarks.users_id',Auth::id())
+        ->join('recipes','bookmarks.recipes_id','=','recipes.id')->paginate(50);
+        return view("access.user.bookmarks",compact('bookmarks'));
     }
 
     /**
@@ -38,15 +35,17 @@ class BookmarkController extends Controller
      */
     public function store(Request $request)
     {
-          $request->validate([
-            'users_id' => 'required|integer',
-            'recipes_id' => 'required|integer',
-          ]);
-          $bookmarks = new Bookmarks();
-          $bookmarks->users_id = $request->input('users_id');
-          $bookmarks->recipes_id = $request->input('recipes_id');
-          $bookmarks->save();
-          return response()->json(['success' => true]);
+        //   $request->validate([
+        //     'users_id' => 'required|integer',
+        //     'recipes_id' => 'required|integer',
+        //   ]);
+        $bookmarks = new Bookmarks();
+        $bookmarks = Bookmarks::updateOrCreate(
+            ['users_id' => $request->input('users_id'), 'recipes_id' => $request->input('recipes_id')],
+            ['users_id' => $request->input('users_id'), 'recipes_id' => $request->input('recipes_id')]
+        );
+        $bookmarks->save();
+        return response()->json(['success' => true]);
     }
 
     /**
@@ -54,10 +53,7 @@ class BookmarkController extends Controller
      */
     public function show(Recipes $recipe, $id)
     {
-        return view('recipes.show', compact('recipes'));
-        $user = User::findOrFail($id);
-        $recipes = Recipes::where('users_id', $id)->first();
-        return view('users.show', compact('user', 'recipes'));
+
     }
 
 

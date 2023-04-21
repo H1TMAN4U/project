@@ -12,17 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('rating', function (Blueprint $table) {
-        $table->integer('rating');
-        $table->longText('review');
-
-        $table->unsignedBigInteger('recipes_id');
-        $table->unsignedBigInteger('users_id');
-
-        $table->foreign('recipes_id')->references('id')->on('recipes')->onDelete('cascade');
-        $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
-        $table->unique(['recipes_id', 'users_id']); // Ensure each user can only rate a recipe once
-
-        $table->timestamps();
+            $table->id();
+            $table->integer('rating');
+            $table->text('review');
+            $table->unsignedBigInteger('recipes_id');
+            $table->unsignedBigInteger('users_id');
+            $table->timestamps();
+            $table->unique(['recipes_id', 'users_id']);
+            $table->foreign('recipes_id')->references('id')->on('recipes')->onDelete('cascade');
+            $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bookmarks');
+        Schema::dropIfExists('rating');
     }
 };

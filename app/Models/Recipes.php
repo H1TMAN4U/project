@@ -22,7 +22,7 @@ class Recipes extends Model
     'img',
     'category_id'
     ];
-    
+
     public function getCategory()
     {
         return $this->hasOne(Category::class,'id', 'category_id');
@@ -36,5 +36,9 @@ class Recipes extends Model
     public function getIngredientsAttribute($value)
     {
         return $this->attributes['ingredients'] = json_decode($value);
+    }
+    public function ingredients()
+    {
+        return $this->belongsToMany(Ingredients::class);
     }
 }

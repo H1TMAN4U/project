@@ -50,11 +50,19 @@ Route::middleware('auth')->group(function () {
     /*
     Rating
     */
-    Route::post('/rating/store', [RatingController::class, 'store'])->name('rating.store');
+    Route::post('/rating', [RatingController::class, 'store']);
+
     /*
     recipes managament
     */
-    Route::resource('/recipes', RecipesController::class);
+    Route::get('/recipes/index-recipe', [RecipesController::class, 'index'])->name('index-recipe');
+    Route::get('/recipes/create-recipe', [RecipesController::class, 'create'])->name('create-recipe');
+    Route::post('/recipes/store-recipe', [RecipesController::class, 'store'])->name('store-recipe');
+    Route::get('/recipes/show-recipe/{id}', [RecipesController::class, 'show'])->name('show-recipe');
+    Route::get('/recipes/edit-recipe/{id}', [RecipesController::class, 'edit'])->name('edit-recipe');
+    Route::put('/recipes/update-recipe/{id}', [RecipesController::class, 'update'])->name('update-recipe');
+    Route::delete('/recipes/delete-recipe/{id}', [RecipesController::class, 'destroy'])->name('delete-recipe');
+
 });
 // Breakfast
 Route::get('/breakfast',[GuestController::class,'breakfast'], function () {

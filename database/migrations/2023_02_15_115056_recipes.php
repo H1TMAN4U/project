@@ -18,7 +18,8 @@ return new class extends Migration
             $table->longText("descriptions");
             $table->longText("instructions");
             $table->string("img");
-
+            $table->boolean('approved')->nullable();
+            
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('users_id');
 

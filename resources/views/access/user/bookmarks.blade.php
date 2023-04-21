@@ -7,7 +7,7 @@
                 class="text-gray-700 flex flex-row justify-between items-center mb-1 p-2
                 dark:text-gray-200">
                 <h1><b>Bookmarks</b></h1>
-                <button onclick="DeleteBookmark()"
+                <button onclick="HideElemenet()"
                     class=" bg-red-600 text-white rounded px-4 hover:bg-red-700">Delete</button>
             </div>
         </div>
@@ -36,7 +36,7 @@
                             </h5>
                         </div>
                         <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise</p>
-                        <a href="{{ route("recipes.show", $value->id) }}"
+                        <a href="{{ route("show-recipe", $value->id) }}"
                             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                             Read more
                             <svg aria-hidden="true" class="w-4 h-4 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20"
@@ -47,9 +47,9 @@
                             </svg>
                         </a>
                     </div>
-                    <button class="delete hidden bg-red-700 hover:bg-red-800 rounded w-full delete-bookmark"
-                        data-users-id="{{ Auth::user()->id }}" data-recipes-id="{{ $value->id }}">Bookmark
-                        Recipe</button>
+                    <button class="hide hidden bg-red-700 hover:bg-red-800 rounded w-full delete-bookmark"
+                        data-users-id="{{ Auth::user()->id }}" data-recipes-id="{{ $value->id }}">Bookmark Recipe
+                    </button>
                 </div>
             @endforeach
         </div>
@@ -63,7 +63,5 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script src="{{ asset('js/bookmarks.js') }}"></script>
-    <script>
 
-    </script>
 @endsection

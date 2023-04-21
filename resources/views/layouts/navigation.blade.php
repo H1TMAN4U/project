@@ -4,14 +4,17 @@
     class="mt-0"
     :href="route('/')" :active="request()->routeIs('/')">
     Home
-</x-admin-link>
-@auth
-<x-admin-link
-    class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark:bg-transparent dark:hover:bg-gray-600 dark:focus:bg-gray-600 dark:focus:text-white dark:hover:text-white dark:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
-    :href="route('bookmarks')" :active="request()->routeIs('bookmarks')">
-    Bookmarks
-</x-admin-link>
-@endauth
+    </x-admin-link>
+    @auth
+    <x-admin-link
+        :href="route('bookmarks')" :active="request()->routeIs('bookmarks')">
+        Bookmarks
+    </x-admin-link>
+    <x-admin-link
+        :href="route('index-recipe')" :active="request()->routeIs('recipes')">
+        My Recipes
+    </x-admin-link>
+    @endauth
 
     {{-- <div class="px-2 py-2 mt-4 bg-white rounded-md shadow dark:bg-gray-700">
         <x-admin-link
@@ -143,12 +146,6 @@
                 class="z-20 absolute right-0 w-full mt-2 origin-top-right rounded-md shadow-lg">
 
                 <div class="px-2 py-2 bg-white rounded-md shadow dark:bg-gray-700">
-                    <x-dropdown-link
-                        class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg
-                        dark:bg-transparent dark:hover:bg-gray-600 dark:focus:bg-gray-600 dark:focus:text-white dark:hover:text-white dark:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
-                        :href="route('recipes.index')">
-                        {{ __('Recipes') }}
-                    </x-dropdown-link>
                     <x-dropdown-link
                         class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark:bg-transparent
                         dark:hover:bg-gray-600 dark:focus:bg-gray-600 dark:focus:text-white dark:hover:text-white dark:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"

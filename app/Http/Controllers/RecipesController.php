@@ -20,7 +20,8 @@ class RecipesController extends Controller
     public function index()
     {
         $user=User::all();
-        $recipes = Recipes::select('id', 'name', 'img')->paginate(8);
+        // $recipes = Recipes::select('id', 'name', 'img')->paginate(8);
+        $recipes=Recipes::all()->where('users_id', Auth::id());
         return view("access.admin.recipes.index", ['user'=>$user], compact('recipes'));
     }
 
@@ -54,7 +55,8 @@ class RecipesController extends Controller
         $recipes->category_id = $request->category_id;
         $recipes->users_id = $users_id;
         $recipes->save();
-        return redirect()->route('recipes.index');
+
+        return redirect()->route('index-recipe');
     }
 
     /**
@@ -63,7 +65,7 @@ class RecipesController extends Controller
     public function show($id)
     {
         $ingredients = Ingredients::orderBy('name')->first();
-        $rating=Rating::all()->first();
+        // $rating=Rating::all()->first();
         $rating = DB::table('rating')->where('recipes_id', $id)->value('rating');
         $recipes=Recipes::all()->where('id',$id)->first();
         return view('access.admin.recipes.show',
@@ -76,13 +78,17 @@ class RecipesController extends Controller
      * @param  \App\Models\Recipes  $recipes
      * @return \Illuminate\Http\Response
      */
-    public function edit(Recipes $recipe)
+    public function edit($id)
     {
-        $ingredients = Ingredients::all();
-        $category = Category::all();
+        $ingredients = Ingredients::get()->all();
+        $category = Category::get()->all();
+        $recipes = Recipes::all()->where('id', $id)->first();
+
+        // Retrieve the IDs of the selected ingredients from the database
+        $selectedIngredients = $recipes->ingredients()->pluck('id')->toArray();
+
         return view("access.admin.recipes.edit",
-            ['ingredients' => $ingredients, 'category' => $category],
-            compact('recipe')
+            compact('recipes', 'category', 'ingredients', 'selectedIngredients')
         );
     }
 
@@ -95,10 +101,6 @@ class RecipesController extends Controller
      */
     public function update(Request $request, Recipes $recipes)
     {
-        $request->validate([
-            'img' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048|dimensions:
-            min_width=100,min_height=100,max_width=5000,max_height=5000'
-        ]);
         $img = $request->hidden_img;
         if ($request->img != '') {
             $img = time() . '.' . request()->img->getClientOriginalExtension();
@@ -110,19 +112,23 @@ class RecipesController extends Controller
         $recipes->descriptions = $request->descriptions;
         $recipes->instructions = $request->instructions;
         $recipes->img = $img;
+        $recipes->approved = $request->approved;
         $recipes->save();
-        return redirect()->route('recipes.index')->with('success', 'recipe Data has been updated successfully');
+        return redirect()->route('index-recipe')->with('success', 'recipe Data has been updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Recipes $recipes,$id )
+
+    public function destroy($id)
     {
-        $recipes=Recipes::find($id);
+        $recipes = Recipes::findOrFail($id);
         $recipes->delete();
-        return redirect()->route('recipes.index')->with('success', 'Student Data deleted successfully');
+
+        return response()->json(['message' => 'Recipe deleted successfully']);
     }
+
     public function search_recipes()
     {
         $search_text=$_GET["search-recipes"];
