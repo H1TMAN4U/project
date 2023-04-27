@@ -41,7 +41,6 @@ class RolesController extends Controller
         $role->delete();
         return back()->with('message', 'Role deleted.');
     }
-
     public function givePermission(Request $request, Role $role)
     {
         if($role->hasPermissionTo($request->permission)){
@@ -50,7 +49,6 @@ class RolesController extends Controller
         $role->givePermissionTo($request->permission);
         return back()->with('message', 'Permission added.');
     }
-    
     public function revokePermission(Role $role, Permission $permission)
     {
         if($role->hasPermissionTo($permission)){

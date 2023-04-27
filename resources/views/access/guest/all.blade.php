@@ -1,7 +1,8 @@
 @extends('access.master')
 @section('content')
-    <div class="bg-gray-200 flex flex-col rounded
-dark:bg-gray-800">
+<div class="p-6">
+    <div class="p-2 bg-gray-200 flex flex-col rounded
+    dark:bg-gray-800">
         <div class="border-b border-gray-600 mb-1">
             <div
                 class="text-gray-700 flex flex-row justify-between items-center mb-1 p-2
@@ -10,7 +11,7 @@ dark:bg-gray-800">
             </div>
         </div>
         <div class=" m-2 p-4 bg-gray-300 rounded
-    dark:bg-gray-700">
+        dark:bg-gray-700">
             <h1>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum, odio maxime. Sapiente distinctio pariatur
                 rem odit illum tempora sequi repellat. Facilis nisi molestias ipsum laudantium incidunt cumque assumenda
                 praesentium accusamus!</h1>
@@ -20,11 +21,11 @@ dark:bg-gray-800">
         @if (Auth::user()->can('Publish'))
             <div
                 class="bg-gray-300 grid justify-center md:grid-cols-3 my-2 py-4 px-4 rounded md:flex-row
-        dark:bg-gray-800 ">
+                dark:bg-gray-800 ">
                 @foreach ($recipes as $value)
                     <div
                         class=" max-w-sm my-1 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800
-                    dark:border-gray-700">
+                        dark:border-gray-700">
                         <a href="#">
                             <img class="w-full rounded-t-lg" src="{{ asset('images/' . $value->img) }}" alt="" />
                         </a>
@@ -51,17 +52,18 @@ dark:bg-gray-800">
             @else
                 <div
                     class="bg-gray-300 flex justify-center md:grid-cols-4 my-2 py-2 rounded md:flex-row
-            dark:bg-gray-800">
+                    dark:bg-gray-800">
                     <h1 class="text-center">No Data Found</h1>
                 </div>
-        @endif
-    @else
-        <div
-            class="bg-gray-300 flex justify-center md:grid-cols-4 my-2 py-2 rounded md:flex-row
+            @endif
+        @else
+            <div
+                class="bg-gray-300 flex justify-center md:grid-cols-4 my-2 py-2 rounded md:flex-row
                 dark:bg-gray-800">
-            <h1 class="text-center">No Data Found</h1>
-        </div>
-    @endif
+                <h1 class="text-center">No Data Found</h1>
+            </div>
+        @endif
+</div>
     <script src="{{ asset('js/bookmarks.js') }}"></script>
 
 @endsection

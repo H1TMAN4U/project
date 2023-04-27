@@ -11,9 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 class BookmarkController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         // $bookmarks = Bookmark::all();
@@ -21,18 +18,6 @@ class BookmarkController extends Controller
         ->join('recipes','bookmarks.recipes_id','=','recipes.id')->paginate(50);
         return view("access.user.bookmarks",compact('bookmarks'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         //   $request->validate([
@@ -47,35 +32,6 @@ class BookmarkController extends Controller
         $bookmarks->save();
         return response()->json(['success' => true]);
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Recipes $recipe, $id)
-    {
-
-    }
-
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Request $request)
     {
         $bookmark=Bookmarks::where('users_id', $request->users_id)->where('recipes_id', $request->recipes_id)->delete();

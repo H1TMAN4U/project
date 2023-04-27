@@ -70,7 +70,7 @@
             </div>
         @endif
         <div class="flex-col w-full md:flex md:flex-row md:min-h-screen">
-            <div @click.away="open = false" class="flex flex-col flex-shrink-0 w-full text-gray-700 bg-white md:w-64 dark:text-gray-200 dark:bg-gray-800" x-data="{ open: false }">
+            <div class="flex flex-col flex-shrink-0 w-full text-gray-700 bg-white md:w-64 dark:text-gray-200 dark:bg-gray-800" x-data="{ open: false }">
                 <div class="flex flex-row justify-center items-center flex-shrink-0 px-4 py-4">
                     <a href="#" class="text-lg font-semibold tracking-widest text-gray-900 uppercase rounded-lg dark:text-white focus:outline-none focus:shadow-outline">
                         Flowtrail UI
@@ -83,6 +83,7 @@
                     </button>
                     <x-button-dark-mode></x-button-dark-mode>
                 </div>
+
                 @include('layouts.navigation')
             </div>
 

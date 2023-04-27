@@ -1,5 +1,7 @@
 @extends('access.master')
 @section('content')
+<div class="p-6">
+
     <div class="bg-gray-100 flex flex-col rounded
     dark:bg-gray-800">
         <div class="border-b border-gray-600 mb-1 py-1">
@@ -252,18 +254,10 @@
                             placeholder="Category" required>
                     </div>
                 </div>
-
-
-
-                {{-- submit input --}}
-                <div>
-                    <input type="submit"
-                        class="bg-gray-900 border border-gray-300 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-blue-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Category" required>
-                </div>
             </div>
         </form>
     </div>
+</div>
     <script src="{{ asset('js/recipes.js') }}"></script>
     <script src="{{ asset('js/ingredients-search.js') }}"></script>
 @endsection('content')

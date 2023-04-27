@@ -17,5 +17,4 @@ class Category extends Model
     'id',
     'name',
     ];
-
 }

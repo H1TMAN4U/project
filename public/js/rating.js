@@ -1,8 +1,5 @@
 function submit_rating() {
     const rating=$('input[name="rate"]:checked').val();
-
-    console.log(rating);
-
 }
 $(document).ready(function() {
     $('#rating-form').submit(function(event) {

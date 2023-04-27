@@ -1,6 +1,9 @@
 @extends('access.master')
 @section('content')
-    <div class="bg-gray-200 flex flex-col rounded
+
+<div class="p-6">
+
+    <div class="bg-gray-100 flex flex-col rounded
         dark:bg-gray-800">
         <div class="border-b border-gray-600 mb-1">
             <div
@@ -11,7 +14,7 @@
                     class=" bg-red-600 text-white rounded px-4 hover:bg-red-700">Delete</button>
             </div>
         </div>
-        <div class=" m-2 p-4 bg-gray-300 rounded
+        <div class=" m-2 p-4 bg-gray-200 rounded
             dark:bg-gray-700">
             <h1>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum, odio maxime. Sapiente distinctio pariatur
                 rem odit illum tempora sequi repellat. Facilis nisi molestias ipsum laudantium incidunt cumque assumenda
@@ -20,7 +23,7 @@
     </div>
     @if (count($bookmarks) > 0)
         <div id="card"
-            class="bg-gray-300 grid justify-center md:grid-cols-3 my-2 py-4 px-4 rounded md:flex-row
+            class="bg-gray-100 grid justify-center md:grid-cols-3 my-2 py-4 px-4 rounded md:flex-row
         dark:bg-gray-800 ">
 
             @foreach ($bookmarks as $value)
@@ -60,8 +63,10 @@
             <h1 class="text-center">No Data Found</h1>
         </div>
     @endif
+</div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script src="{{ asset('js/bookmarks.js') }}"></script>
+    <script src="{{ asset('js/design.js') }}"></script>
 
 @endsection

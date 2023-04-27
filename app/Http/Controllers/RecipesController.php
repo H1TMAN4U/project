@@ -14,9 +14,6 @@ use Illuminate\Support\Facades\DB;
 
 class RecipesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $user=User::all();
@@ -24,10 +21,6 @@ class RecipesController extends Controller
         $recipes=Recipes::all()->where('users_id', Auth::id());
         return view("access.admin.recipes.index", ['user'=>$user], compact('recipes'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $recipes = Recipes::all();
@@ -35,17 +28,11 @@ class RecipesController extends Controller
         $ingredients = Ingredients::all();
         return view("access.admin.recipes.create", ['ingredients' => $ingredients, 'category' => $category, 'recipes' => $recipes]);
     }
-
-    /**
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $file_name = time() . '.' . request()->img->getClientOriginalExtension();
         request()->img->move(public_path('images'), $file_name);
         $users_id = Auth::id();
-
         $recipes = new Recipes;
         $recipes->name = $request->name;
         // $recipes->ingredients = $request->input('ingredients');
@@ -55,16 +42,9 @@ class RecipesController extends Controller
         $recipes->category_id = $request->category_id;
         $recipes->users_id = $users_id;
         $recipes->save();
-
         $recipes->ingredients()->attach($request->ingredients);
-
-
         return redirect()->route('index-recipe');
     }
-
-    /**
-     * Display the specified resource.
-     */
     public function show($id)
     {
         $ingredients = Ingredients::orderBy('name')->first();
@@ -74,13 +54,6 @@ class RecipesController extends Controller
         return view('access.admin.recipes.show',
         compact('recipes','ingredients','rating'));
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Recipes  $recipes
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $ingredients = Ingredients::all();
@@ -96,15 +69,6 @@ class RecipesController extends Controller
             compact('recipes', 'category', 'ingredients', 'selectedIngredients')
         );
     }
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Recipes   $recipe
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Recipes $recipes)
     {
         $img = $request->hidden_img;
@@ -122,28 +86,75 @@ class RecipesController extends Controller
         $recipes->save();
         $ingredients = $request->ingredients;
         $recipes->ingredients()->sync($ingredients);
-
         return redirect()->route('index-recipe')->with('success', 'recipe Data has been updated successfully');
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-
     public function destroy($id)
     {
         $recipes = Recipes::findOrFail($id);
         $recipes->delete();
-
         return response()->json(['message' => 'Recipe deleted successfully']);
     }
-
     public function search_recipes()
     {
         $search_text=$_GET["search-recipes"];
+
         $recipes = Recipes::where('name','LIKE', '%'.$search_text.'%')->get();
         return view('access.guest.search-recipes',
-
         compact('recipes'));
     }
+    public function filter(){
+        $category=Category::all();
+        $user=User::all();
+        $recipes=Recipes::all();
+        $ingredients=Ingredients::all();
+        return view('filtered-search',
+        compact('category','user','recipes','ingredients'));
+    }
+    public function search(Request $request)
+    {
+    // retrieve the input and select values from the form
+    $recipe_category=Category::all();
+    $user=User::all();
+    $recipes=Recipes::all();
+    $recipe_ingredients=Ingredients::all();
+    $keyword = $request->input('keyword');
+    $category = $request->input('category');
+    $user_id = $request->input('user_id');
+    $ingredient_ids = $request->input('ingredient_ids');
+    $sort = $request->input('sort');
+    $query = Recipes::query();
+    if (!empty($keyword)) {
+        $query->where(function ($query) use ($keyword) {
+            $query->where('name', 'like', "%$keyword%");
+                //   ->orWhere('description', 'like', "%$keyword%")
+                //   ->orWhere('instructions', 'like', "%$keyword%");
+        });
+    }
+    if (!empty($category)) {
+        $query->where('category_id', $category);
+    }
+    if (!empty($user_id)) {
+        $query->where('user_id', $user_id);
+    }
+    if (!empty($ingredient_ids)) {
+        $query->whereHas('ingredients', function ($query) use ($ingredient_ids) {
+            $query->whereIn('ingredients.id', $ingredient_ids);
+        });
+    }
+    if (!empty($sort)) {
+        if ($sort == 'name_asc') {
+            $query->orderBy('name', 'asc');
+        } elseif ($sort == 'name_desc') {
+            $query->orderBy('name', 'desc');
+        } elseif ($sort == 'created_at_asc') {
+            $query->orderBy('created_at', 'asc');
+        } elseif ($sort == 'created_at_desc') {
+            $query->orderBy('created_at', 'desc');
+        }
+    }
+    $recipes = $query->get();
+    return view('filtered-search', ['recipes' => $recipes],
+    compact('recipe_category','recipes','user','recipe_ingredients'));
+}
+
 }

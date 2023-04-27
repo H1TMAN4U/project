@@ -1,33 +1,27 @@
 @extends('access.master')
 @section('content')
-    <div class="bg-gray-200 flex flex-col rounded
-    dark:bg-gray-800">
+<div class="p-6">
+    <div class="bg-gray-100 flex flex-col rounded dark:bg-gray-800">
             <div class="border-b border-gray-600 mb-1 flex flex-row justify-between items-center p-2">
                 <b>My Recipes</b>
+                <div class="text-gray-700 flex flex-row justify-end items-center mb-1 dark:text-gray-200">
 
-                <div
-                    class="text-gray-700 flex flex-row justify-end items-center mb-1
-                    dark:text-gray-200">
-                    <a href="{{ route('create-recipe') }}">
-                        <button class="bg-indigo-700 text-white rounded px-4 mx-1 hover:bg-indigo-800 font-semibold">Create</button>
-                    </a>
-                    <button onclick="HideElemenet()"
-                        class=" bg-green-600 text-white rounded font-semibold px-4 mx-1 hover:bg-green-700 ">Edit
-                    </button>
-                    <button onclick="HideElemenet()"
-                        class=" bg-red-600 text-white rounded font-semibold px-4 mx-1 hover:bg-red-700 ">Delete
-                    </button>
+                            <a href="{{ route('create-recipe') }}" class="block rounded px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white dark:hover:font-semibold">Create</a></a>
+
+                            <a onclick="HideElemenet()" class="block rounded px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white dark:hover:font-semibold">Edit</a>
+
+                            <a onclick="HideElemenet()" class="block rounded px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white dark:hover:font-semibold">Delete</a>
 
                 </div>
             </div>
-        <div class="m-2 p-4 bg-gray-300 rounded
+        <div class="m-2 p-4 bg-gray-200 rounded
         dark:bg-gray-700">
             <h1>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum, odio maxime. Sapiente distinctio pariatur rem odit illum tempora sequi repellat. Facilis nisi molestias ipsum laudantium incidunt cumque assumenda praesentium accusamus!</h1>
         </div>
     </div>
     @if(count($recipes) > 0)
 
-    <div class="bg-gray-300 grid justify-center md:grid-cols-4 my-2 py-2 rounded md:flex-row
+    <div class="bg-gray-100 grid justify-center md:grid-cols-4 my-2 py-2 rounded md:flex-row
     dark:bg-gray-800 ">
 
         @foreach ($recipes as $value)
@@ -55,7 +49,6 @@
                 </div>
             </div>
         @endforeach
-
         @else
         <div class="bg-gray-300 flex justify-center md:grid-cols-4 my-2 py-2 rounded md:flex-row
         dark:bg-gray-800">
@@ -63,6 +56,7 @@
         </div>
         @endif
     </div>
+</div>
     <script src="{{ asset('js/recipes.js') }}"></script>
     <script src="{{ asset('js/design.js') }}"></script>
 

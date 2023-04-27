@@ -23,10 +23,16 @@ use Illuminate\Support\Facades\Route;
 Route::get('/search-recipes',[RecipesController::class,'search_recipes'], function () {
     return view('access.guest.search-recipes');
 })->name('search-recipes');
+
+// Route::get('/filter',[RecipesController::class,'filter'], function () {
+//     return view('filtered-search');
+// })->name('filter');
+Route::get('/filter', [RecipesController::class,'search'], function (){
+    return view('filtered-search');
+})->name('search');
+
+
 Route::get('/recipes/create', [RecipesController::class, 'search_ingredients']);
-
-// Route::get('/show-all/{id}', [RecipesController::class, 'IDrecipe']);
-
 Route::get('/', function () {
     return view('welcome');
 })->name('/');

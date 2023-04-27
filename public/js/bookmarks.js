@@ -1,4 +1,3 @@
-
 $('.create-bookmark').click(function () {
     var userId = $(this).data('users-id');
     var recipeId = $(this).data('recipes-id');
@@ -15,7 +14,6 @@ $('.create-bookmark').click(function () {
         }
     });
 });
-
 $('.delete-bookmark').click(function () {
     var userId = $(this).data('users-id');
     var recipeId = $(this).data('recipes-id');

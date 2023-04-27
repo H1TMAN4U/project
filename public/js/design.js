@@ -1,5 +1,5 @@
 function HideElemenet() {
-    var element = document.getElementById("rating-element");
+    // var element = document.getElementById("rating-element");
     var x = document.getElementsByClassName("hide");
     for (let i = 0; i < x.length; i++) {
 

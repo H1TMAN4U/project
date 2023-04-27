@@ -2,11 +2,9 @@ $(document).ready(function () {
     $('#create-recipe').submit(function (event) {
         // Prevent the form from submitting normally
         event.preventDefault();
-
         // Get the form data and add the file
         var formData = new FormData($(this)[0]);
         formData.append('img', $('input[type=file]')[0].files[0]);
-
         // Send the AJAX request to the server
         $.ajax({
             url: '/recipes/store-recipe',
@@ -25,7 +23,6 @@ $(document).ready(function () {
         });
     });
 });
-
 $('.delete-bookmark').click(function() {
     var userId = $(this).data('users-id');
     var recipeId = $(this).data('recipes-id');
