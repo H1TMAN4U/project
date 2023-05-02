@@ -10,6 +10,7 @@ use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,18 +21,17 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('recipes/changes/{change_id}', [RecipesController::class, 'showChanges'], function () {
+    return view('access.admin.recipes.changes');
+})->name('recipes-changes');
+
 Route::get('/search-recipes',[RecipesController::class,'search_recipes'], function () {
     return view('access.guest.search-recipes');
 })->name('search-recipes');
 
-// Route::get('/filter',[RecipesController::class,'filter'], function () {
-//     return view('filtered-search');
-// })->name('filter');
 Route::get('/filter', [RecipesController::class,'search'], function (){
     return view('filtered-search');
 })->name('search');
-
-
 Route::get('/recipes/create', [RecipesController::class, 'search_ingredients']);
 Route::get('/', function () {
     return view('welcome');

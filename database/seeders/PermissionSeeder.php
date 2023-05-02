@@ -15,6 +15,10 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         Permission::create(['name' => 'Publish']);
+        Permission::create(['name' => 'Create']);
+        Permission::create(['name' => 'Edit']);
+        Permission::create(['name' => 'Delete']);
+        Permission::create(['name' => 'View']);
         // $role = ModelsRole::findByName('Admin');
         // $permission = Permission::findByName('approve-recipe');
         // $role->givePermissionTo($permission);

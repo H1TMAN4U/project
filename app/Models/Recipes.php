@@ -23,6 +23,10 @@ class Recipes extends Model
     'category_id'
     ];
 
+    protected $casts = [
+        'disabled' => 'boolean'
+    ];
+
     public function getCategory()
     {
         return $this->hasOne(Category::class,'id', 'category_id');

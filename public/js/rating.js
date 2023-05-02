@@ -1,8 +1,8 @@
 function submit_rating() {
-    const rating=$('input[name="rate"]:checked').val();
+    const rating = $('input[name="rate"]:checked').val();
 }
-$(document).ready(function() {
-    $('#rating-form').submit(function(event) {
+$(document).ready(function () {
+    $('#rating-form').submit(function (event) {
         // Prevent the form from submitting normally
         event.preventDefault();
 
@@ -11,15 +11,15 @@ $(document).ready(function() {
         // Send the AJAX request to the server
         $.ajax({
             url: '/rating',
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
 
             type: 'POST',
             data: formData,
 
 
-            success: function({ rating }) {
+            success: function ({ rating }) {
 
-                let stars =$(".pasive");
+                let stars = $(".pasive");
                 for (let i = 0; i < stars.length; i++) {
                     let s = stars[i];
                     s.classList.remove("text-gray-300");
@@ -31,9 +31,9 @@ $(document).ready(function() {
                     }
                 }
 
-            alert('Thank you for your review!');
-        },
-            error: function(xhr, status, error) {
+                alert('Thank you for your review!');
+            },
+            error: function (xhr, status, error) {
                 alert('You failed');
             }
 

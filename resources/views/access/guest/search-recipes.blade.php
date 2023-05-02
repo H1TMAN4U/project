@@ -1,7 +1,6 @@
 @extends('access.master')
 @section('content')
 
-<div class="p-6">
 
     <div class="bg-gray-100 flex flex-col rounded
         dark:bg-gray-800">
@@ -63,7 +62,6 @@
             <h1 class="text-center">No Data Found</h1>
         </div>
     @endif
-</div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script src="{{ asset('js/bookmarks.js') }}"></script>

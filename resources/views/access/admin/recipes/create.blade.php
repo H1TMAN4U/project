@@ -1,6 +1,5 @@
 @extends('access.master')
 @section('content')
-<div class="p-6">
 
     <div class="bg-gray-100 flex flex-col rounded
     dark:bg-gray-800">
@@ -213,8 +212,6 @@
                                             clip-rule="evenodd"></path>
                                     </svg>
                                 </div>
-                                <form class="flex items-center py-1" type="get"
-                                    action="{{ route('search-recipes') }}">
                                     <div class="relative w-full">
                                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                             <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true"
@@ -229,35 +226,41 @@
                                             class="w-full block mr-2 p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-gray-400 focus:border-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-600"
                                             placeholder="Search your ingredient/s">
                                     </div>
-                                </form>
 
                             </div>
                         </div>
-                        <ul class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
-                            aria-labelledby="dropdownSearchButton">
-                            <li>
-                                <div class="grid items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-
-                                    @foreach ($ingredients as $value)
-                                    <li>
-                                        <input id="checkbox-item-{{ $value->id }}" type="checkbox" name="ingredients" value="{{ $value->id }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                        <label for="checkbox-item-{{ $value->id}}" class="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">{{$value->name}}</label>
-                                    </li>
-                                @endforeach
-                                </div>
-                            </li>
+                        <ul class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                            @foreach ($ingredients as $value)
+                                <li>
+                                    <div class="flex items-center p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                    <input id="checkbox-item-{{ $value->id }}" type="checkbox" name="ingredients[]" value="{{ $value->id }}"
+                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                    <label for="checkbox-item-{{ $value->id}}"
+                                        class="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">{{ $value->name }}</label>
+                                    </div>
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
-                    <div>
-                        <input type="submit"
-                            class="bg-gray-900 border border-gray-300 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-blue-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="Category" required>
-                    </div>
+                </div>
+                <div>
+                    <input type="submit"
+                        class="bg-gray-900 border border-gray-300 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-blue-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
             </div>
         </form>
     </div>
-</div>
+
+<script>
+    $(document).ready(function() {
+        $("#input-group-search").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#dropdownSearch li").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
     <script src="{{ asset('js/recipes.js') }}"></script>
     <script src="{{ asset('js/ingredients-search.js') }}"></script>
 @endsection('content')

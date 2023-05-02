@@ -14,8 +14,11 @@ class BookmarkController extends Controller
     public function index(Request $request)
     {
         // $bookmarks = Bookmark::all();
-        $bookmarks=DB::table('bookmarks')->where('bookmarks.users_id',Auth::id())
-        ->join('recipes','bookmarks.recipes_id','=','recipes.id')->paginate(50);
+        $query = DB::table('bookmarks');
+        $query->where('bookmarks.users_id',Auth::id());
+        $query->join('recipes','bookmarks.recipes_id','=','recipes.id');
+        $bookmarks = $query->paginate(50);
+
         return view("access.user.bookmarks",compact('bookmarks'));
     }
     public function store(Request $request)
@@ -24,6 +27,7 @@ class BookmarkController extends Controller
         //     'users_id' => 'required|integer',
         //     'recipes_id' => 'required|integer',
         //   ]);
+
         $bookmarks = new Bookmarks();
         $bookmarks = Bookmarks::updateOrCreate(
             ['users_id' => $request->input('users_id'), 'recipes_id' => $request->input('recipes_id')],

@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Ingredients;
 use App\Models\Rating;
 use App\Models\Recipes;
+use App\Models\RecipesChanges;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -16,10 +17,10 @@ class RecipesController extends Controller
 {
     public function index()
     {
-        $user=User::all();
+        $IsDirty = RecipesChanges::all()->first();
         // $recipes = Recipes::select('id', 'name', 'img')->paginate(8);
-        $recipes=Recipes::all()->where('users_id', Auth::id());
-        return view("access.admin.recipes.index", ['user'=>$user], compact('recipes'));
+        $recipes = Recipes::where('users_id', Auth::id())->get();
+        return view("access.admin.recipes.index", ['IsDirty' => $IsDirty], compact('recipes'));
     }
     public function create()
     {
@@ -32,27 +33,36 @@ class RecipesController extends Controller
     {
         $file_name = time() . '.' . request()->img->getClientOriginalExtension();
         request()->img->move(public_path('images'), $file_name);
-        $users_id = Auth::id();
-        $recipes = new Recipes;
-        $recipes->name = $request->name;
-        // $recipes->ingredients = $request->input('ingredients');
-        $recipes->descriptions = $request->descriptions;
-        $recipes->instructions = $request->instructions;
-        $recipes->img = $file_name;
-        $recipes->category_id = $request->category_id;
-        $recipes->users_id = $users_id;
-        $recipes->save();
-        $recipes->ingredients()->attach($request->ingredients);
+
+        $user_id = Auth::id();
+
+        $recipe = new Recipes;
+        $recipe->name = $request->name;
+        $recipe->descriptions = $request->descriptions;
+        $recipe->instructions = $request->instructions;
+        $recipe->img = $file_name;
+        $recipe->category_id = $request->category_id;
+        $recipe->users_id = $user_id;
+        $recipe->save();
+
+        // Loop through the array of ingredients and attach them to the recipe
+        foreach ($request->ingredients as $ingredient_id) {
+            $recipe->ingredients()->attach($ingredient_id);
+        }
+
         return redirect()->route('index-recipe');
     }
+
     public function show($id)
     {
         $ingredients = Ingredients::orderBy('name')->first();
         // $rating=Rating::all()->first();
         $rating = DB::table('rating')->where('recipes_id', $id)->value('rating');
-        $recipes=Recipes::all()->where('id',$id)->first();
-        return view('access.admin.recipes.show',
-        compact('recipes','ingredients','rating'));
+        $recipes = Recipes::all()->where('id', $id)->first();
+        return view(
+            'access.admin.recipes.show',
+            compact('recipes', 'ingredients', 'rating')
+        );
     }
     public function edit($id)
     {
@@ -66,7 +76,7 @@ class RecipesController extends Controller
             ->pluck('id')
             ->toArray();
         return view("access.admin.recipes.edit",
-            compact('recipes', 'category', 'ingredients', 'selectedIngredients')
+        compact('recipes', 'category', 'ingredients', 'selectedIngredients')
         );
     }
     public function update(Request $request, Recipes $recipes)
@@ -77,15 +87,43 @@ class RecipesController extends Controller
             request()->img->move(public_path('images'), $img);
         }
         $recipes = Recipes::find($request->hidden_id);
+        $old_recipe_data = $recipes->toArray();
         $recipes->name = $request->name;
-        // $recipes->ingredients = $request->input('ingredients');
         $recipes->descriptions = $request->descriptions;
         $recipes->instructions = $request->instructions;
         $recipes->img = $img;
-        $recipes->approved = $request->approved;
+        // $recipes->approved = $request->approved;
         $recipes->save();
-        $ingredients = $request->ingredients;
-        $recipes->ingredients()->sync($ingredients);
+
+        foreach ($request->ingredients as $ingredient_id) {
+            $recipes->ingredients()->attach($ingredient_id);
+        }
+
+
+    // Compare the old and new recipe data
+    $new_recipe_data = $recipes->toArray();
+    $changed_attributes = array_diff_assoc($new_recipe_data, $old_recipe_data);
+
+    // Build a string with the old and new values of the changed attributes
+    $changes_message = '';
+    foreach ($changed_attributes as $attribute => $new_value) {
+        $old_value = $old_recipe_data[$attribute];
+        $changes_message .= "The $attribute attribute was changed from '$old_value' to '$new_value'.\n";
+    }
+
+    // Store the old and new recipe data in the recipes_changes table
+    $recipes_change = RecipesChanges::updateOrCreate(
+        ['recipes_id' => $recipes->id],
+        ['users_id' => Auth::user()->id, 'old' => json_encode($old_recipe_data), 'new' => json_encode($new_recipe_data)]
+    );
+
+    // Return a response with the changes message and the updated recipe data
+    // return response()->json([
+    //     'message' => 'Recipe updated successfully',
+    //     'recipe' => $recipes,
+    //     'changes_message' => $changes_message,
+    //     'recipe_change' => $recipes_change,
+    // ]);
         return redirect()->route('index-recipe')->with('success', 'recipe Data has been updated successfully');
     }
     public function destroy($id)
@@ -96,65 +134,94 @@ class RecipesController extends Controller
     }
     public function search_recipes()
     {
-        $search_text=$_GET["search-recipes"];
+        $search_text = $_GET["search-recipes"];
 
-        $recipes = Recipes::where('name','LIKE', '%'.$search_text.'%')->get();
-        return view('access.guest.search-recipes',
-        compact('recipes'));
+        $recipes = Recipes::where('name', 'LIKE', '%' . $search_text . '%')->get();
+        return view(
+            'access.guest.search-recipes',
+            compact('recipes')
+        );
     }
-    public function filter(){
-        $category=Category::all();
-        $user=User::all();
-        $recipes=Recipes::all();
-        $ingredients=Ingredients::all();
-        return view('filtered-search',
-        compact('category','user','recipes','ingredients'));
+    public function filter()
+    {
+        $category = Category::all();
+        $user = User::all();
+        $recipes = Recipes::all();
+        $ingredients = Ingredients::all();
+        return view(
+            'filtered-search',
+            compact('category', 'user', 'recipes', 'ingredients')
+        );
     }
     public function search(Request $request)
     {
-    // retrieve the input and select values from the form
-    $recipe_category=Category::all();
-    $user=User::all();
-    $recipes=Recipes::all();
-    $recipe_ingredients=Ingredients::all();
-    $keyword = $request->input('keyword');
-    $category = $request->input('category');
-    $user_id = $request->input('user_id');
-    $ingredient_ids = $request->input('ingredient_ids');
-    $sort = $request->input('sort');
-    $query = Recipes::query();
-    if (!empty($keyword)) {
-        $query->where(function ($query) use ($keyword) {
-            $query->where('name', 'like', "%$keyword%");
+        // retrieve the input and select values from the form
+        $recipe_category = Category::all();
+        $user = User::all();
+        $recipes = Recipes::all();
+        $recipe_ingredients = Ingredients::all();
+        $keyword = $request->input('keyword');
+        $category = $request->input('category');
+        $user_id = $request->input('user_id');
+        $ingredient_ids = $request->input('ingredient_ids');
+        $sort = $request->input('sort');
+        $query = Recipes::query();
+        if (!empty($keyword)) {
+            $query->where(function ($query) use ($keyword) {
+                $query->where('name', 'like', "%$keyword%");
                 //   ->orWhere('description', 'like', "%$keyword%")
                 //   ->orWhere('instructions', 'like', "%$keyword%");
-        });
-    }
-    if (!empty($category)) {
-        $query->where('category_id', $category);
-    }
-    if (!empty($user_id)) {
-        $query->where('user_id', $user_id);
-    }
-    if (!empty($ingredient_ids)) {
-        $query->whereHas('ingredients', function ($query) use ($ingredient_ids) {
-            $query->whereIn('ingredients.id', $ingredient_ids);
-        });
-    }
-    if (!empty($sort)) {
-        if ($sort == 'name_asc') {
-            $query->orderBy('name', 'asc');
-        } elseif ($sort == 'name_desc') {
-            $query->orderBy('name', 'desc');
-        } elseif ($sort == 'created_at_asc') {
-            $query->orderBy('created_at', 'asc');
-        } elseif ($sort == 'created_at_desc') {
-            $query->orderBy('created_at', 'desc');
+            });
         }
+        if (!empty($category)) {
+            $query->where('category_id', $category);
+        }
+        if (!empty($user_id)) {
+            $query->where('user_id', $user_id);
+        }
+        if (!empty($ingredient_ids)) {
+            $query->whereHas('ingredients', function ($query) use ($ingredient_ids) {
+                $query->whereIn('ingredients.id', $ingredient_ids);
+            });
+        }
+        if (!empty($sort)) {
+            if ($sort == 'name_asc') {
+                $query->orderBy('name', 'asc');
+            } elseif ($sort == 'name_desc') {
+                $query->orderBy('name', 'desc');
+            } elseif ($sort == 'created_at_asc') {
+                $query->orderBy('created_at', 'asc');
+            } elseif ($sort == 'created_at_desc') {
+                $query->orderBy('created_at', 'desc');
+            }
+        }
+        $recipes = $query->get();
+        return view(
+            'filtered-search',
+            ['recipes' => $recipes],
+            compact('recipe_category', 'recipes', 'user', 'recipe_ingredients')
+        );
     }
-    $recipes = $query->get();
-    return view('filtered-search', ['recipes' => $recipes],
-    compact('recipe_category','recipes','user','recipe_ingredients'));
-}
+    public function showChanges($change_id)
+    {
+        $recipe_change = RecipesChanges::find($change_id);
+        $old_recipe_data = json_decode($recipe_change->old, true);
+        $new_recipe_data = json_decode($recipe_change->new, true);
+
+        $attribute_changes = [];
+        foreach ($new_recipe_data as $attribute => $new_value) {
+            $old_value = $old_recipe_data[$attribute];
+            if ($old_value != $new_value) {
+                $attribute_changes[$attribute] = [
+                    'old' => $old_value,
+                    'new' => $new_value,
+                ];
+            }
+        }
+        return view('access.admin.recipes.changes', [
+            'attribute_changes' => $attribute_changes,
+        ]);
+    }
+
 
 }

@@ -1,7 +1,6 @@
 @extends('access.master')
 @section('content')
 
-<div class="p-6">
 
     <div class="bg-gray-100 flex flex-col rounded
         dark:bg-gray-800">
@@ -11,7 +10,7 @@
                 dark:text-gray-200">
                 <h1><b>Bookmarks</b></h1>
                 <button onclick="HideElemenet()"
-                    class=" bg-red-600 text-white rounded px-4 hover:bg-red-700">Delete</button>
+                    class=" bg-red-600 text-white font-semibold rounded px-4 hover:bg-red-600 dark:hover:text-white hover:font-bold">Delete</button>
             </div>
         </div>
         <div class=" m-2 p-4 bg-gray-200 rounded
@@ -23,11 +22,11 @@
     </div>
     @if (count($bookmarks) > 0)
         <div id="card"
-            class="bg-gray-100 grid justify-center md:grid-cols-3 my-2 py-4 px-4 rounded md:flex-row
+        class="bg-gray-100 grid justify-center lg:grid-cols-5 md:grid-cols-3 my-2 py-2 rounded md:flex-row
         dark:bg-gray-800 ">
 
             @foreach ($bookmarks as $value)
-                <div id="recipe-{{$value->id}}" class="max-w-sm mx-2 my-1 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <div id="recipe-{{$value->id}}" class="relative max-w-sm mx-2 my-1 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                     <a href="#">
                         <img class="w-full rounded-t-lg" src="{{ asset('images/' . $value->img) }}" alt="" />
                     </a>
@@ -50,8 +49,8 @@
                             </svg>
                         </a>
                     </div>
-                    <button class="hide hidden bg-red-700 hover:bg-red-800 rounded w-full delete-bookmark"
-                        data-users-id="{{ Auth::user()->id }}" data-recipes-id="{{ $value->id }}">Bookmark Recipe
+                    <button class="absolute top-0 right-0 hide hidden bg-red-600 text-white font-semibold rounded-bl-lg px-2 delete-bookmark hover:font-bold"
+                        data-users-id="{{ Auth::user()->id }}" data-recipes-id="{{ $value->id }}">Delete
                     </button>
                 </div>
             @endforeach
@@ -63,7 +62,6 @@
             <h1 class="text-center">No Data Found</h1>
         </div>
     @endif
-</div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script src="{{ asset('js/bookmarks.js') }}"></script>

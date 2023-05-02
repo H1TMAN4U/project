@@ -56,7 +56,7 @@
                                 <span class="hidden md:inline"> {{ Session::get('message') }} </span>
                             </p>
                         </div>
-                        <div class="order-2 flex-shrink-0 sm:order-3 sm:ml-3">
+                        {{-- <div class="order-2 flex-shrink-0 sm:order-3 sm:ml-3">
                             <button @click="open = false" type="button"
                                 class="-mr-1 flex p-2 rounded-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2">
                                 <span class="sr-only">Dismiss</span>
@@ -64,30 +64,18 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                             </button>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
         @endif
         <div class="flex-col w-full md:flex md:flex-row md:min-h-screen">
-            <div class="flex flex-col flex-shrink-0 w-full text-gray-700 bg-white md:w-64 dark:text-gray-200 dark:bg-gray-800" x-data="{ open: false }">
-                <div class="flex flex-row justify-center items-center flex-shrink-0 px-4 py-4">
-                    <a href="#" class="text-lg font-semibold tracking-widest text-gray-900 uppercase rounded-lg dark:text-white focus:outline-none focus:shadow-outline">
-                        Flowtrail UI
-                    </a>
-                    <button class="rounded-lg md:hidden focus:outline-none focus:shadow-outline" @click="open = !open">
-                        <svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
-                            <path x-show="!open" fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM9 15a1 1 0 011-1h6a1 1 0 110 2h-6a1 1 0 01-1-1z" clip-rule="evenodd"></path>
-                            <path x-show="open" fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                        </svg>
-                    </button>
-                    <x-button-dark-mode></x-button-dark-mode>
-                </div>
+            <div drawer-backdrop="bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-30"  x-data="{ open: false }"></div>
 
+            <div class="flex flex-col flex-shrink-0 w-full text-gray-700 bg-white md:w-64 dark:text-gray-200 dark:bg-gray-800" x-data="{ open: false }">
                 @include('layouts.navigation')
             </div>
-
-            <div class="flex w-full bg-gray-50 dark:bg-gray-900">
+            <div class="p-4 flex w-full bg-gray-50 dark:bg-gray-900">
                 {{ $slot }}
             </div>
 

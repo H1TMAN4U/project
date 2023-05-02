@@ -1,6 +1,5 @@
 @extends('access.master')
 @section('content')
-<div class="p-6">
     <div class="bg-gray-200 flex flex-col rounded
     dark:bg-gray-800">
         <div class="border-b border-gray-600 mb-1">
@@ -55,5 +54,4 @@
     @endif
 
     <script src="{{asset('js/bookmarks.js')}}"></script>
-</div>
 @endsection
