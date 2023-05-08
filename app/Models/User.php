@@ -55,4 +55,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Bookmarks::class);
     }
+    public function changes()
+    {
+        return $this->hasMany(RecipesChanges::class);
+    }
 }

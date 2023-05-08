@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Ingredients;
+use App\Models\IngredientsChanges;
+use App\Models\IngredientsRecipes;
+use App\Models\Instructions;
 use App\Models\Rating;
 use App\Models\Recipes;
 use App\Models\RecipesChanges;
@@ -18,7 +21,7 @@ class RecipesController extends Controller
     public function index()
     {
         $IsDirty = RecipesChanges::all()->first();
-        // $recipes = Recipes::select('id', 'name', 'img')->paginate(8);
+        $recipes = Recipes::select('id', 'name', 'img')->paginate(8);
         $recipes = Recipes::where('users_id', Auth::id())->get();
         return view("access.admin.recipes.index", ['IsDirty' => $IsDirty], compact('recipes'));
     }
@@ -39,31 +42,58 @@ class RecipesController extends Controller
         $recipe = new Recipes;
         $recipe->name = $request->name;
         $recipe->descriptions = $request->descriptions;
-        $recipe->instructions = $request->instructions;
+        $recipe->duration = $request->duration;
         $recipe->img = $file_name;
         $recipe->category_id = $request->category_id;
         $recipe->users_id = $user_id;
         $recipe->save();
+        // return dd($request->amount);
 
         // Loop through the array of ingredients and attach them to the recipe
         foreach ($request->ingredients as $ingredient_id) {
-            $recipe->ingredients()->attach($ingredient_id);
-        }
+            // $recipe->ingredients()->attach($ingredient_id);
+            $i=[
+                'ingredients_id'=>$ingredient_id,
+                'recipes_id'=>$recipe->id,
+                'amount'=>(int)$request->amount
+            ];
+            DB::table('ingredients_recipes')->insert($i);
 
+        }
+        foreach ($request->instructions as $step_number => $instruction_text) {
+            $instruction = new Instructions;
+            $instruction->recipe_id = $recipe->id;
+            $instruction->step_number = $step_number;
+            $instruction->instruction = $instruction_text;
+            $instruction->save();
+
+        }
         return redirect()->route('index-recipe');
     }
 
+    // public function show($id)
+    // {
+    //     $ingredients = Ingredients::orderBy('name')->first();
+    //     // $rating=Rating::all()->first();
+    //     $rating = DB::table('rating')->where('recipes_id', $id)->value('rating');
+    //     $recipes = Recipes::all()->where('id', $id)->first();
+    //     return view(
+    //         'access.admin.recipes.show',
+    //         compact('recipes', 'ingredients', 'rating')
+    //     );
+    // }
     public function show($id)
-    {
-        $ingredients = Ingredients::orderBy('name')->first();
-        // $rating=Rating::all()->first();
-        $rating = DB::table('rating')->where('recipes_id', $id)->value('rating');
-        $recipes = Recipes::all()->where('id', $id)->first();
-        return view(
-            'access.admin.recipes.show',
-            compact('recipes', 'ingredients', 'rating')
-        );
-    }
+{
+    $rating = DB::table('rating')->where('recipes_id', $id)->value('rating');
+    $recipe = Recipes::findOrFail($id);
+    // $ingredients = $recipe->ingredients()->orderBy('created_at')->get();
+    $ingredients = $recipe->ingredients;
+    $recipeIngredients = $recipe->ingredients()->withPivot('amount')->get();
+    $instructions = Instructions::where('recipe_id', $id)->get();
+
+    return view('access.admin.recipes.show', compact('recipe', 'ingredients', 'instructions', 'recipeIngredients', 'rating'));
+}
+
     public function edit($id)
     {
         $ingredients = Ingredients::all();
@@ -92,38 +122,23 @@ class RecipesController extends Controller
         $recipes->descriptions = $request->descriptions;
         $recipes->instructions = $request->instructions;
         $recipes->img = $img;
-        // $recipes->approved = $request->approved;
         $recipes->save();
+        $ingredients = $request->ingredients;
 
-        foreach ($request->ingredients as $ingredient_id) {
-            $recipes->ingredients()->attach($ingredient_id);
-        }
+        $recipes->ingredients()->sync($ingredients);
 
+        // $new_recipe_data = $recipes->toArray();
+        // $changed_attributes = array_diff_assoc($new_recipe_data, $old_recipe_data);
 
-    // Compare the old and new recipe data
-    $new_recipe_data = $recipes->toArray();
-    $changed_attributes = array_diff_assoc($new_recipe_data, $old_recipe_data);
-
-    // Build a string with the old and new values of the changed attributes
-    $changes_message = '';
-    foreach ($changed_attributes as $attribute => $new_value) {
-        $old_value = $old_recipe_data[$attribute];
-        $changes_message .= "The $attribute attribute was changed from '$old_value' to '$new_value'.\n";
-    }
-
-    // Store the old and new recipe data in the recipes_changes table
-    $recipes_change = RecipesChanges::updateOrCreate(
-        ['recipes_id' => $recipes->id],
-        ['users_id' => Auth::user()->id, 'old' => json_encode($old_recipe_data), 'new' => json_encode($new_recipe_data)]
-    );
-
-    // Return a response with the changes message and the updated recipe data
-    // return response()->json([
-    //     'message' => 'Recipe updated successfully',
-    //     'recipe' => $recipes,
-    //     'changes_message' => $changes_message,
-    //     'recipe_change' => $recipes_change,
-    // ]);
+        // $changes_message = '';
+        // foreach ($changed_attributes as $attribute => $new_value) {
+        //     $old_value = $old_recipe_data[$attribute];
+        //     $changes_message .= "The $attribute attribute was changed from '$old_value' to '$new_value'.\n";
+        // }
+        // $recipes_change = RecipesChanges::updateOrCreate(
+        //     ['recipes_id' => $recipes->id],
+        //     ['users_id' => Auth::user()->id, 'old' => json_encode($old_recipe_data), 'new' => json_encode($new_recipe_data)]
+        // );
         return redirect()->route('index-recipe')->with('success', 'recipe Data has been updated successfully');
     }
     public function destroy($id)
@@ -202,26 +217,26 @@ class RecipesController extends Controller
             compact('recipe_category', 'recipes', 'user', 'recipe_ingredients')
         );
     }
-    public function showChanges($change_id)
+    public function showChanges()
     {
-        $recipe_change = RecipesChanges::find($change_id);
-        $old_recipe_data = json_decode($recipe_change->old, true);
-        $new_recipe_data = json_decode($recipe_change->new, true);
-
-        $attribute_changes = [];
-        foreach ($new_recipe_data as $attribute => $new_value) {
-            $old_value = $old_recipe_data[$attribute];
-            if ($old_value != $new_value) {
-                $attribute_changes[$attribute] = [
-                    'old' => $old_value,
-                    'new' => $new_value,
-                ];
-            }
+        $changes = RecipesChanges::get();
+        $changeData = [];
+        foreach ($changes as $change) {
+            $oldData = json_decode($change->old, true);
+            $newData = json_decode($change->new, true);
+            $changeData[] = [
+                'id' => $change->id,
+                'old_name' => $oldData['name'] ?? '',
+                'new_name' => $newData['name'] ?? '',
+                'user_name' => $change->user->name ?? '',
+                'created_at' => $change->created_at,
+                'updated_at' => $change->updated_at,
+            ];
         }
-        return view('access.admin.recipes.changes', [
-            'attribute_changes' => $attribute_changes,
-        ]);
+        return view('access.admin.recipes.changes', compact('changeData'));
     }
+
+
 
 
 }

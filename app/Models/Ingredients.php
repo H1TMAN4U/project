@@ -11,7 +11,7 @@ class Ingredients extends Model
     protected $table = 'ingredients';
     protected $primaryKey = 'id';
     public $incrementing = true;
-    public $timestamp = false;
+    public $timestamp = true;
     protected $fillable =
     [
         'id',
@@ -19,6 +19,6 @@ class Ingredients extends Model
     ];
     public function recipes()
     {
-        return $this->belongsToMany(Recipes::class, 'ingredient_recipe');
+        return $this->belongsTo(Recipes::class);
     }
 }

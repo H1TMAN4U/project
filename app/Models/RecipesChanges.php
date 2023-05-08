@@ -9,24 +9,17 @@ class RecipesChanges extends Model
 {
     use HasFactory;
     protected $table = 'recipes_changes';
-    protected $primaryKey = 'id';
-    public $incrementing = true;
-    public $timestamp = true;
-    protected $fillable =
-    [
-    'id',
-    'recipes_id',
-    'users_id',
-    'old',
-    'new'
+
+    protected $fillable = [
+        'recipes_id',
+        'users_id',
+        'old',
+        'new'
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
     public function recipe()
     {
-        return $this->belongsTo(Recipes::class);
+        return $this->belongsTo(Recipes::class, 'recipes_id');
     }
 }
+

@@ -1,6 +1,113 @@
 @extends('access.master')
 @section('content')
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+<section class="py-4 border-b-2">
+    <div class="flex md:flex-row flex-col-reverse justify-center items-center ">
+        <div class="">
+            <div class="flex flex-col p-4">
+                <h1 class="text-4xl text-center leading-relaxed font-semibold py-4">
+                    {{ $recipe->name }}
+                </h1>
+                <div class="flex flex-row justify-center text-center px-4">
+                    <div class="w-full p-4">
+                        <span class="text-2xl block">5</span>
+                        <p class="block text-2xl ">Ingredients</p>
+                    </div>
+                    <div class="w-full p-4">
+                        <p class="block text-2xl">{{$recipe->duration}}</p>
+                        <p class="block text-2xl">Minutes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex grow-1 justify-center">
+            <img class="rounded-lg w-[500px] h-auto md:h-[500px]" src="{{ asset('images/' . $recipe->img) }}" alt="" />
+        </div>
+    </div>
+</section>
+<section>
+    <div class="">
+        <div class="flex flex-row justify-between mb-4">
+            <h1 class="text-2xl font-semibold">Ingredients</h1>
+            <h5 class="uppercase text-xs">4 Servings</h5>
+        </div>
+        <div class="flex flex-col">
+        <ul>
+            @foreach ($recipeIngredients as $ingredient)
+            <li>{{ $ingredient->name }} - {{ $ingredient->pivot->amount }}</li>
+        @endforeach
+        </ul>
+        </div>
+    </div>
+</section>
+{{-- <div class="mx-[70px]">
+<section class="flex items-center justify-center top-2 py-8 pb-8 border-b-2">
+    <div class="">
+        <h1 class="text-[40px] leading-relaxed font-semibold mb-6">
+            Homemade Pumpkin Purée
+        </h1>
+        <div class="flex flex-row justify-center">
+            <div class="w-full text-center border-r-2">
+                <span class="inline-block text-[40px] ">5</span>
+                <span class="block">Ingredients</span>
+            </div>
+            <div class="w-full text-center">
+                <span class="inline-block text-[40px] ">{{$recipe->duration}}</span>
+                <span class="block">Minutes</span>
+            </div>
+        </div>
+        <div class="flex flex-col">
+            <div class="flex flex-row justify-center p-4 text-white font-semibold">
+                <span class="m-2 px-4">
+                    <button class="w-full bg-indigo-500 rounded-full p-2">Read Instruction</button>
+                </span>
+                <span class="m-2 px-4">
+                    <button class="w-full bg-red-500 rounded-full p-2">Add to Bookmarks</button>
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="ml-[40px]">
+        <img src="https://lh3.googleusercontent.com/fIxM5_imEFhunBAUSyhHfw8Ha5ZxmuejEkGGagv7d77t1k5qDi1mO_1q8Ag_rLqvMo6AVl7d9r6TD59mUqOQIeI=w640-h640-c-rw-v1-e365" alt=""
+        class="max-w-7xl w-[500px] h-[500px] rounded-xl ">
+    </div>
+</section>
+<section class="py-8 border-b-2">
+    <div class="">
+        <div class="flex flex-row justify-between mb-4">
+            <h1 class="text-2xl font-semibold">Ingredients</h1>
+            <h5 class="uppercase text-xs">4 Servings</h5>
+        </div>
+        <div class="flex flex-col">
+        <ul>
+            @foreach ($ingredients as $ingredient)
+            <li class="font-md my-2">{{ $ingredient->name }}</li>
+            @endforeach
+        </ul>
+        </div>
+    </div>
+</section>
+<section class="py-8 border-b-2">
+    <div class="flex flex-col">
+        <h1 class="text-2xl mb-8">Instructions</h1>
+        <ol>
+            @foreach ($instructions as $value)
+            <li class="mb-4">
+                <div class="flex flex-row">
+                    <p>{{$value->step_number}}</p>
+                    <span>{{$value->instruction}}</span>
+                </div>
+            </li>
+            @endforeach
+
+
+        </ol>
+    </div>
+</section>
+</div> --}}
+
+    {{-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"
         integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
     <style>
         input[type="checkbox"]:checked+i:before {
@@ -74,7 +181,7 @@
 
         </div>
 
-    </div>
+    </div> --}}
 
     <script src="{{ asset('js/rating.js') }}"></script>
 

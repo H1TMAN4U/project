@@ -6,7 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
-        @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/dark-light-mode.js', 'resources/js/bookmarks.js' ])
+        @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/darkmode.js', 'resources/js/bookmarks.js' ])
 
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
@@ -16,14 +16,14 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/index.min.css" />
-        <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.4/dist/flowbite.min.css" />
+        {{-- <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.4/dist/flowbite.min.css" /> --}}
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
 
 
         <!-- Scripts -->
         <script src="//unpkg.com/alpinejs" defer></script>
-        <script src="https://cdn.tailwindcss.com"></script>
+        {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
         <script src="https://unpkg.com/flowbite@1.5.4/dist/flowbite.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <script>
@@ -38,7 +38,7 @@
         <!-- Scripts -->
     </head>
 
-    <body class="font-sans antialiased">
+    <body class="bg-white dark:bg-gray-900 font-sans antialiased">
         @if (Session::has('message'))
             <!-- This example requires Tailwind CSS v2.0+ -->
             <div class="bg-indigo-600" x-data="{open: true}" x-show="open">
@@ -70,7 +70,7 @@
             </div>
         @endif
         <div class="flex-col w-full md:flex md:flex-row md:min-h-screen">
-            <div drawer-backdrop="bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-30"  x-data="{ open: false }"></div>
+            {{-- <div drawer-backdrop="bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-30"  x-data="{ open: false }"></div> --}}
 
             <div class="flex flex-col flex-shrink-0 w-full text-gray-700 bg-white md:w-64 dark:text-gray-200 dark:bg-gray-800" x-data="{ open: false }">
                 @include('layouts.navigation')

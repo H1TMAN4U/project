@@ -16,9 +16,8 @@ class Recipes extends Model
     [
     'id',
     'name',
-    'ingredients',
+    'duration',
     'description',
-    'instructions',
     'img',
     'category_id'
     ];
@@ -26,6 +25,10 @@ class Recipes extends Model
     protected $casts = [
         'disabled' => 'boolean'
     ];
+    public function instructions()
+    {
+        return $this->hasMany(Instructions::class);
+    }
 
     public function getCategory()
     {
@@ -34,5 +37,10 @@ class Recipes extends Model
     public function ingredients()
     {
         return $this->belongsToMany(Ingredients::class);
+    }
+
+    public function changes()
+    {
+        return $this->hasMany(RecipesChanges::class);
     }
 }

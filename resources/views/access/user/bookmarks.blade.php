@@ -54,14 +54,15 @@
                     </button>
                 </div>
             @endforeach
+            @else
+            <div
+                class="bg-gray-200 flex justify-center md:grid-cols-4 my-2 py-2 rounded md:flex-row
+                dark:bg-gray-800">
+                <h1 class="text-center">No Data Found</h1>
+            </div>
+        @endif
         </div>
-    @else
-        <div
-            class="bg-gray-300 flex justify-center md:grid-cols-4 my-2 py-2 rounded md:flex-row
-            dark:bg-gray-800">
-            <h1 class="text-center">No Data Found</h1>
-        </div>
-    @endif
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script src="{{ asset('js/bookmarks.js') }}"></script>

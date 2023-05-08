@@ -15,22 +15,22 @@
                     </th>
                 </tr>
             </thead>
-              <tbody>
-                @foreach ($attribute_changes as $attribute => $values)
+            <tbody>
 
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
 
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {{ ucfirst(str_replace('_', ' ', $attribute)) }}
-                    </th>
-                    <td class="px-6 py-4">
-                        {{ $values['old'] }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ $values['new'] }}
-                    </td>
-                </tr>
+                @foreach ($changeData as $change)
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <td>{{ $change['id'] }}</td>
+                        <td>{{ $change['old_name'] }}</td>
+                        <td>{{ $change['new_name'] }}</td>
+                        <td>{{ $change['user_name'] }}</td>
+                        <td>{{ $change['updated_at'] }}</td>
+                    </tr>
                 @endforeach
+
+
+
+
 
             </tbody>
         </table>

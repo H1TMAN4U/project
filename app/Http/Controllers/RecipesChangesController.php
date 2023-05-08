@@ -7,6 +7,6 @@ use Illuminate\Http\Request;
 class RecipesChangesController extends Controller
 {
     public function index(){
-        
+
     }
 }
