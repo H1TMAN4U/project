@@ -5,7 +5,7 @@
             <div class="bg-white dark:bg-gray-900 overflow-hidden shadow-sm ">
                 <div class=" text-gray-900 dark:text-gray-100">
 
-                    <div class="w-full p-4 break-all bg-white rounded flex lg:flex-row md:flex-col sm:flex-col-reverse dark:bg-gray-900" style="">
+                    <div class="w-full p-4 break-all bg-white rounded flex lg:flex-row md:flex-col-reverse sm:flex-col-reverse dark:bg-gray-900" style="">
                         <div class="px-2 text-black flex flex-col lg:items-start md:items-start sm:mt-[30px] lg:justify-center md:justify-start sm:justify-center dark:text-white">
                             <h1 class="lg:text-[54px] md:text-[36px] sm:text-[32px] break-normal" style="font-family: 'Playfair Display', serif;">Lets start cooking with popular recipes</h1>
                             <p class="mt-4 text-gray-600 break-normal font-bold lg:text-[22px] md:text-[16px] sm:text-[18px]">Want to learn how to cook but confused how to start? <br> No need to worry again!</p>

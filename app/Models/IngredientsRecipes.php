@@ -9,5 +9,17 @@ class IngredientsRecipes extends Model
 {
     use HasFactory;
     protected $table = 'ingredients_recipes';
+    protected $primaryKey = 'recipes_id';
 
+    protected $fillable =
+    [
+    'amount',
+    'measures_id',
+    'ingredients_id',
+    'recipes_id',
+    ];
+    public function measure()
+    {
+        return $this->belongsTo(Measure::class, 'measures_id');
+    }
 }

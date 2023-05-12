@@ -10,7 +10,7 @@ class IngredientsChanges extends Model
     use HasFactory;
     protected $fillable = ['recipes_id', 'users_id', 'old', 'new'];
 
-    public function recipe()
+    public function measure()
     {
         return $this->belongsTo(Recipes::class);
     }

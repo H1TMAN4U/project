@@ -5,16 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Bookmarks extends Model
+class Measure extends Model
 {
     use HasFactory;
-    protected $table = 'bookmarks';
+    protected $primaryKey = 'id';
     public $incrementing = true;
     public $timestamp = false;
-
     protected $fillable =
     [
-    'users_id',
-    'recipes_id',
+        'id',
+        'name',
     ];
+    public function measure()
+{
+    return $this->belongsTo(Measure::class, 'measures_id');
+}
 }

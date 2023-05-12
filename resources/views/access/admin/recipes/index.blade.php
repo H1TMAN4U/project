@@ -30,8 +30,10 @@
         </div>
     </div>
     @if (count($recipes) > 0)
-        <div class="bg-gray-100 grid justify-center md:grid-cols-5 my-2 py-2 rounded md:flex-row
-            dark:bg-gray-800 ">
+    <div class="bg-gray-100 rounded dark:bg-gray-800">
+
+
+        <div class="grid justify-center lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 xs-grid-row my-2 py-2 ">
             @foreach ($recipes as $value)
                 <div id="recipe-{{ $value->id }}"
                     class="relative max-w-sm mx-2 my-1 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -66,13 +68,13 @@
                         </a>
                         @if(!is_null($IsDirty) && DB::table('recipes_changes')->where('recipes_id', $IsDirty->id)->exists())
                         <a href="{{ route('recipes-changes', $IsDirty->id) }}">
-                            <button class="view-changes-button toggle-element view-changes-button hidden absolute right-0 top-0 rounded-bl-lg rounded-tr-lg px-2 font-semibold bg-green-600 text-white hover:bg-green-700 hover:font-bold">
+                            <button class="view-changes-button toggle-element hidden absolute right-0 top-0 rounded-bl-lg rounded-tr-lg px-2 font-semibold bg-green-600 text-white hover:bg-green-700 hover:font-bold">
                                 View Changes
                             </button>
                         </a>
                         @endif
                         <button
-                            class="delete-button toggle-element delete-bookmark delete-button hidden absolute right-0 top-0 rounded-bl-lg rounded-tr-lg px-2 font-semibold bg-red-600  text-white hover:bg-red-700 hover:font-bold "
+                            class="delete-button toggle-element delete-bookmark hidden absolute right-0 top-0 rounded-bl-lg rounded-tr-lg px-2 font-semibold bg-red-600  text-white hover:bg-red-700 hover:font-bold "
                             data-users-id="{{ Auth::user()->id }}" data-recipes-id="{{ $value->id }}">
                             Delete
                         </button>
@@ -84,11 +86,12 @@
                 dark:bg-gray-800">
                 <h1 class="text-center">No Data Found</h1>
             </div>
-            <div class="">
-                {!! $recipes->links() !!}
-            </div>
         @endif
+        <div class="">
+            {!! $recipes->links() !!}
+        </div>
     </div>
+
 
 
 

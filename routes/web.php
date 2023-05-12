@@ -21,6 +21,9 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::delete('/instructions/{id}', [RecipesController::class, 'destroy_instruction']);
+Route::delete('/ingredient/delete/{id}', [RecipesController::class, 'destroy_ingredients'])->name('ingredient.delete');
+
 Route::get('recipes/changes/{change_id}', [RecipesController::class, 'showChanges'], function () {
     return view('access.admin.recipes.changes');
 })->name('recipes-changes');

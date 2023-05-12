@@ -10,12 +10,10 @@ class Rating extends Model
 {
     use HasFactory;
     protected $table = 'rating';
-    protected $primaryKey = 'id';
-    public $incrementing = true;
+    protected $primaryKey = 'recipes_id';
     public $timestamp = true;
     protected $fillable =
     [
-    'id',
     'rating',
     'review',
     'recipes_id',

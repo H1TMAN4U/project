@@ -43,4 +43,25 @@ $('.delete-bookmark').click(function() {
     });
 });
 
+$(document).on('click', '.delete-instruction-btn', function(event) {
+    event.preventDefault(); // Prevent the default form submission behavior
+    var instructionId = $(this).data('instruction-id');
+    $.ajax({
+        type: 'DELETE',
+        url: '/instructions/' + instructionId,
+        data: {
+            '_token': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(data) {
+            // Remove the instruction from the DOM
+            $('#instruction-' + instructionId).remove();
+        },
+        error: function(data) {
+            console.log(data);
+        }
+    });
+});
+
+
+
 

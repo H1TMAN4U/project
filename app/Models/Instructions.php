@@ -8,8 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Instructions extends Model
 {
     use HasFactory;
-
-    protected $fillable = ['step_number', 'instruction'];
+    protected $table = 'instructions';
+    protected $primaryKey = 'id';
+    public $incrementing = true;
+    protected $fillable = ['step_number', 'instruction', 'recipe_id'];
 
     public function recipes()
 {

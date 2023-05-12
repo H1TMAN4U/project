@@ -15,7 +15,7 @@ public function up(): void
         $table->integer('step_number');
         $table->longText('instruction');
         $table->timestamps();
-        
+
         $table->unsignedBigInteger('recipe_id');
         $table->foreign('recipe_id')->references('id')->on('recipes')->onDelete('cascade');
     });
