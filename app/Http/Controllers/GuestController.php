@@ -4,9 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Recipes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class GuestController extends Controller
 {
+    public function welcome(){
+        $recipes = Recipes::with('ratings')
+        ->whereHas('ratings', function ($query) {
+            $query->select('recipes_id', DB::raw('AVG(rating) as avg_rating'))
+                ->groupBy('recipes_id')
+                ->having('avg_rating', '>', 3);
+        })
+        ->paginate(10);
+        return view("welcome", compact("recipes"));
+    }
     public function dinner()
     {
         $recipes=Recipes::where("category_id", "=", "1")->paginate(10);

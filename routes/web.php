@@ -36,7 +36,8 @@ Route::get('/filter', [RecipesController::class,'search'], function (){
     return view('filtered-search');
 })->name('search');
 Route::get('/recipes/create', [RecipesController::class, 'search_ingredients']);
-Route::get('/', function () {
+
+Route::get('/', [GuestController::class,'welcome'], function (){
     return view('welcome');
 })->name('/');
 

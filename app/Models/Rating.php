@@ -20,4 +20,13 @@ class Rating extends Model
     'recipes_id',
     'users_id'
     ];
+    public function recipe()
+    {
+        return $this->belongsTo(Recipe::class, 'recipes_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'users_id');
+    }
 }

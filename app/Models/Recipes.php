@@ -47,4 +47,8 @@ class Recipes extends Model
         ->withPivot('amount', 'measures_id')
         ->withTimestamps();
     }
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class, 'recipes_id');
+    }
 }
