@@ -50,7 +50,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(Recipes::class);
     }
-
     public function bookmarks()
     {
         return $this->hasMany(Bookmarks::class);

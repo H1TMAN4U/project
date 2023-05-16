@@ -5,18 +5,14 @@ $(document).ready(function () {
     $('#rating-form').submit(function (event) {
         // Prevent the form from submitting normally
         event.preventDefault();
-
         // Get the form data
         var formData = $(this).serialize();
         // Send the AJAX request to the server
         $.ajax({
             url: '/rating',
             headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-
             type: 'POST',
             data: formData,
-
-
             success: function ({ rating }) {
 
                 let stars = $(".pasive");
@@ -30,7 +26,6 @@ $(document).ready(function () {
                         s.classList.add("text-gray-300");
                     }
                 }
-
                 alert('Thank you for your review!');
             },
             error: function (xhr, status, error) {
@@ -40,3 +35,13 @@ $(document).ready(function () {
         });
     });
 });
+function checkPrevious(current) {
+    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].value <= current.value) {
+            checkboxes[i].checked = true;
+        } else {
+            checkboxes[i].checked = false;
+        }
+    }
+}

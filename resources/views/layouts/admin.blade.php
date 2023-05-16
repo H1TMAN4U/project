@@ -38,7 +38,7 @@
         <!-- Scripts -->
     </head>
 
-    <body class="bg-white dark:bg-gray-900 font-sans antialiased">
+    <body class="bg-gray-50 dark:bg-gray-900 font-sans antialiased">
         @if (Session::has('message'))
             <!-- This example requires Tailwind CSS v2.0+ -->
             <div class="bg-indigo-600" x-data="{open: true}" x-show="open">
@@ -72,10 +72,10 @@
         <div class="flex-col w-full md:flex md:flex-row md:min-h-screen">
             {{-- <div drawer-backdrop="bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-30"  x-data="{ open: false }"></div> --}}
 
-            <div class="flex flex-col flex-shrink-0 w-full text-gray-700 bg-white md:w-64 dark:text-gray-200 dark:bg-gray-800" x-data="{ open: false }">
+            <div class="flex flex-col flex-shrink-0 w-full text-gray-700 md:w-64 dark:text-gray-200 dark:bg-gray-800" x-data="{ open: false }">
                 @include('layouts.navigation')
             </div>
-            <div class="p-4 flex w-full bg-gray-50 dark:bg-gray-900">
+            <div class="p-4 flex w-full">
                 {{ $slot }}
             </div>
 

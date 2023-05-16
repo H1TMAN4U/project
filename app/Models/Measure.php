@@ -17,7 +17,7 @@ class Measure extends Model
         'name',
     ];
     public function measure()
-{
-    return $this->belongsTo(Measure::class, 'measures_id');
-}
+    {
+        return $this->belongsTo(Measure::class, 'measures_id');
+    }
 }

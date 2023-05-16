@@ -14,8 +14,7 @@ class Instructions extends Model
     protected $fillable = ['step_number', 'instruction', 'recipe_id'];
 
     public function recipes()
-{
-    return $this->belongsTo(Recipes::class);
-}
-
+    {
+        return $this->belongsTo(Recipes::class);
+    }
 }

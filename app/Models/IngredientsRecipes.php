@@ -9,7 +9,6 @@ class IngredientsRecipes extends Model
 {
     use HasFactory;
     protected $table = 'ingredients_recipes';
-    protected $primaryKey = 'recipes_id';
 
     protected $fillable =
     [

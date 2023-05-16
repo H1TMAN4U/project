@@ -37,20 +37,14 @@ class Recipes extends Model
     {
         return $this->hasOne(Category::class,'id', 'category_id');
     }
-    // public function ingredients()
-    // {
-    //     return $this->belongsToMany(Ingredients::class, 'ingredients_recipes', 'recipes_id', 'ingredients_id')
-    //     ->withPivot('amount');
-    // }
     public function changes()
     {
         return $this->hasMany(RecipesChanges::class);
     }
     public function ingredients()
-{
-    return $this->belongsToMany(Ingredients::class, 'ingredients_recipes')
-                ->withPivot('amount', 'measures_id')
-                ->withTimestamps();
-}
-
+    {
+        return $this->belongsToMany(Ingredients::class, 'ingredients_recipes')
+        ->withPivot('amount', 'measures_id')
+        ->withTimestamps();
+    }
 }

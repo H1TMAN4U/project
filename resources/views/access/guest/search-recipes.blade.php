@@ -11,7 +11,7 @@
                 <h1><b>Recipes</b></h1>
                 <button onclick="HideElemenet()"
                     class=" bg-red-600 text-white rounded px-4 hover:bg-red-700">Delete</button>
-            </div>
+                </div>
         </div>
         <div class=" m-2 p-4 bg-gray-200 rounded
             dark:bg-gray-700">
@@ -21,13 +21,12 @@
         </div>
     </div>
     @if (count($recipes) > 0)
-        <div id="card"
-            class="bg-gray-100 grid justify-center md:grid-cols-3 my-2 py-4 px-4 rounded md:flex-row
-        dark:bg-gray-800 ">
-
+    <div class="bg-gray-100 rounded dark:bg-gray-800">
+        <div id="card" class="grid gap-2 justify-center p-2 lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 xs-grid-row my-2 py-2 ">
             @foreach ($recipes as $value)
-                <div id="recipe-{{$value->id}}" class="max-w-sm mx-2 my-1 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                    <a href="#">
+            <div id="recipe-{{ $value->id }}"
+                class="relative  max-w-sm bg-white border border-gray-200 rounded-lg shadow
+                dark:bg-gray-800 dark:border-gray-700">                    <a href="#">
                         <img class="w-full rounded-t-lg" src="{{ asset('images/' . $value->img) }}" alt="" />
                     </a>
                     <div class="p-5">
@@ -56,12 +55,10 @@
             @endforeach
         </div>
     @else
-        <div
-            class="bg-gray-300 flex justify-center md:grid-cols-4 my-2 py-2 rounded md:flex-row
-            dark:bg-gray-800">
-            <h1 class="text-center">No Data Found</h1>
-        </div>
+        <h1 class="bg-gray-200 my-2 py-2 font-semibold rounded text-center dark:bg-gray-800">No Data Found</h1>
     @endif
+    <div>{!! $recipes->links() !!}</div>
+</div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script src="{{ asset('js/bookmarks.js') }}"></script>

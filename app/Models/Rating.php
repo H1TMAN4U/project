@@ -10,8 +10,9 @@ class Rating extends Model
 {
     use HasFactory;
     protected $table = 'rating';
-    protected $primaryKey = 'recipes_id';
     public $timestamp = true;
+    protected $keyType = 'string'; // or 'int' if recipes_id is an integer
+
     protected $fillable =
     [
     'rating',
