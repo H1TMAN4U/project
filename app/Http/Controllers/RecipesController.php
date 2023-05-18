@@ -25,7 +25,7 @@ class RecipesController extends Controller
     public function index()
     {
         $IsDirty = RecipesChanges::all()->first();
-        $recipes = Recipes::paginate(10);
+        $recipes = Recipes::where('users_id', Auth::id())->paginate(10);
         return view("access.admin.recipes.index", ['IsDirty' => $IsDirty], compact('recipes'));
     }
     public function create()
@@ -40,6 +40,8 @@ class RecipesController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'duration' => 'numeric',
+            'img' => 'required|image|mimetypes:image/jpeg,image/png,image/gif|dimensions:min_width=700,min_height=500',
+
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
@@ -80,7 +82,8 @@ class RecipesController extends Controller
     }
     public function show($id)
     {
-        $recipe = Recipes::findOrFail($id);
+        $recipe = Recipes::with('comments.user')->findOrFail($id);
+
         $rating = DB::table('rating')
         ->join('users', 'users.id', '=', 'rating.users_id')
         ->select('users.name', 'rating.rating')
@@ -129,8 +132,13 @@ class RecipesController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'duration' => 'numeric',
+            'img' => 'required|image|mimetypes:image/jpeg,image/png,image/gif|dimensions:min_width=700,min_height=10000',
+
         ]);
 
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
@@ -286,16 +294,14 @@ class RecipesController extends Controller
     public function destroy_instruction($id)
     {
         $instruction = Instructions::findOrFail($id);
-        $instruction->delete();
     }
-    // public function destroy_ingredients(Request $request, $recipe_id, $ingredient_id)
-    // {
-    //     $recipe = Recipes::findOrFail($recipe_id);
-    //     $ingredient = Ingredients::findOrFail($ingredient_id);
-
-    //     $ingredient->delete();
-    //     return response()->json(['message' => 'Ingredient deleted successfully']);
-    // }
+    public function control_recipes()
+    {
+        $IsDirty = RecipesChanges::all()->first();
+        $recipes = Recipes::paginate(10);
+        return view("access.admin.control-recipe",
+        ['IsDirty' => $IsDirty], compact('recipes'));
+    }
 
 
 }

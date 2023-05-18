@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\BookmarkController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\RecipesChangesController;
 use App\Http\Controllers\RecipesController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UserController;
@@ -106,21 +108,31 @@ Route::get('/all',[GuestController::class,'all'], function () {
 /*
 Permissions & Roles
 */
-Route::middleware(['auth','verified', 'role:Admin'])->name('admin.')->prefix('admin')->group(function () {
+Route::middleware(['auth','verified', 'role:Root'])->name('admin.')->prefix('admin')->group(function () {
     // Route::get('/home', [RolesController::class, 'home'])->name('home');
     // Route::get('/show', [RecipeController::class, 'guest_recipe'])->name('show');
+    Route::get('/control-recipe',[RecipesController::class,'control_recipes'], function () {
+        return view('access.admin.control-recipe');
+    })->name('control.recipe');
+
     Route::resource('/roles', RolesController::class);
     Route::post('/roles/{role}/permissions', [RolesController::class, 'givePermission'])->name('roles.permissions');
     Route::delete('/roles/{role}/permissions/{permission}', [RolesController::class, 'revokePermission'])->name('roles.permissions.revoke');
     Route::resource('/permissions', PermissionsController::class);
     Route::post('/permissions/{permission}/roles', [PermissionsController::class, 'assignRole'])->name('permissions.roles');
     Route::delete('/permissions/{permission}/roles/{role}', [PermissionsController::class, 'removeRole'])->name('permissions.roles.remove');
-    Route::get('/user', [UserController::class, 'index'])->name('user.index');
-    Route::get('/user/{user}', [UserController::class, 'show'])->name('user.show');
-    Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
-    Route::post('/user/{user}/roles', [UserController::class, 'assignRole'])->name('user.roles');
-    Route::delete('/user/{user}/roles/{role}', [UserController::class, 'removeRole'])->name('user.roles.remove');
-    Route::post('/user/{user}/permissions', [UserController::class, 'givePermission'])->name('user.permissions');
-    Route::delete('/user/{user}/permissions/{permission}', [UserController::class, 'revokePermission'])->name('user.permissions.revoke');
+    Route::get('/user', [UserController::class, 'index'])->name('users.index');
+    Route::get('/user/{user}', [UserController::class, 'show'])->name('users.show');
+    Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::post('/user/{user}/roles', [UserController::class, 'assignRole'])->name('users.roles');
+    Route::delete('/user/{user}/roles/{role}', [UserController::class, 'removeRole'])->name('users.roles.remove');
+    Route::post('/user/{user}/permissions', [UserController::class, 'givePermission'])->name('users.permissions');
+    Route::delete('/user/{user}/permissions/{permission}', [UserController::class, 'revokePermission'])->name('users.permissions.revoke');
+
 });
+
+Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+
 require __DIR__.'/auth.php';

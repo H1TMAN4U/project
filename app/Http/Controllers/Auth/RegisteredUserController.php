@@ -41,7 +41,10 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-
+        if ($user->roles()->count() === 0) {
+            // Assign "User" role to the newly registered user
+            $user->assignRole('User');
+        }
         event(new Registered($user));
 
         Auth::login($user);

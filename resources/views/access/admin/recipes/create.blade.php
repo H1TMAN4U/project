@@ -122,23 +122,23 @@
         </div>
         <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="finish" role="tabpanel" aria-labelledby="finish-tab">
             <div class="mb-6">
-                <div class="flex items-center justify-center w-full">
-                    <label for="dropzone-file"
-                        class="bg-gray-50 flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                <div class="flex p-2 flex-col items-center justify-center w-full rounded-lg dark:bg-gray-700">
+                    <label for="dropzone-file" class="bg-gray-50 flex flex-col items-center justify-center w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer
+                    dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                         <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                            <svg aria-hidden="true" class="w-10 h-10 mb-3 text-gray-400" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
-                                </path>
-                            </svg>
+                            <div id="image-container" class="w-full h-full"></div>
                             <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
                             <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
                         </div>
                         <input id="dropzone-file" name="img" type="file" class="hidden" />
                     </label>
+                    @error('img')
+                    <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @enderror
+                    <img id="uploaded-image" alt="Uploaded Image" class="m-2 rounded-lg hidden"/>
                 </div>
             </div>
+
             <div>
                 <button type="submit"
                     class="bg-gray-900 border border-gray-300 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-blue-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">submit
@@ -153,7 +153,26 @@
 </section>
 <script src="{{ asset('js/create.js') }}"></script>
 <script>
-     $(document).ready(function() {
+const fileInput = document.getElementById('dropzone-file');
+const image = document.getElementById('uploaded-image');
+
+fileInput.addEventListener('change', handleFileSelect);
+
+function handleFileSelect(event) {
+    const file = event.target.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            image.src = e.target.result;
+            image.style.display = 'block';
+        };
+
+        reader.readAsDataURL(file);
+    }
+}
+
     $(".input-checkbox").change(function() {
         var id = $(this).attr("id");
         var isChecked = $(this).prop("checked");
@@ -196,7 +215,6 @@
         $(`#container-for-${checkboxId}`).remove(); // Remove the corresponding container div
         // Perform any additional actions if needed
     });
-});
 
 </script>
 @endsection('content')

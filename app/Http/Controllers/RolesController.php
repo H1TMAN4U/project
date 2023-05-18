@@ -12,8 +12,10 @@ class RolesController extends Controller
     public function index()
     {
         $roles=Role::all();
+        $permissions = Permission::all();
+
         return view('access.admin.roles.index',
-        compact('roles'));
+        compact('roles','permissions'));
     }
     public function create()
     {

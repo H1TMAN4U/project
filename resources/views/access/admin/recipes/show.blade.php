@@ -64,13 +64,13 @@
 
 <div class="block w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700">
     <div class="bg-gray-50 flex flex-col rounded-t-lg dark:bg-gray-800">
-        <h5 class="border-b border-gray-600 p-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white">Review</h5>
+        <h5 class="border-b border-gray-300 p-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white dark:border-gray-600">Review</h5>
         <h1 class="bg-gray-100 border border-gray-200 font-normal text-gray-700 m-2 p-4 rounded-lg dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum, odio maxime. Sapiente distinctio pariatur
             rem odit illum tempora sequi repellat. Facilis nisi molestias ipsum laudantium incidunt cumque assumenda
             praesentium accusamus!
         </h1>
     </div>
-    <div class=" py-4 px-2 border-t border-gray-600 dark:bg-gray-800">
+    <div class=" py-4 px-2 border-t border-gray-300 dark:bg-gray-800 dark:border-gray-600 ">
         <form id="rating-form" class="flex flex-col bg-gray-100 items-center py-8 rounded-lg dark:bg-gray-900" method="POST">
             @csrf
             <div class="flex-row text-center p-2 text-gray-300">
@@ -105,137 +105,136 @@
         </form>
     </div>
 </div>
-{{-- <div class="mx-[70px]">
-<section class="flex items-center justify-center top-2 py-8 pb-8 border-b-2">
-    <div class="">
-        <h1 class="text-[40px] leading-relaxed font-semibold mb-6">
-            Homemade Pumpkin Purée
-        </h1>
-        <div class="flex flex-row justify-center">
-            <div class="w-full text-center border-r-2">
-                <span class="inline-block text-[40px] ">5</span>
-                <span class="block">Ingredients</span>
-            </div>
-            <div class="w-full text-center">
-                <span class="inline-block text-[40px] ">{{$recipe->duration}}</span>
-                <span class="block">Minutes</span>
-            </div>
-        </div>
-        <div class="flex flex-col">
-            <div class="flex flex-row justify-center p-4 text-white font-semibold">
-                <span class="m-2 px-4">
-                    <button class="w-full bg-indigo-500 rounded-full p-2">Read Instruction</button>
-                </span>
-                <span class="m-2 px-4">
-                    <button data-users-id="{{ Auth::user()->id }}" data-recipes-id="{{ $recipe->id }}"
-                        class="create-bookmark w-full bg-red-500 rounded-full p-2">Add to Bookmarks</button>
-                </span>
-            </div>
 
+<div class="block w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-600">
+    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy technology acquisitions 2021</h5>
+    <p class="font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
+
+
+    <form action="{{ route('comments.store') }}" method="POST" class="my-4">
+        @csrf
+
+        <div class="mb-4">
+        <label for="content" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your message</label>
+        <textarea name="content" id="content" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your thoughts here..."></textarea>
+
+            {{-- <textarea name="content" id="content" rows="5" required class="w-full border border-gray-200 rounded-lg px-4 py-2"></textarea> --}}
         </div>
 
-    </div>
-    <div class="ml-[40px]">
-        <img  src="{{ asset('images/' . $recipe->img) }}" alt=""
-        class="max-w-7xl w-[500px] h-[500px] rounded-xl ">
-    </div>
-</section>
-<section class="py-8 border-b-2">
-    <div class="">
-        <div class="flex flex-row justify-between mb-4">
-            <h1 class="text-2xl font-semibold">Ingredients</h1>
-            <h5 class="uppercase text-xs">4 Servings</h5>
-        </div>
-        <div class="flex flex-col">
-        <ul>
-            @foreach ($recipeIngredients as $ingredient)
-            <li>{{ $ingredient->name }} - {{ $ingredient->pivot->amount }}</li>
-            @endforeach
-        </ul>
-        </div>
-    </div>
-</section>
-<section class="py-8 border-b-2">
-    <div class="flex flex-col">
-        <h1 class="text-2xl mb-8">Instructions</h1>
-        <ol>
-            @foreach ($instructions as $value)
-            <li class="mb-4">
-                <div class="flex flex-row">
-                    <p>{{$value->step_number}}</p>
-                    <span>{{$value->instruction}}</span>
+        <input type="hidden" name="users_id" value="{{ Auth::id() }}">
+        <input type="hidden" name="recipes_id" value="{{ $recipe->id }}">
+
+        <!-- Add the parent comment ID field -->
+        <input type="hidden" name="parent_comment_id" value="{{ $parentCommentId ?? null }}">
+
+        <button type="submit" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600">Post Comment</button>
+    </form>
+
+    <!-- Display the recipe details -->
+
+<!-- Display existing comments -->
+<div id="comments" class="my-4">
+    <h3 class="text-lg font-semibold">Comments:</h3>
+    <ul class="mt-2 space-y-1">
+        @foreach ($recipe->comments as $comment)
+        <div id="comment_{{$comment->id}}" class="my-4">
+            @if (!$comment->parent_comment_id)
+            <li id="parentComment_{{$comment->id}}" class="bg-gray-50 border border-gray-200 rounded-lg p-4 dark:border-gray-600 dark:bg-gray-800">
+                <div class="flex items-center mb-2">
+                    @if ($comment->user)
+                    <img src="{{ $comment->user->avatar }}" alt="{{ $comment->user->name }}" class="w-8 h-8 rounded-full mr-2">
+                    <span class="font-semibold">{{ $comment->user->name }}</span>
+                    @else
+                    <span class="font-semibold">Anonymous User</span>
+                    @endif
                 </div>
+                <p class="text-gray-700 dark:text-gray-300">{{ $comment->content }}</p>
+                <button onclick="deleteComment('parentComment_{{ $comment->id }}')">Delete</button>
+                <button class="text-blue-500 hover:text-blue-600 font-semibold mt-2" onclick="toggleReplyForm({{ $comment->id }})">Reply</button>
+                <div id="replyForm_{{ $comment->id }}" class="hidden mt-4">
+                        <form action="{{ route('comments.store') }}" method="POST">
+                            @csrf
+                            <div>
+                                <label for="replyContent" class="block font-semibold">Reply:</label>
+                                <textarea name="content" id="replyContent" rows="3" required class="w-full border border-gray-200 rounded-lg px-4 py-2 bg-gray-700"></textarea>
+                            </div>
+                            <input type="hidden" name="users_id" value="{{ Auth::id() }}">
+                            <input type="hidden" name="recipes_id" value="{{ $recipe->id }}">
+                            <input type="hidden" name="parent_comment_id" value="{{ $comment->id }}">
+                            <button type="submit" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 mt-2">Post Reply</button>
+                        </form>
+                </div>
+
+                <!-- Display child comments recursively -->
+                <ul class="mt-2 space-y-1">
+                    @foreach ($comment->childComments as $childComment)
+                    <li id="childComment_{{ $childComment->id }}" class="bg-gray-50 border border-gray-200 rounded-lg p-2 dark:border-gray-600 dark:bg-gray-800 ml-8 mt-2">
+                        <div class="flex items-center mb-2">
+                            @if ($childComment->user)
+                            <img src="{{ $childComment->user->avatar }}" alt="{{ $childComment->user->name }}" class="w-6 h-6 rounded-full mr-2">
+                            <span class="font-semibold">{{ $childComment->user->name }}</span>
+                            @else
+                            <span class="font-semibold">Anonymous User</span>
+                            @endif
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300">{{ $childComment->content }}</p>
+                        <button onclick="deleteComment('childComment_{{ $childComment->id }}')">Delete</button>
+                        <button class="text-blue-500 hover:text-blue-600 font-semibold mt-2" onclick="toggleReplyForm('{{ $childComment->id }}')">Reply</button>
+                        <div id="replyForm_{{ $childComment->id }}" class="hidden mt-4">
+                            <form action="{{ route('comments.store') }}" method="POST">
+                                @csrf
+                                <div>
+                                    <label for="replyContent" class="block font-semibold">Reply:</label>
+                                    <textarea name="content" id="replyContent" rows="3" required
+                                        class="w-full border border-gray-200 rounded-lg px-4 py-2 dark:bg-gray-700 dark:border-gray-600"></textarea>
+                                </div>
+                                <input type="hidden" name="users_id" value="{{ Auth::id() }}">
+                                <input type="hidden" name="recipes_id" value="{{ $recipe->id }}">
+                                <input type="hidden" name="parent_comment_id" value="{{ $childComment->id }}">
+                                <button type="submit"
+                                    class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 mt-2">Post
+                                    Reply</button>
+                            </form>
+                        </div>
+                    </li>
+                    @endforeach
+                </ul>
+
             </li>
-            @endforeach
-
-
-        </ol>
-    </div>
-</section>
-<section class="py-8">
-    <div class="bg-gray-100 flex flex-col rounded dark:bg-gray-800">
-        <div class="border-b border-gray-600 mb-1">
-            <div class="text-gray-700 flex flex-row justify-between items-center mb-1 p-2 dark:text-gray-200">
-                <h1><b>Comments</b></h1>
-            </div>
+            @endif
         </div>
-        <div class="m-2 p-4 bg-gray-200 rounded dark:bg-gray-700">
-            <h1>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum, odio maxime. Sapiente distinctio pariatur
-                rem odit illum tempora sequi repellat. Facilis nisi molestias ipsum laudantium incidunt cumque assumenda
-                praesentium accusamus!
-            </h1>
-        </div>
-        <div class="py-8 px-2 border-t border-gray-600">
-            <form id="rating-form" method="POST">
-                @csrf
-                <div class="flex-row text-center p-2 text-gray-300">
-                    <label>
-                        <input name="rating" class="hidden" type="checkbox" value="1" onclick="checkPrevious(this)">
-                        <i class="fa fa-star fa-2xl"></i>
-                    </label>
-                    <label>
-                        <input name="rating" class="hidden" type="checkbox" value="2" onclick="checkPrevious(this)">
-                        <i class="fa fa-star fa-2xl"></i>
-                    </label>
-                    <label>
-                        <input name="rating" class="hidden" type="checkbox" value="3" onclick="checkPrevious(this)">
-                        <i class="fa fa-star fa-2xl"></i>
-                    </label>
-                    <label>
-                        <input name="rating" class="hidden" type="checkbox" value="4" onclick="checkPrevious(this)">
-                        <i class="fa fa-star fa-2xl"></i>
-                    </label>
-                    <label>
-                        <input name="rating" class="hidden" type="checkbox" value="5" onclick="checkPrevious(this)">
-                        <i class="fa fa-star fa-2xl"></i>
-                    </label>
-                    <h1 for="message" class="block p-4 text-sm font-medium text-gray-900 dark:text-white">Your message</h1>
+        @endforeach
+    </ul>
+</div>
 
-                </div>
-                <textarea id="message" rows="2" name="review" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your thoughts here..."></textarea>
-                <input type="hidden" name="recipes_id" value="{{ $recipe->id }}">
-                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold p-2 rounded-lg mt-2 w-full">
-                    Post
-                </button>
-            </form>
-
-        </div>
-    @foreach ($rating as $value)
-        <div class="flex flex-row">
-            @for ($i = 1; $i <= 5; $i++)
-                @if ($i <= $value->rating)
-                    <i class="pasive fas fa-star text-yellow-300"></i>
-                @else
-                    <i class="pasive fas fa-star text-gray-300"></i>
-                @endif
-            @endfor
-            <span>{{ $value->name }}</span>
-        </div>
-    @endforeach
-    </div>
-</section>
-</div> --}}
 <script>
+
+function deleteComment(commentId) {
+    if (confirm('Are you sure you want to delete this comment?')) {
+        // Perform AJAX request to delete the comment
+        $.ajax({
+            url: '/comments/' + commentId.replace('parentComment_', '').replace('childComment_', ''),
+            type: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                // Remove the comment from the DOM
+                $('#' + commentId).remove();
+
+                // Remove child comments recursively
+                $('.childComment_' + commentId).remove();
+            },
+            error: function(xhr) {
+                console.log(xhr.responseText);
+            }
+        });
+    }
+}
+
+
+
+
     function checkPrevious(current) {
         var checkboxes = document.querySelectorAll('input[type="checkbox"]');
         for (var i = 0; i < checkboxes.length; i++) {
@@ -245,6 +244,11 @@
                 checkboxes[i].checked = false;
             }
         }
+    }
+    function toggleReplyForm(commentId) {
+        const formId = `#replyForm_${commentId}`;
+        const formElement = document.querySelector(formId);
+        formElement.classList.toggle('hidden');
     }
 </script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>

@@ -16,22 +16,17 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         $user=User::create([
-
             'name'=>'Admin',
             'email'=>'admin@gmail.com',
             'email_verified_at'=> now(),
             'password'=> bcrypt('adminpass')
-
         ]);
-        $user->assignRole('Admin');
-        $role = Role::findByName('Admin');
-        $permission = Permission::findByName('Publish');
-        $role->givePermissionTo($permission);
+        $user->assignRole('Root');
+        $adminRole = Role::where('name', 'Root')->first();
+        $permissions = Permission::pluck('name');
 
-        if ($user->hasPermissionTo('Publish')) {
-            echo "Permission assigned to user successfully!";
+        if ($adminRole && $permissions) {
+            $adminRole->syncPermissions($permissions);
         }
-
-
     }
 }

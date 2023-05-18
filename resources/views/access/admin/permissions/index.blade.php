@@ -25,22 +25,22 @@
            </thead>
            <tbody>
                 @foreach ($permissions as $value)
-                <tr class="bg-white rounded border dark:bg-gray-800 dark:border-gray-900 hover:bg-gray-50 dark:hover:bg-gray-700">
-                    <td scope="row" class="p-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ $value->name }}
+                    <tr class="bg-white rounded border-t dark:bg-gray-800 dark:border-gray-900 hover:bg-gray-50 dark:hover:bg-gray-700">
+                        <td scope="row" class="p-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {{ $value->name }}
                         </td>
-                    <td class="p-4 float-right">
-                        <form class="" method="POST" action="{{ route('admin.permissions.destroy', $value->id) }}" onsubmit="return confirm('Are you sure?');">
-                            @csrf
-                            @method('DELETE')
-                            <div class="flex flex-col items-center">
-                                <button class="font-semibold text-red-600 dark:text-red-600 hover:underline hover:font-bold" type="submit">Delete</button>
-                                <a href="{{ route('admin.permissions.edit', $value->id) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                </form>
+                        <td class="p-4 float-right">
+                            <form class="" method="POST" action="{{ route('admin.permissions.destroy', $value->id) }}" onsubmit="return confirm('Are you sure?');">
+                                @csrf
+                                @method('DELETE')
+                                <div class="flex flex-col items-center">
+                                    <button class="font-semibold text-red-600 dark:text-red-600 hover:underline hover:font-bold" type="submit">Delete</button>
+                                    <a href="{{ route('admin.permissions.edit', $value->id) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                            </form>
                             </div>
-                    </td>
-                </tr>
-            @endforeach
+                        </td>
+                    </tr>
+                @endforeach
            </tbody>
        </table>
    </div>

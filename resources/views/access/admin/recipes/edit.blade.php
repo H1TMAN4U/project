@@ -23,26 +23,44 @@
         </div>
     </div>
 
-    <div class="mt-4 p-2 h-full bg-gray-100 flex flex-col rounded dark:bg-gray-800">
+    <div class="mt-4 p-2 bg-gray-100 flex flex-col rounded-lg dark:bg-gray-800">
 
         <form method="post" action="{{ route('update-recipe', $recipes->id) }}" enctype="multipart/form-data">
             @method('PUT')
             @csrf
             <div class="w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 rounded-t-lg bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800" id="defaultTab" data-tabs-toggle="#defaultTabContent" role="tablist">
-                    <li class="mr-2">
-                        <button id="about-tab" data-tabs-target="#about" type="button" role="tab" aria-controls="about" aria-selected="true" class="inline-block p-4 text-blue-600 rounded-tl-lg hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-500">Step 1</button>
-                    </li>
-                    <li class="mr-2">
-                        <button id="services-tab" data-tabs-target="#services" type="button" role="tab" aria-controls="services" aria-selected="false" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300">Step 2</button>
-                    </li>
-                    <li class="mr-2">
-                        <button id="statistics-tab" data-tabs-target="#statistics" type="button" role="tab" aria-controls="statistics" aria-selected="false" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300">Step 3</button>
-                    </li>
-                    <li class="mr-2">
-                        <button id="image-tab" data-tabs-target="#image" type="button" role="tab" aria-controls="image" aria-selected="false" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300">Step 4</button>
-                    </li>
-                </ul>
+                <div class="flex w-full border-b justify-between items-center bg-white rounded-t-lg dark:bg-gray-800 dark:border-gray-600">
+                    <ul>
+                        <li class="mr-2">
+                            <button id="prevButton" type="button" class="p-4 text-sm font-medium bg-gray-200 rounded-tl-lg border border-gray-300 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-700 dark:hover:border-gray-600 w-full">
+                                <i class="fa-solid mr-2 text-white fa-arrow-right-long fa-rotate-180 fa-xl"></i>
+                                Previous
+                            </button>
+                        </li>
+                    </ul>
+                    <ul class="flex flex-row text-sm font-medium text-center text-gray-500 border-gray-200 rounded-t-lg bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800" id="defaultTab" data-tabs-toggle="#defaultTabContent" role="tablist">
+                        <li class="mr-2">
+                            <button id="about-tab" data-tabs-target="#about" type="button" role="tab" aria-controls="about" aria-selected="false" class="inline-block p-4 text-blue-600 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-500">Step 1</button>
+                        </li>
+                        <li class="mr-2">
+                            <button id="services-tab" data-tabs-target="#services" type="button" role="tab" aria-controls="services" aria-selected="false" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300 w-full">Step 2</button>
+                        </li>
+                        <li class="mr-2">
+                            <button id="statistics-tab" data-tabs-target="#statistics" type="button" role="tab" aria-controls="statistics" aria-selected="false" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300 w-full">Step 3</button>
+                        </li>
+                        <li class="mr-2">
+                            <button id="image-tab" data-tabs-target="#image" type="button" role="tab" aria-controls="image" aria-selected="false" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300 w-full">Step 4</button>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <button id="nextButton" type="button" class="py-4 px-6 text-sm border font-medium text-white bg-blue-600 rounded-tr-lg hover:bg-blue-700 dark:border-blue-700 w-full">
+                                Next
+                                <i class="fa-solid ml-2 fa-arrow-right-long fa-xl"></i>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
 
                 <div id="defaultTabContent">
 
@@ -177,11 +195,11 @@
                                             <option value="{{ $measure->id }}">{{ $measure->name }}</option>
                                         @endforeach
                                     </select>
-                                    <button type="button" class="btn btn-sm btn-danger delete-ingredient" data-ingredient-id="{{ $ingredient->id }}">
+                                    {{-- <button type="button" class="btn btn-sm btn-danger delete-ingredient" data-ingredient-id="{{ $ingredient->id }}">
                                         <svg class="w-5 h-5 ml-2 mr-1.5 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
                                         </svg>
-                                    </button>
+                                    </button> --}}
 
                                 </div>
                             </div>
@@ -193,9 +211,9 @@
                     </div>
                     <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="image" role="tabpanel" aria-labelledby="image-tab">
                         <div class="mb-6">
-                            <div class="flex items-center justify-center w-full">
+                            <div class="flex flex-col items-center justify-center w-full">
                                 <label for="dropzone-file"
-                                    class="bg-gray-50 flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                                    class="bg-gray-50 flex flex-col items-center justify-center w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                                     <div class="flex flex-col items-center justify-center pt-5 pb-6">
                                         <svg aria-hidden="true" class="w-10 h-10 mb-3 text-gray-400" fill="none"
                                             stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -208,6 +226,10 @@
                                     </div>
                                     <input id="dropzone-file" name="img" type="file" class="hidden" />
                                 </label>
+                                @error('img')
+                                <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                                @enderror
+                                <img id="uploaded-image" alt="Uploaded Image" class="m-2 rounded-lg hidden"/>
                             </div>
                         </div>
 
@@ -219,134 +241,80 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex justify-between p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800">
-                    <button id="prevButton" type="button" class="px-4 py-2 text-sm font-medium text-gray-500 bg-gray-200 rounded-lg hover:bg-gray-300 dark:text-gray-400 dark:bg-gray-700 dark:hover:bg-gray-600">Previous</button>
-                    <button id="nextButton" type="button" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">Next</button>
-                </div>
+
             </div>
             </form>
-
     </div>
+
+
     <script src="{{ asset('js/edit.js') }}"></script>
 
 <script>
-//     $(document).ready(function() {
-//     $(document).on('click', '.delete-ingredient', function(event) {
-//         event.preventDefault(); // Prevent form submission
 
-//         let ingredientId = $(this).data('ingredient-id');
-//         let recipeId = {{ $recipes->id }};
-//         let ingredientItem = $(this).closest('.ingredient-item'); // Get the ingredient item element
+  const prevButton = document.getElementById("prevButton");
+  const nextButton = document.getElementById("nextButton");
 
-//         $.ajax({
-//             type: 'DELETE',
-//             url: '/recipes/' + recipeId + '/ingredients/' + ingredientId,
-//             headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-//             success: function(response) {
-//                 alert(response.message);
-//                 // Remove the deleted ingredient from the DOM
-//                 ingredientItem.remove();
-//             },
-//             error: function(response) {
-//                 alert('An error occurred while deleting the ingredient');
-//             }
-//         });
-//     });
-// });
-// $(document).on('click', '.delete-ingredient', function() {
-//     event.preventDefault();
+  prevButton.addEventListener("click", goToPreviousTab);
+  nextButton.addEventListener("click", goToNextTab);
 
-//     let ingredientId = $(this).data('ingredient-id');
-//     let recipeId = {{ $recipes->id }};
+  function goToPreviousTab() {
+    const currentTab = document.querySelector('[aria-selected="true"]');
+    const previousTab = currentTab.parentElement.previousElementSibling.querySelector("button");
 
-//     $.ajax({
-//         type: 'DELETE',
-//         url: '/recipes/' + recipeId + '/ingredients/' + ingredientId,
-//         headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+    if (previousTab) {
+      currentTab.setAttribute("aria-selected", false);
+      previousTab.setAttribute("aria-selected", true);
 
-//         success: function(response) {
-//             alert(response.message);
-//             // Reload the page to show the updated ingredient list
-//             location.reload();
-//         },
-//         error: function(response) {
-//             alert('An error occurred while deleting the ingredient');
-//         }
-//     });
-// });
-// $(document).on('click', '.delete-ingredient', function(event) {
-//     event.preventDefault();
+      const currentContent = document.getElementById(currentTab.getAttribute("aria-controls"));
+      const previousContent = document.getElementById(previousTab.getAttribute("aria-controls"));
 
-//     let ingredientId = $(this).data('ingredient-id');
-//     let recipeId = {{ $recipes->id }};
+      currentContent.classList.add("hidden");
+      previousContent.classList.remove("hidden");
+    }
+  }
 
-//     // Get the ingredient item element
-//     let ingredientItem = $('#container-for-' + ingredientId);
+  function goToNextTab() {
+    const currentTab = document.querySelector('[aria-selected="true"]');
+    const nextTab = currentTab.parentElement.nextElementSibling.querySelector("button");
 
-//     // Send an AJAX request to remove the ingredient from the database
-//     $.ajax({
-//         type: 'DELETE',
-//         url: '/recipes/' + recipeId + '/ingredients/' + ingredientId,
-//         headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-//         success: function(response) {
-//             alert(response.message);
-//             // Remove the ingredient item from the DOM
-//             ingredientItem.remove();
-//             // Uncheck the corresponding checkbox
-//             $('#checkbox-item-' + ingredientId).prop('checked', false);
-//         },
-//         error: function(response) {
-//             alert('An error occurred while deleting the ingredient');
-//         }
-//     });
-// });
+    if (nextTab) {
+      currentTab.setAttribute("aria-selected", false);
+      nextTab.setAttribute("aria-selected", true);
+
+      const currentContent = document.getElementById(currentTab.getAttribute("aria-controls"));
+      const nextContent = document.getElementById(nextTab.getAttribute("aria-controls"));
+
+      currentContent.classList.add("hidden");
+      nextContent.classList.remove("hidden");
+    }
+  }
 
 
 
+
+const fileInput = document.getElementById('dropzone-file');
+const image = document.getElementById('uploaded-image');
+
+fileInput.addEventListener('change', handleFileSelect);
+
+function handleFileSelect(event) {
+    const file = event.target.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            image.src = e.target.result;
+            image.style.display = 'block';
+        };
+
+        reader.readAsDataURL(file);
+    }
+}
 
 $(document).on('click', '.remove-instruction-step', function() {
   $(this).closest('.instruction-step').remove();
 });
-// $(".input-checkbox").change(function() {
-//     var id = $(this).attr("id");
-//     var isChecked = $(this).prop("checked");
-//     var name = $(`label[for="${id}"]`).text(); // Get the name value
-//     if (isChecked) {
-//         $('#values').append(`
-//             <div id="container-for-${id}" class="flex flex-row">
-//                 <div class="flex items-center justify-center w-full p-2 bg-indigo-600 rounded-l-lg">
-//                     <h1>${name}</h1>
-//                 </div>
-//                 <div class="relative flex flex-row">
-//                     <input type="text" name="amount[]" class="instruction-input bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Amount">
-//                     <select id="measure" name="measure[]" class="bg-gray-50 border text-gray-800 border-gray-300 text-xs rounded-r-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mr-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-//                         <option>Enter meatric</option>
-//                         @foreach ($measures as $measure)
-//                             <option value="{{ $measure->id }}" required>{{ $measure->name }}</option>
-//                         @endforeach
-//                     </select>
-
-//                     <button type="button" data-checkbox-id="${id}" class="uncheck-btn absolute inset-y-0 right-0 flex items-center px-1 text-red-500 border border-l-0 border-transparent">
-//                         <svg class="w-4 h-4 ml-2 mr-1.5 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
-//                     </button>
-//                 </div>
-//             </div>
-//         `);
-//     }
-//     else {
-//     $(`#values [data-checkbox-id="${id}"]`).parent().remove();
-//     $(`#container-for-${id}`).remove(); // Remove the corresponding container div
-//     }
-// });
-
-// // Event delegation for dynamically added elements
-// $('#values').on('click', '.uncheck-btn', function() {
-//     var checkboxId = $(this).data("checkbox-id");
-//     $(`#${checkboxId}`).prop("checked", false);
-//     $(this).parent().remove();
-//     $(`#container-for-${checkboxId}`).remove(); // Remove the corresponding container div
-//     // Perform any additional actions if needed
-// });
 $(document).on('click', 'li[id^="list-id-"]', function() {
     var ingredientId = $(this).attr('id').replace('list-id-', '');
     var checkbox = $('#checkbox-item-' + ingredientId);
@@ -368,11 +336,6 @@ $(document).on('click', 'li[id^="list-id-"]', function() {
                                 <option value="{{ $measure->id }}" required>{{ $measure->name }}</option>
                             @endforeach
                         </select>
-                        <button type="button" class="btn btn-sm btn-danger delete-ingredient" data-ingredient-id="{{ $ingredient->id }}">
-                            <svg class="w-5 h-5 ml-2 mr-1.5 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-                            </svg>
-                        </button>
                     </div>
                 </div>
             `;

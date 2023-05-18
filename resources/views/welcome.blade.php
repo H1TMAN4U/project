@@ -13,7 +13,7 @@
 </div>
 
 <div class="block text-center w-full p-6 bg-white border border-gray-200 rounded-t-lg shadow dark:bg-gray-800 dark:border-gray-700 ">
-    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Most Poular Recipes</h5>
+    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Highest Rated Recipes</h5>
     <p class="font-normal text-gray-700 dark:text-gray-400">We provide a variety of food and beverage recipes <br> with amazing taste from famous chefs</p>
 </div>
 <div class="block text-center w-full p-4 bg-white border border-gray-200 rounded-b-lg shadow dark:bg-gray-800 dark:border-gray-700 ">
