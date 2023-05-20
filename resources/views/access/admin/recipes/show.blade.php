@@ -1,7 +1,7 @@
 @extends('access.master')
 @section('content')
-<div class="flex flex-col items-center my-1 bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-7xl dark:border-gray-700 dark:bg-gray-900">
-    <img class="m-4 w-full rounded-lg h-full md:h-[500px] md:w-[500px] md:rounded-none md:rounded" src="{{ asset('images/' . $recipe->img) }}" alt="">
+<div class="flex flex-col p-2 items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-7xl dark:border-gray-700 dark:bg-gray-900">
+    <img class=" w-full rounded h-full md:h-[500px] md:w-[500px]" src="{{ asset('images/' . $recipe->img) }}" alt="">
     <div class="flex flex-col p-4 leading-normal items-center">
 
         <h5 class="mb-2 text-center text-4xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $recipe->name }}</h5>
@@ -111,130 +111,177 @@
     <p class="font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
 
 
-    <form action="{{ route('comments.store') }}" method="POST" class="my-4">
-        @csrf
+<form id="commentForm" action="{{ route('comments.store') }}" method="POST" class="my-4">
+    @csrf
+    <div class="mb-4">
+    <label for="content" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your message</label>
+    <textarea name="content" id="content" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your thoughts here..."></textarea>
+    </div>
+    <input type="hidden" name="users_id" value="{{ Auth::id() }}">
+    <input type="hidden" name="recipes_id" value="{{ $recipe->id }}">
+    <input type="hidden" name="parent_comment_id" value="{{ $parentCommentId ?? null }}">
+    <button type="submit" class="btn btn-primary">Submit Comment</button>
+</form>
 
-        <div class="mb-4">
-        <label for="content" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your message</label>
-        <textarea name="content" id="content" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your thoughts here..."></textarea>
-
-            {{-- <textarea name="content" id="content" rows="5" required class="w-full border border-gray-200 rounded-lg px-4 py-2"></textarea> --}}
-        </div>
-
-        <input type="hidden" name="users_id" value="{{ Auth::id() }}">
-        <input type="hidden" name="recipes_id" value="{{ $recipe->id }}">
-
-        <!-- Add the parent comment ID field -->
-        <input type="hidden" name="parent_comment_id" value="{{ $parentCommentId ?? null }}">
-
-        <button type="submit" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600">Post Comment</button>
-    </form>
-
-    <!-- Display the recipe details -->
-
-<!-- Display existing comments -->
-<div id="comments" class="my-4">
-    <h3 class="text-lg font-semibold">Comments:</h3>
-    <ul class="mt-2 space-y-1">
-        @foreach ($recipe->comments as $comment)
-        <div id="comment_{{$comment->id}}" class="my-4">
-            @if (!$comment->parent_comment_id)
-            <li id="parentComment_{{$comment->id}}" class="bg-gray-50 border border-gray-200 rounded-lg p-4 dark:border-gray-600 dark:bg-gray-800">
-                <div class="flex items-center mb-2">
-                    @if ($comment->user)
-                    <img src="{{ $comment->user->avatar }}" alt="{{ $comment->user->name }}" class="w-8 h-8 rounded-full mr-2">
-                    <span class="font-semibold">{{ $comment->user->name }}</span>
-                    @else
-                    <span class="font-semibold">Anonymous User</span>
-                    @endif
-                </div>
-                <p class="text-gray-700 dark:text-gray-300">{{ $comment->content }}</p>
-                <button onclick="deleteComment('parentComment_{{ $comment->id }}')">Delete</button>
-                <button class="text-blue-500 hover:text-blue-600 font-semibold mt-2" onclick="toggleReplyForm({{ $comment->id }})">Reply</button>
-                <div id="replyForm_{{ $comment->id }}" class="hidden mt-4">
-                        <form action="{{ route('comments.store') }}" method="POST">
-                            @csrf
-                            <div>
-                                <label for="replyContent" class="block font-semibold">Reply:</label>
-                                <textarea name="content" id="replyContent" rows="3" required class="w-full border border-gray-200 rounded-lg px-4 py-2 bg-gray-700"></textarea>
-                            </div>
-                            <input type="hidden" name="users_id" value="{{ Auth::id() }}">
-                            <input type="hidden" name="recipes_id" value="{{ $recipe->id }}">
-                            <input type="hidden" name="parent_comment_id" value="{{ $comment->id }}">
-                            <button type="submit" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 mt-2">Post Reply</button>
-                        </form>
-                </div>
-
-                <!-- Display child comments recursively -->
-                <ul class="mt-2 space-y-1">
-                    @foreach ($comment->childComments as $childComment)
-                    <li id="childComment_{{ $childComment->id }}" class="bg-gray-50 border border-gray-200 rounded-lg p-2 dark:border-gray-600 dark:bg-gray-800 ml-8 mt-2">
+<div id="comments-container" class="my-4">
+    @include('access.admin.recipes.comment', ['recipe' => $recipe])
+</div>
+{{-- <div id="comments-container" class="my-4">
+    <div id="comments" class="my-4">
+        <h3 class="text-lg font-semibold">Comments:</h3>
+        <ul id="ul-comments" class="mt-2 space-y-1">
+            @foreach ($recipe->comments as $comment)
+                <div id="parent-div" class="my-4">
+                    @if (!$comment->parent_comment_id)
+                    <li id="parentComment_{{$comment->id}}" class="bg-gray-50 border border-gray-200 rounded-lg p-4 dark:border-gray-600 dark:bg-gray-800">
                         <div class="flex items-center mb-2">
-                            @if ($childComment->user)
-                            <img src="{{ $childComment->user->avatar }}" alt="{{ $childComment->user->name }}" class="w-6 h-6 rounded-full mr-2">
-                            <span class="font-semibold">{{ $childComment->user->name }}</span>
+                            @if ($comment->user)
+                            <img src="{{ $comment->user->avatar }}" alt="{{ $comment->user->name }}" class="w-8 h-8 rounded-full mr-2">
+                            <span class="font-semibold">{{ $comment->user->name }}</span>
                             @else
                             <span class="font-semibold">Anonymous User</span>
                             @endif
                         </div>
-                        <p class="text-gray-700 dark:text-gray-300">{{ $childComment->content }}</p>
-                        <button onclick="deleteComment('childComment_{{ $childComment->id }}')">Delete</button>
-                        <button class="text-blue-500 hover:text-blue-600 font-semibold mt-2" onclick="toggleReplyForm('{{ $childComment->id }}')">Reply</button>
-                        <div id="replyForm_{{ $childComment->id }}" class="hidden mt-4">
-                            <form action="{{ route('comments.store') }}" method="POST">
-                                @csrf
-                                <div>
-                                    <label for="replyContent" class="block font-semibold">Reply:</label>
-                                    <textarea name="content" id="replyContent" rows="3" required
-                                        class="w-full border border-gray-200 rounded-lg px-4 py-2 dark:bg-gray-700 dark:border-gray-600"></textarea>
-                                </div>
-                                <input type="hidden" name="users_id" value="{{ Auth::id() }}">
-                                <input type="hidden" name="recipes_id" value="{{ $recipe->id }}">
-                                <input type="hidden" name="parent_comment_id" value="{{ $childComment->id }}">
-                                <button type="submit"
-                                    class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 mt-2">Post
-                                    Reply</button>
-                            </form>
+                        <p class="text-gray-700 dark:text-gray-300">{{ $comment->content }}</p>
+                        <button onclick="deleteComment('parentComment_{{ $comment->id }}')">Delete</button>
+                        <button class="text-blue-500 hover:text-blue-600 font-semibold mt-2" onclick="toggleReplyForm({{ $comment->id }})">Reply</button>
+                        <div id="replyForm_{{ $comment->id }}" class="hidden mt-4">
+                                <form action="{{ route('comments.store') }}" method="POST">
+                                    @csrf
+                                    <div>
+                                        <label for="replyContent" class="block font-semibold">Reply:</label>
+                                        <textarea name="content" id="replyContent" rows="3" required class="w-full border border-gray-200 rounded-lg px-4 py-2 bg-gray-700"></textarea>
+                                    </div>
+                                    <input type="hidden" name="users_id" value="{{ Auth::id() }}">
+                                    <input type="hidden" name="recipes_id" value="{{ $recipe->id }}">
+                                    <input type="hidden" name="parent_comment_id" value="{{ $comment->id }}">
+                                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 mt-2">Post Reply</button>
+                                </form>
                         </div>
-                    </li>
-                    @endforeach
-                </ul>
 
-            </li>
-            @endif
-        </div>
-        @endforeach
-    </ul>
-</div>
+                        <!-- Display child comments recursively -->
+                        <ul class="mt-2 space-y-1">
+                            @foreach ($comment->childComments as $childComment)
+                            <li id="childComment_{{ $childComment->id }}" class="bg-gray-50 border border-gray-200 rounded-lg p-2 dark:border-gray-600 dark:bg-gray-800 ml-8 mt-2">
+                                <div class="flex items-center mb-2">
+                                    @if ($childComment->user)
+                                    <img src="{{ $childComment->user->avatar }}" alt="{{ $childComment->user->name }}" class="w-6 h-6 rounded-full mr-2">
+                                    <span class="font-semibold">{{ $childComment->user->name }}</span>
+                                    @else
+                                    <span class="font-semibold">Anonymous User</span>
+                                    @endif
+                                </div>
+                                <p class="text-gray-700 dark:text-gray-300">{{ $childComment->content }}</p>
+                                <button onclick="deleteComment('childComment_{{ $childComment->id }}')">Delete</button>
+                                <button class="text-blue-500 hover:text-blue-600 font-semibold mt-2" onclick="toggleReplyForm('{{ $childComment->id }}')">Reply</button>
+                                <div id="replyForm_{{ $childComment->id }}" class="hidden mt-4">
+                                    <form action="{{ route('comments.store') }}" method="POST">
+                                        @csrf
+                                        <div>
+                                            <label for="replyContent" class="block font-semibold">Reply:</label>
+                                            <textarea name="content" id="replyContent" rows="3" required
+                                                class="w-full border border-gray-200 rounded-lg px-4 py-2 dark:bg-gray-700 dark:border-gray-600"></textarea>
+                                        </div>
+                                        <input type="hidden" name="users_id" value="{{ Auth::id() }}">
+                                        <input type="hidden" name="recipes_id" value="{{ $recipe->id }}">
+                                        <input type="hidden" name="parent_comment_id" value="{{ $childComment->id }}">
+                                        <button type="submit"
+                                            class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 mt-2">Post
+                                            Reply</button>
+                                    </form>
+                                </div>
+                            </li>
+                            @endforeach
+                        </ul>
+
+                    </li>
+                    @endif
+                </div>
+            @endforeach
+        </ul>
+    </div>
+</div> --}}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+//  $(document).ready(function () {
+//         // Submit comment form
+//         $('#commentForm').submit(function (event) {
+//             event.preventDefault();
 
-function deleteComment(commentId) {
-    if (confirm('Are you sure you want to delete this comment?')) {
-        // Perform AJAX request to delete the comment
-        $.ajax({
-            url: '/comments/' + commentId.replace('parentComment_', '').replace('childComment_', ''),
-            type: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(response) {
-                // Remove the comment from the DOM
-                $('#' + commentId).remove();
+//             $.ajax({
+//                 url: $(this).attr('action'),
+//                 type: 'POST',
+//                 data: $(this).serialize(),
+//                 success: function (response) {
+//                     $('#commentForm')[0].reset();
+//                     fetchComments(); // Fetch comments after successful submission
+//                 }
+//             });
+//         });
 
-                // Remove child comments recursively
-                $('.childComment_' + commentId).remove();
-            },
-            error: function(xhr) {
-                console.log(xhr.responseText);
-            }
-        });
-    }
-}
+//         // Submit reply form
+//         $(document).on('submit', '.reply-form', function (event) {
+//             event.preventDefault();
 
+//             var form = $(this);
 
+//             $.ajax({
+//                 url: form.attr('action'),
+//                 type: 'POST',
+//                 data: form.serialize(),
+//                 success: function (response) {
+//                     form[0].reset();
+//                     fetchComments(); // Fetch comments after successful submission
+//                 }
+//             });
+//         });
 
+//         // Fetch comments
+//         $('#fetch-comments-button').click(function () {
+//             fetchComments();
+//         });
 
+//         function fetchComments() {
+//             $.ajax({
+//                 url: '{{ route("fetch.comments", $recipe->id) }}',
+//                 type: 'GET',
+//                 success: function (response) {
+//                     var commentsContainer = $('#comments-container');
+//                     commentsContainer.empty();
+//                     commentsContainer.html(response);
+//                 }
+//             });
+//         }
+// });
+//     function deleteComment(commentId) {
+//         if (confirm('Are you sure you want to delete this comment?')) {
+//             // Perform AJAX request to delete the comment
+//             $.ajax({
+//                 url: '/comments/' + commentId.replace('parentComment_', '').replace('childComment_', ''),
+//                 type: 'DELETE',
+//                 headers: {
+//                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//                 },
+//                 success: function(response) {
+//                     // Remove the comment from the DOM
+//                     $('#' + commentId).remove();
+
+//                     // Remove child comments recursively
+//                     $('.childComment_' + commentId).remove();
+//                 },
+//                 error: function(xhr) {
+//                     console.log(xhr.responseText);
+//                 }
+//             });
+//         }
+//     }
+//     function toggleReplyForm(commentId) {
+//         const formId = `#replyForm_${commentId}`;
+//         const formElement = document.querySelector(formId);
+//         formElement.classList.toggle('hidden');
+//     }
     function checkPrevious(current) {
         var checkboxes = document.querySelectorAll('input[type="checkbox"]');
         for (var i = 0; i < checkboxes.length; i++) {
@@ -244,11 +291,6 @@ function deleteComment(commentId) {
                 checkboxes[i].checked = false;
             }
         }
-    }
-    function toggleReplyForm(commentId) {
-        const formId = `#replyForm_${commentId}`;
-        const formElement = document.querySelector(formId);
-        formElement.classList.toggle('hidden');
     }
 </script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>

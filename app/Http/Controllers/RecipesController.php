@@ -80,25 +80,32 @@ class RecipesController extends Controller
         }
         return redirect()->route('index-recipe');
     }
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $recipe = Recipes::with('comments.user')->findOrFail($id);
+        $recipe = Recipes::findOrFail($id);
 
+        $comments = $recipe->comments()
+            ->with('user')
+            ->orderBy('created_at', 'desc')
+            ->get();
         $rating = DB::table('rating')
-        ->join('users', 'users.id', '=', 'rating.users_id')
-        ->select('users.name', 'rating.rating')
-        ->where('rating.recipes_id', $id)
-        ->get();
+            ->join('users', 'users.id', '=', 'rating.users_id')
+            ->select('users.name', 'rating.rating')
+            ->where('rating.recipes_id', $id)
+            ->get();
+
         $ingredients = DB::table('ingredients_recipes')
-        ->join('recipes', 'recipes.id', '=', 'ingredients_recipes.recipes_id')
-        ->join('ingredients', 'ingredients.id', '=', 'ingredients_recipes.ingredients_id')
-        ->join('measures', 'measures.id', '=', 'ingredients_recipes.measures_id')
-        ->select('ingredients.name as ingredient_name', 'ingredients_recipes.amount', 'measures.name as measure_name')
-        ->where('recipes_id',$id)
-        ->get();
+            ->join('recipes', 'recipes.id', '=', 'ingredients_recipes.recipes_id')
+            ->join('ingredients', 'ingredients.id', '=', 'ingredients_recipes.ingredients_id')
+            ->join('measures', 'measures.id', '=', 'ingredients_recipes.measures_id')
+            ->select('ingredients.name as ingredient_name', 'ingredients_recipes.amount', 'measures.name as measure_name')
+            ->where('recipes_id',$id)
+            ->get();
+
         $instructions = Instructions::where('recipe_id', $id)->get();
         return view('access.admin.recipes.show', compact('recipe', 'ingredients', 'instructions', 'rating'));
     }
+
     public function edit($id)
     {
         $measures = Measure::all();

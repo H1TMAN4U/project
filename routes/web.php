@@ -130,9 +130,10 @@ Route::middleware(['auth','verified', 'role:Root'])->name('admin.')->prefix('adm
     Route::delete('/user/{user}/permissions/{permission}', [UserController::class, 'revokePermission'])->name('users.permissions.revoke');
 
 });
-
-Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+Route::get('/fetch-comments/{id}', [CommentController::class, 'fetchComments'])->name('fetch.comments');
+Route::match(['post', 'put'], '/comments', [CommentController::class, 'store'])->name('comments.store');
 Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
+Route::put('/comments/update/{id}', [CommentController::class, 'update'])->name('comments.update');
 
 
 require __DIR__.'/auth.php';
