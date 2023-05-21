@@ -126,162 +126,99 @@
 <div id="comments-container" class="my-4">
     @include('access.admin.recipes.comment', ['recipe' => $recipe])
 </div>
-{{-- <div id="comments-container" class="my-4">
-    <div id="comments" class="my-4">
-        <h3 class="text-lg font-semibold">Comments:</h3>
-        <ul id="ul-comments" class="mt-2 space-y-1">
-            @foreach ($recipe->comments as $comment)
-                <div id="parent-div" class="my-4">
-                    @if (!$comment->parent_comment_id)
-                    <li id="parentComment_{{$comment->id}}" class="bg-gray-50 border border-gray-200 rounded-lg p-4 dark:border-gray-600 dark:bg-gray-800">
-                        <div class="flex items-center mb-2">
-                            @if ($comment->user)
-                            <img src="{{ $comment->user->avatar }}" alt="{{ $comment->user->name }}" class="w-8 h-8 rounded-full mr-2">
-                            <span class="font-semibold">{{ $comment->user->name }}</span>
-                            @else
-                            <span class="font-semibold">Anonymous User</span>
-                            @endif
-                        </div>
-                        <p class="text-gray-700 dark:text-gray-300">{{ $comment->content }}</p>
-                        <button onclick="deleteComment('parentComment_{{ $comment->id }}')">Delete</button>
-                        <button class="text-blue-500 hover:text-blue-600 font-semibold mt-2" onclick="toggleReplyForm({{ $comment->id }})">Reply</button>
-                        <div id="replyForm_{{ $comment->id }}" class="hidden mt-4">
-                                <form action="{{ route('comments.store') }}" method="POST">
-                                    @csrf
-                                    <div>
-                                        <label for="replyContent" class="block font-semibold">Reply:</label>
-                                        <textarea name="content" id="replyContent" rows="3" required class="w-full border border-gray-200 rounded-lg px-4 py-2 bg-gray-700"></textarea>
-                                    </div>
-                                    <input type="hidden" name="users_id" value="{{ Auth::id() }}">
-                                    <input type="hidden" name="recipes_id" value="{{ $recipe->id }}">
-                                    <input type="hidden" name="parent_comment_id" value="{{ $comment->id }}">
-                                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 mt-2">Post Reply</button>
-                                </form>
-                        </div>
 
-                        <!-- Display child comments recursively -->
-                        <ul class="mt-2 space-y-1">
-                            @foreach ($comment->childComments as $childComment)
-                            <li id="childComment_{{ $childComment->id }}" class="bg-gray-50 border border-gray-200 rounded-lg p-2 dark:border-gray-600 dark:bg-gray-800 ml-8 mt-2">
-                                <div class="flex items-center mb-2">
-                                    @if ($childComment->user)
-                                    <img src="{{ $childComment->user->avatar }}" alt="{{ $childComment->user->name }}" class="w-6 h-6 rounded-full mr-2">
-                                    <span class="font-semibold">{{ $childComment->user->name }}</span>
-                                    @else
-                                    <span class="font-semibold">Anonymous User</span>
-                                    @endif
-                                </div>
-                                <p class="text-gray-700 dark:text-gray-300">{{ $childComment->content }}</p>
-                                <button onclick="deleteComment('childComment_{{ $childComment->id }}')">Delete</button>
-                                <button class="text-blue-500 hover:text-blue-600 font-semibold mt-2" onclick="toggleReplyForm('{{ $childComment->id }}')">Reply</button>
-                                <div id="replyForm_{{ $childComment->id }}" class="hidden mt-4">
-                                    <form action="{{ route('comments.store') }}" method="POST">
-                                        @csrf
-                                        <div>
-                                            <label for="replyContent" class="block font-semibold">Reply:</label>
-                                            <textarea name="content" id="replyContent" rows="3" required
-                                                class="w-full border border-gray-200 rounded-lg px-4 py-2 dark:bg-gray-700 dark:border-gray-600"></textarea>
-                                        </div>
-                                        <input type="hidden" name="users_id" value="{{ Auth::id() }}">
-                                        <input type="hidden" name="recipes_id" value="{{ $recipe->id }}">
-                                        <input type="hidden" name="parent_comment_id" value="{{ $childComment->id }}">
-                                        <button type="submit"
-                                            class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 mt-2">Post
-                                            Reply</button>
-                                    </form>
-                                </div>
-                            </li>
-                            @endforeach
-                        </ul>
-
-                    </li>
-                    @endif
-                </div>
-            @endforeach
-        </ul>
-    </div>
-</div> --}}
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+<script src="{{ asset('js/design.js') }}"></script>
+<script src="{{ asset('js/rating.js') }}"></script>
+<script src="{{ asset('js/bookmarks.js') }}"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
 <script>
-//  $(document).ready(function () {
-//         // Submit comment form
-//         $('#commentForm').submit(function (event) {
-//             event.preventDefault();
+    // Update comment form
+    $(document).on('submit', 'form[id^="updateForm_"]', function (event) {
+        event.preventDefault();
 
-//             $.ajax({
-//                 url: $(this).attr('action'),
-//                 type: 'POST',
-//                 data: $(this).serialize(),
-//                 success: function (response) {
-//                     $('#commentForm')[0].reset();
-//                     fetchComments(); // Fetch comments after successful submission
-//                 }
-//             });
-//         });
+        var formId = $(this).attr('id');
+        var commentId = formId.split('_')[1];
+        var updateContentId = '#updateContent_' + commentId;
 
-//         // Submit reply form
-//         $(document).on('submit', '.reply-form', function (event) {
-//             event.preventDefault();
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function (response) {
+                $(updateContentId).attr('readonly', true);
+                $('#update-' + commentId).addClass('hidden');
+                fetchComments(); // Fetch comments after successful update
+            }
+        });
+    });
+    // Submit comment form
+    $('#commentForm').submit(function (event) {
+        event.preventDefault();
 
-//             var form = $(this);
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function (response) {
+                $('#commentForm')[0].reset();
+                fetchComments(); // Fetch comments after successful submission
+            }
+        });
+    });
+     // Submit reply form
+    $(document).on('submit', '.reply-form', function (event) {
+        event.preventDefault();
 
-//             $.ajax({
-//                 url: form.attr('action'),
-//                 type: 'POST',
-//                 data: form.serialize(),
-//                 success: function (response) {
-//                     form[0].reset();
-//                     fetchComments(); // Fetch comments after successful submission
-//                 }
-//             });
-//         });
+        var form = $(this);
 
-//         // Fetch comments
-//         $('#fetch-comments-button').click(function () {
-//             fetchComments();
-//         });
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+            success: function (response) {
+                form[0].reset();
+                fetchComments(); // Fetch comments after successful submission
+            }
+        });
+    });
+    function fetchComments() {
+        $.ajax({
+            url: '{{ route("fetch.comments", $recipe->id) }}',
+            type: 'GET',
+            success: function (response) {
+                var commentsContainer = $('#comments-container');
+                commentsContainer.empty();
+                commentsContainer.html(response);
+            }
+        });
+    }
+    function deleteComment(commentId) {
+        if (confirm('Are you sure you want to delete this comment?')) {
+            // Perform AJAX request to delete the comment
+            $.ajax({
+                url: '/comments/' + commentId.replace('parentComment_', '').replace('childComment_', ''),
+                type: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    // Remove the comment from the DOM
+                    $('#' + commentId).remove();
 
-//         function fetchComments() {
-//             $.ajax({
-//                 url: '{{ route("fetch.comments", $recipe->id) }}',
-//                 type: 'GET',
-//                 success: function (response) {
-//                     var commentsContainer = $('#comments-container');
-//                     commentsContainer.empty();
-//                     commentsContainer.html(response);
-//                 }
-//             });
-//         }
-// });
-//     function deleteComment(commentId) {
-//         if (confirm('Are you sure you want to delete this comment?')) {
-//             // Perform AJAX request to delete the comment
-//             $.ajax({
-//                 url: '/comments/' + commentId.replace('parentComment_', '').replace('childComment_', ''),
-//                 type: 'DELETE',
-//                 headers: {
-//                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-//                 },
-//                 success: function(response) {
-//                     // Remove the comment from the DOM
-//                     $('#' + commentId).remove();
-
-//                     // Remove child comments recursively
-//                     $('.childComment_' + commentId).remove();
-//                 },
-//                 error: function(xhr) {
-//                     console.log(xhr.responseText);
-//                 }
-//             });
-//         }
-//     }
-//     function toggleReplyForm(commentId) {
-//         const formId = `#replyForm_${commentId}`;
-//         const formElement = document.querySelector(formId);
-//         formElement.classList.toggle('hidden');
-//     }
+                    // Remove child comments recursively
+                    $('.childComment_' + commentId).remove();
+                },
+                error: function(xhr) {
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+    }
+    function toggleReplyForm(commentId) {
+        const formId = `#replyForm_${commentId}`;
+        const formElement = document.querySelector(formId);
+        formElement.classList.toggle('hidden');
+    }
     function checkPrevious(current) {
         var checkboxes = document.querySelectorAll('input[type="checkbox"]');
         for (var i = 0; i < checkboxes.length; i++) {
@@ -293,16 +230,11 @@
         }
     }
 </script>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
-    <style>
-        input[type="checkbox"]:checked+i:before {
-            color: #ffd117;
-        }
-    </style>
-        <script src="{{ asset('js/design.js') }}"></script>
-        <script src="{{ asset('js/rating.js') }}"></script>
-        <script src="{{ asset('js/bookmarks.js') }}"></script>
-    </body>
 
-    </html>
+    <style>
+    input[type="checkbox"]:checked+i:before
+    {
+        color: #ffd117;
+    }
+    </style>
 @endsection
