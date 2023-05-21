@@ -27,14 +27,17 @@
             <div class="grid gap-6 mb-6 md:grid-cols-3">
                 <div>
                     <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Recipes name</label>
-                    <input type="text" id="name" name="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter recipes name" required>
+                    <input value="{{ old('name') }}" type="text" id="name" name="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter recipes name" required>
                 </div>
                 <div>
                     <label for="duration" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Preparation Time</label>
-                    <input  value="{{ old('duration') }}" type="text" id="duration" name="duration" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="30 min" required>
-                    @error('duration')
+                    <input value="{{ old('duration') }}" type="text" id="duration" name="duration" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="30 min" required>
+                @if ($errors->has('duration'))
+                @error('duration')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
+                @endif
+
 
                     {{-- <span id="duration-error" class="text-red-500 text-sm"></span> --}}
 
@@ -43,34 +46,58 @@
                     <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an category</label>
                     <select id="category" name="category_id"
                         class="bg-gray-50 border border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option class="" selected>Select a category</option>
+                        <option selected>Select a category</option>
                         @foreach ($category as $value)
-                            <option value="{{ $value->id }}" required>{{ $value->name }}</option>
+                        <option value="{{ $value->id }}"{{ old('category_id') == $value->id ? ' selected' : '' }}>{{ $value->name }}</option>
                         @endforeach
                     </select>
                 </div>
             </div>
             <div>
                 <label for="descriptions" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Recipes description</label>
-                <textarea id="descriptions" name="descriptions" id="descriptions" rows="8" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter your discription here..." required></textarea>
-            </div>
+                <textarea id="descriptions" name="descriptions" rows="8"
+                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Enter your description here..." required>{{ old('descriptions') }}</textarea>
+                        </div>
         </div>
         <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="services" role="tabpanel" aria-labelledby="services-tab">
             <h2 class="mb-5 text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white">Instruction</h2>
             <div class="">
                 <div class="grid grid-col-1 gap-4">
                     <div id="instruction-steps">
-                        <label for="instructions" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Step</label>
-                        <div class="relative my-2">
-                            <input type="text" name="instructions[]" class="instruction-input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="..." requered>
-                            <button type="button" class="remove-instruction-step absolute inset-y-0 right-0 flex items-center px-1 text-gray-500 border border-l-0 border-transparent rounded-r-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" dis>
-                                <svg class="w-4 h-4 ml-2 mr-1.5 text-gray-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
-                            </button>
-                        </div>
+                        @if (is_array(old('instructions')) && count(old('instructions')) > 0)
+                            @foreach (old('instructions') as $index => $instruction)
+                                <div class="instruction-step">
+                                    <label for="instructions" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Step</label>
+                                    <div class="relative my-2">
+                                        <input type="text" name="instructions[]" class="instruction-input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="..." value="{{ $instruction }}" required>
+                                        <button type="button" class="remove-instruction-step absolute inset-y-0 right-0 flex items-center px-1 {{ $index === 0 ? 'text-gray-500' : 'text-red-500' }} border border-l-0 border-transparent rounded-r-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" {{ $index === 0 ? 'disabled' : '' }}>
+                                            <svg class="w-4 h-4 ml-2 mr-1.5 text-gray-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="instruction-step">
+                                <label for="instructions" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Step</label>
+                                <div class="relative my-2">
+                                    <input type="text" name="instructions[]" class="instruction-input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="..." value="{{ old('instructions.0') }}" required>
+                                    <button type="button" class="remove-instruction-step absolute inset-y-0 right-0 flex items-center px-1 text-gray-500 border border-l-0 border-transparent rounded-r-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
+                                        <svg class="w-4 h-4 ml-2 mr-1.5 text-gray-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                     <button id="add-instruction-step" type="button">Add step</button>
                 </div>
             </div>
+
+
 
         </div>
         <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="statistics" role="tabpanel" aria-labelledby="statistics-tab">
@@ -109,13 +136,15 @@
                             <li id="list-id-{{ $value->id }}">
                                 <div class="flex items-center p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                                     <input id="checkbox-item-{{ $value->id }}" type="checkbox" name="ingredients[]" value="{{ $value->id }}"
-                                        class="input-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                        class="input-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                                        {{ in_array($value->id, old('ingredients', [])) ? 'checked' : '' }}>
                                     <label for="checkbox-item-{{ $value->id }}"
                                         class="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">{{ $value->name }}</label>
                                 </div>
                             </li>
                             @endforeach
                         </ul>
+
                 </div>
             </div>
             <div class="grid md:grid-cols-1 gap-2 text-white font-semibold" id='values'></div>
@@ -130,7 +159,7 @@
                             <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
                             <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
                         </div>
-                        <input id="dropzone-file" name="img" type="file" class="hidden" />
+                        <input value="{{old('img')}}" id="dropzone-file" name="img" type="file" class="hidden" />
                     </label>
                     @error('img')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
@@ -147,12 +176,15 @@
         </div>
     </div>
 </div>
+<!-- Add instruction step -->
+
 
 </form>
 
 </section>
 <script src="{{ asset('js/create.js') }}"></script>
 <script>
+
 const fileInput = document.getElementById('dropzone-file');
 const image = document.getElementById('uploaded-image');
 
@@ -173,7 +205,8 @@ function handleFileSelect(event) {
     }
 }
 
-    $(".input-checkbox").change(function() {
+$(".input-checkbox").change(function() {
+    try {
         var id = $(this).attr("id");
         var isChecked = $(this).prop("checked");
         var name = $(`label[for="${id}"]`).text(); // Get the name value
@@ -186,13 +219,14 @@ function handleFileSelect(event) {
                 </div>
                 <div class="relative flex flex-row">
                     <input type="text" name="amount[]" class="instruction-input bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
-                    dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Amount" requered>
+                    dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Amount" required>
                     <select id="measure" name="measure[]" class="bg-gray-50 border text-gray-800 border-gray-300 text-xs rounded-r-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mr-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <option class="" selected>Select a Measure</option>
-                    @foreach ($measure as $measure)
-                        <option value="{{ $measure->id }}" required>{{ $measure->name }}</option>
-                    @endforeach
-                </select>
+                        <option class="" selected>Select a Measure</option>
+                        @foreach ($measure as $measureItem)
+                            <option value="{{ $measureItem->id }}" {{ in_array($measureItem->id, old('measure', [])) ? 'selected' : '' }} required>{{ $measureItem->name }}</option>
+                        @endforeach
+                    </select>
+
                     <button type="button" data-checkbox-id="${id}"
                     class="uncheck-btn absolute inset-y-0 right-0 flex items-center px-1 text-red-500 border border-l-0 border-transparent">
                         <svg class="w-4 h-4 ml-2 mr-1.5 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
@@ -200,12 +234,16 @@ function handleFileSelect(event) {
                 </div>
             </div>
             `);
-        }
-        else {
+        } else {
             $(`#values [data-checkbox-id="${id}"]`).parent().remove();
             $(`#container-for-${id}`).remove(); // Remove the corresponding container div
         }
-    });
+    } catch (error) {
+        console.error(error);
+        // Handle the error here, e.g., display an error message
+    }
+});
+
 
     // Event delegation for dynamically added elements
     $('#values').on('click', '.uncheck-btn', function() {
