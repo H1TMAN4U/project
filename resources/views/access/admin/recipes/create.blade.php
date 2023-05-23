@@ -138,8 +138,9 @@
                                     <input id="checkbox-item-{{ $value->id }}" type="checkbox" name="ingredients[]" value="{{ $value->id }}"
                                         class="input-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                                         {{ in_array($value->id, old('ingredients', [])) ? 'checked' : '' }}>
-                                    <label for="checkbox-item-{{ $value->id }}"
-                                        class="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">{{ $value->name }}</label>
+                                        <label id="ingredient-name-{{ $value->id }}" for="checkbox-item-{{ $value->id }}"
+                                            class="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">{{ $value->name }}</label>
+
                                 </div>
                             </li>
                             @endforeach
@@ -147,7 +148,47 @@
 
                 </div>
             </div>
-            <div class="grid md:grid-cols-1 gap-2 text-white font-semibold" id='values'></div>
+            <div class="grid md:grid-cols-1 gap-2 text-white font-semibold" id='values'>
+<!-- Your form fields -->
+
+<!-- Fields for the dynamically appended data -->
+@if(count(old('ingredient_id', [])) > 0)
+    @foreach(old('ingredient_id', []) as $index => $ingredientId)
+    @error('amount.'.$index)
+    <span class="text-red-500">{{ str_replace('.'.$index, '', $message) }}</span> <!-- Display error message for amount field -->
+@enderror
+
+        <div class="flex flex-row">
+            <div class="flex items-center justify-center w-full p-2 bg-indigo-600 rounded-l-lg">
+                <h1>{{ old('ingredient_name.'.$index) }}</h1>
+            </div>
+            <div class="relative flex flex-row">
+                <input type="text" name="amount[]"  placeholder="Amount" value="{{ old('amount.'.$index) }}" required class="instruction-input bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
+                dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <select id="measure" name="measure[]" class="bg-gray-50 border text-gray-800 border-gray-300 text-xs rounded-r-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mr-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option class="" selected>Select a Measure</option>
+                    @foreach ($measure as $measureItem)
+                        <option value="{{ $measureItem->id }}" {{ old('measure.'.$index) == $measureItem->id ? 'selected' : '' }}>{{ $measureItem->name }}</option>
+                    @endforeach
+                </select>
+                <input type="hidden" name="ingredient_id[]" value="{{ $ingredientId }}">
+                <input type="hidden" name="ingredient_name[]" value="{{ old('ingredient_name.'.$index) }}">
+            </div>
+        </div>
+    @endforeach
+@endif
+
+
+<!-- Rest of your form -->
+
+
+<!-- Rest of your form -->
+
+
+<!-- Rest of your form -->
+
+
+            </div>
         </div>
         <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="finish" role="tabpanel" aria-labelledby="finish-tab">
             <div class="mb-6">
@@ -209,13 +250,16 @@ $(".input-checkbox").change(function() {
     try {
         var id = $(this).attr("id");
         var isChecked = $(this).prop("checked");
-        var name = $(`label[for="${id}"]`).text(); // Get the name value
+        var ingredientId = $(this).val();
+
+        var ingredientName = $('#ingredient-name-' + ingredientId).text();
+        console.log(ingredientName);
 
         if (isChecked) {
             $('#values').append(`
             <div id="container-for-${id}" class="flex flex-row">
                 <div class="flex items-center justify-center w-full p-2 bg-indigo-600 rounded-l-lg">
-                    <h1>${name}</h1>
+                    <h1>${ingredientName}</h1>
                 </div>
                 <div class="relative flex flex-row">
                     <input type="text" name="amount[]" class="instruction-input bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
@@ -227,16 +271,38 @@ $(".input-checkbox").change(function() {
                         @endforeach
                     </select>
 
-                    <button type="button" data-checkbox-id="${id}"
-                    class="uncheck-btn absolute inset-y-0 right-0 flex items-center px-1 text-red-500 border border-l-0 border-transparent">
-                        <svg class="w-4 h-4 ml-2 mr-1.5 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
-                    </button>
+                    <input type="hidden" name="ingredient_id[]" value="${ingredientId}">
+                    <input type="hidden" name="ingredient_name[]" value="${ingredientName}">
                 </div>
             </div>
             `);
+
+            // Store the ingredient ID and name in session
+            var ingredientData = {
+                id: ingredientId,
+                name: ingredientName
+            };
+            var storedData = sessionStorage.getItem('appendedData');
+            if (storedData) {
+                var parsedData = JSON.parse(storedData);
+                parsedData.push(ingredientData);
+                sessionStorage.setItem('appendedData', JSON.stringify(parsedData));
+            } else {
+                sessionStorage.setItem('appendedData', JSON.stringify([ingredientData]));
+            }
         } else {
             $(`#values [data-checkbox-id="${id}"]`).parent().remove();
             $(`#container-for-${id}`).remove(); // Remove the corresponding container div
+
+            // Remove the ingredient ID and name from session
+            var storedData = sessionStorage.getItem('appendedData');
+            if (storedData) {
+                var parsedData = JSON.parse(storedData);
+                var updatedData = parsedData.filter(function(data) {
+                    return data.id !== ingredientId;
+                });
+                sessionStorage.setItem('appendedData', JSON.stringify(updatedData));
+            }
         }
     } catch (error) {
         console.error(error);
@@ -245,14 +311,15 @@ $(".input-checkbox").change(function() {
 });
 
 
-    // Event delegation for dynamically added elements
-    $('#values').on('click', '.uncheck-btn', function() {
-        var checkboxId = $(this).data("checkbox-id");
-        $(`#${checkboxId}`).prop("checked", false);
-        $(this).parent().remove();
-        $(`#container-for-${checkboxId}`).remove(); // Remove the corresponding container div
-        // Perform any additional actions if needed
-    });
+
+// Event delegation for dynamically added elements
+$('#values').on('click', '.uncheck-btn', function() {
+    var checkboxId = $(this).data("checkbox-id");
+    $(`#${checkboxId}`).prop("checked", false);
+    $(this).parent().remove();
+    $(`#container-for-${checkboxId}`).remove(); // Remove the corresponding container div
+    // Perform any additional actions if needed
+});
 
 </script>
 @endsection('content')

@@ -230,11 +230,10 @@
         }
     }
 </script>
-
-    <style>
-    input[type="checkbox"]:checked+i:before
-    {
-        color: #ffd117;
-    }
-    </style>
+<style>
+input[type="checkbox"]:checked+i:before
+{
+    color: #ffd117;
+}
+</style>
 @endsection

@@ -64,13 +64,6 @@
                         Edit
                         </button>
                     </a>
-                    @if(!is_null($IsDirty) && DB::table('recipes_changes')->where('recipes_id', $IsDirty->id)->exists())
-                        <a href="{{ route('recipes-changes', $IsDirty->id) }}">
-                            <button class="view-changes-button toggle-element hidden absolute right-0 top-0 rounded-bl-lg rounded-tr-lg px-2 font-semibold bg-green-600 text-white hover:bg-green-700 hover:font-bold">
-                                View Changes
-                            </button>
-                        </a>
-                    @endif
                     <button
                         class="delete-button toggle-element delete-bookmark hidden absolute right-0 top-0 rounded-bl-lg rounded-tr-lg px-2 font-semibold bg-red-600  text-white hover:bg-red-700 hover:font-bold "
                         data-users-id="{{ Auth::user()->id }}" data-recipes-id="{{ $value->id }}">

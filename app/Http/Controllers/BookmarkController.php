@@ -23,10 +23,6 @@ class BookmarkController extends Controller
     }
     public function store(Request $request)
     {
-        //   $request->validate([
-        //     'users_id' => 'required|integer',
-        //     'recipes_id' => 'required|integer',
-        //   ]);
         $bookmarks = new Bookmarks();
         $bookmarks = Bookmarks::updateOrCreate(
             ['users_id' => $request->input('users_id'), 'recipes_id' => $request->input('recipes_id')],

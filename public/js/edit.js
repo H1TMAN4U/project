@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
     $("#input-group-search").on("keyup", function() {
         var value = $(this).val().toLowerCase();
@@ -26,4 +25,3 @@ $(document).ready(function() {
         $('#instruction-steps').append(instructionStep);
     });
 });
-

@@ -13,7 +13,6 @@ class RolesController extends Controller
     {
         $roles=Role::all();
         $permissions = Permission::all();
-
         return view('access.admin.roles.index',
         compact('roles','permissions'));
     }

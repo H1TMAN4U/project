@@ -23,9 +23,6 @@ class RatingController extends Controller
             ['users_id' => $userId, 'recipes_id' => $recipeId],
             ['rating' => $request->input('rating'), 'review' => $request->input('review')]
         );
-
-
         return response()->json($rating);
     }
-
 }

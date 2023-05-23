@@ -18,28 +18,12 @@ class Ingredients extends Model
         'name',
         'amount'
     ];
-    // public function recipes()
-    // {
-    //     return $this->belongsTo(Recipes::class);
-    // }
     public function recipes()
     {
         return $this->belongsToMany(Recipes::class, 'ingredients_recipes')
-                    ->withPivot('amount', 'measures_id')
-                    ->withTimestamps();
+        ->withPivot('amount', 'measures_id')
+        ->withTimestamps();
     }
-    // public function measure()
-    // {
-    //     return $this->belongsTo(Measure::class, 'measures_id');
-    // }
-    //     public function recipes()
-    // {
-    //     return $this->belongsToMany(Recipes::class, 'ingredients_recipes')
-    //                 ->withPivot('amount', 'measures_id')
-    //                 ->withTimestamps();
-    // }
-    
-
     public function measure()
     {
         return $this->belongsTo(Measure::class, 'measures_id');

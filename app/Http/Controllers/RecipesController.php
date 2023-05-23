@@ -24,9 +24,8 @@ class RecipesController extends Controller
 {
     public function index()
     {
-        $IsDirty = RecipesChanges::all()->first();
         $recipes = Recipes::where('users_id', Auth::id())->paginate(10);
-        return view("access.admin.recipes.index", ['IsDirty' => $IsDirty], compact('recipes'));
+        return view("access.admin.recipes.index", compact('recipes'));
     }
     public function create()
     {
@@ -41,11 +40,42 @@ class RecipesController extends Controller
         $validator = Validator::make($request->all(), [
             'duration' => 'numeric',
             'img' => 'required|image|mimetypes:image/jpeg,image/png,image/gif|dimensions:min_width=700,min_height=500',
-
+            'amount.*' => 'required|numeric', // Validation rule for amount field
+        ], [
+            'amount.*.required' => 'The :attribute field is required.',
+            'amount.*.numeric' => 'The :attribute field must be a number.',
         ]);
+
+        $ingredients = $request->ingredients;
+        $amounts = $request->amount;
+        $measures = $request->measure;
+
+        $dataArray = [];
+
+        foreach ($ingredients as $index => $ingredient_id) {
+            // Retrieve the corresponding amount and measure from the request
+            $amount = $amounts[$index];
+            $measure = $measures[$index];
+
+            // Create an array with the collected data
+            $data = [
+                'ingredient_id' => $ingredient_id,
+                'amount' => $amount,
+                'measure' => $measure,
+            ];
+
+            // Add the data to the array
+            $dataArray[] = $data;
+        }
+
+        // Store the data in the session
+        session()->put('appended_data', $dataArray);
+
+        // Redirect the user with validation errors
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
+
         $file_name = time() . '.' . request()->img->getClientOriginalExtension();
         request()->img->move(public_path('images'), $file_name);
         $user_id = Auth::id();
@@ -57,6 +87,7 @@ class RecipesController extends Controller
         $recipe->category_id = $request->category_id;
         $recipe->users_id = $user_id;
         $recipe->save();
+
         // Loop through the array of ingredients and attach them to the recipe
         $amounts = $request->amount;
         $measures = $request->measure;
@@ -71,6 +102,7 @@ class RecipesController extends Controller
                 'measures_id' => $measure_id,
             ]);
         }
+
         foreach ($request->instructions as $step_number => $instruction_text) {
             $instruction = new Instructions;
             $instruction->recipe_id = $recipe->id;
@@ -78,8 +110,14 @@ class RecipesController extends Controller
             $instruction->instruction = $instruction_text;
             $instruction->save();
         }
+
+        // Store the ingredients data separately
+        session()->put('ingredients', $dataArray);
+
         return redirect()->route('index-recipe');
     }
+
+
     public function show(Request $request, $id)
     {
         $recipe = Recipes::findOrFail($id);
@@ -105,7 +143,6 @@ class RecipesController extends Controller
         $instructions = Instructions::where('recipe_id', $id)->get();
         return view('access.admin.recipes.show', compact('recipe', 'ingredients', 'instructions', 'rating'));
     }
-
     public function edit($id)
     {
         $measures = Measure::all();
@@ -280,35 +317,14 @@ class RecipesController extends Controller
             compact('recipe_category', 'recipes', 'user', 'recipe_ingredients')
         );
     }
-    public function showChanges()
-    {
-        $changes = RecipesChanges::get();
-        $changeData = [];
-        foreach ($changes as $change) {
-            $oldData = json_decode($change->old, true);
-            $newData = json_decode($change->new, true);
-            $changeData[] = [
-                'id' => $change->id,
-                'old_name' => $oldData['name'] ?? '',
-                'new_name' => $newData['name'] ?? '',
-                'user_name' => $change->user->name ?? '',
-                'created_at' => $change->created_at,
-                'updated_at' => $change->updated_at,
-            ];
-        }
-        return view('access.admin.recipes.changes', compact('changeData'));
-    }
     public function destroy_instruction($id)
     {
         $instruction = Instructions::findOrFail($id);
     }
     public function control_recipes()
     {
-        $IsDirty = RecipesChanges::all()->first();
         $recipes = Recipes::paginate(10);
         return view("access.admin.control-recipe",
-        ['IsDirty' => $IsDirty], compact('recipes'));
+        compact('recipes'));
     }
-
-
 }
