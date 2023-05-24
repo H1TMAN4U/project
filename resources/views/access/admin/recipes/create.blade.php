@@ -154,9 +154,9 @@
 <!-- Fields for the dynamically appended data -->
 @if(count(old('ingredient_id', [])) > 0)
     @foreach(old('ingredient_id', []) as $index => $ingredientId)
-    @error('amount.'.$index)
-    <span class="text-red-500">{{ str_replace('.'.$index, '', $message) }}</span> <!-- Display error message for amount field -->
-@enderror
+        @error('amount.'.$index)
+        <span class="text-red-500">{{ str_replace('.'.$index, '', $message) }}</span> <!-- Display error message for amount field -->
+    @enderror
 
         <div class="flex flex-row">
             <div class="flex items-center justify-center w-full p-2 bg-indigo-600 rounded-l-lg">

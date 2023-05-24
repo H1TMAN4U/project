@@ -1,5 +1,5 @@
 @foreach ($recipe->comments()->orderBy('created_at', 'desc')->get() as $comment)
-<div id="parent-div">
+<div id="parent-div" class="my-4">
     <ul>
         @if (!$comment->parent_comment_id)
         <li id="parentComment_{{$comment->id}}" class="bg-gray-50 border border-gray-200 rounded-lg p-4 dark:border-gray-600 dark:bg-gray-800">

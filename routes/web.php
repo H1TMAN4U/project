@@ -23,16 +23,19 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
 Route::delete('/instructions/{id}', [RecipesController::class, 'destroy_instruction']);
-Route::get('recipes/changes/{change_id}', [RecipesController::class, 'showChanges'], function () {
-    return view('access.admin.recipes.changes');
-})->name('recipes-changes');
+
 Route::get('/search-recipes',[RecipesController::class,'search_recipes'], function () {
     return view('access.guest.search-recipes');
 })->name('search-recipes');
+
+Route::get('/search-user', [UserController::class, 'search'])->name('search-user');
+
 Route::get('/filter', [RecipesController::class,'search'], function (){
     return view('filtered-search');
 })->name('search');
+
 Route::get('/recipes/create', [RecipesController::class, 'search_ingredients']);
 Route::get('/', [GuestController::class,'welcome'], function (){
     return view('welcome');

@@ -31,8 +31,8 @@
             <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
         </div>
 
-        <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+        <div class="flex items-center gap-4  justify-center">
+            <x-primary-button class="w-2/5 justify-center">{{ __('Save') }}</x-primary-button>
 
             @if (session('status') === 'password-updated')
                 <p

@@ -117,7 +117,6 @@ class RecipesController extends Controller
         return redirect()->route('index-recipe');
     }
 
-
     public function show(Request $request, $id)
     {
         $recipe = Recipes::findOrFail($id);

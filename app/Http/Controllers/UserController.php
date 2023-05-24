@@ -66,4 +66,13 @@ class UserController extends Controller
 
          return back()->with('message', 'User deleted.');
      }
+     public function search(Request $request)
+    {
+        $searchTerm = $request->input('search-user');
+        $users = User::where('name', 'LIKE', '%'.$searchTerm.'%')
+        ->orWhere('email', 'LIKE', '%'.$searchTerm.'%')
+        ->get();
+
+        return view('access.admin.users.index', compact('users'));
+    }
 }
