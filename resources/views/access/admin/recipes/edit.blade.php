@@ -251,45 +251,6 @@
 
 <script>
 
-  const prevButton = document.getElementById("prevButton");
-  const nextButton = document.getElementById("nextButton");
-
-  prevButton.addEventListener("click", goToPreviousTab);
-  nextButton.addEventListener("click", goToNextTab);
-
-  function goToPreviousTab() {
-    const currentTab = document.querySelector('[aria-selected="true"]');
-    const previousTab = currentTab.parentElement.previousElementSibling.querySelector("button");
-
-    if (previousTab) {
-      currentTab.setAttribute("aria-selected", false);
-      previousTab.setAttribute("aria-selected", true);
-
-      const currentContent = document.getElementById(currentTab.getAttribute("aria-controls"));
-      const previousContent = document.getElementById(previousTab.getAttribute("aria-controls"));
-
-      currentContent.classList.add("hidden");
-      previousContent.classList.remove("hidden");
-    }
-  }
-
-  function goToNextTab() {
-    const currentTab = document.querySelector('[aria-selected="true"]');
-    const nextTab = currentTab.parentElement.nextElementSibling.querySelector("button");
-
-    if (nextTab) {
-      currentTab.setAttribute("aria-selected", false);
-      nextTab.setAttribute("aria-selected", true);
-
-      const currentContent = document.getElementById(currentTab.getAttribute("aria-controls"));
-      const nextContent = document.getElementById(nextTab.getAttribute("aria-controls"));
-
-      currentContent.classList.add("hidden");
-      nextContent.classList.remove("hidden");
-    }
-  }
-
-
 
 
 const fileInput = document.getElementById('dropzone-file');
@@ -315,6 +276,7 @@ function handleFileSelect(event) {
 $(document).on('click', '.remove-instruction-step', function() {
   $(this).closest('.instruction-step').remove();
 });
+
 $(document).on('click', 'li[id^="list-id-"]', function() {
     var ingredientId = $(this).attr('id').replace('list-id-', '');
     var checkbox = $('#checkbox-item-' + ingredientId);

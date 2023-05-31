@@ -6,8 +6,8 @@ use App\Http\Controllers\GuestController;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RatingController;
-use App\Http\Controllers\RecipesChangesController;
 use App\Http\Controllers\RecipesController;
+use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -23,23 +23,18 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/reports',[ReportsController::class,'index']);
 
+Route::post('/report/{id}', [ReportsController::class, 'store'])->name('report');
 Route::delete('/instructions/{id}', [RecipesController::class, 'destroy_instruction']);
 
-Route::get('/search-recipes',[RecipesController::class,'search_recipes'], function () {
-    return view('access.guest.search-recipes');
-})->name('search-recipes');
-
+Route::get('/search-recipes',[RecipesController::class,'search_recipes'])->name('search-recipes');
 Route::get('/search-user', [UserController::class, 'search'])->name('search-user');
 
-Route::get('/filter', [RecipesController::class,'search'], function (){
-    return view('filtered-search');
-})->name('search');
+Route::get('/filter', [RecipesController::class,'search'])->name('search');
 
 Route::get('/recipes/create', [RecipesController::class, 'search_ingredients']);
-Route::get('/', [GuestController::class,'welcome'], function (){
-    return view('welcome');
-})->name('/');
+Route::get('/', [GuestController::class,'welcome'])->name('/');
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -47,9 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/bookmarks',[BookmarkController::class,'index'], function () {
-    return view('access.user.bookmarks');
-    })->name('bookmarks');
+    Route::get('/bookmarks',[BookmarkController::class,'index'])->name('bookmarks');
     Route::post('/bookmarks/store', [BookmarkController::class, 'store'])->name('bookmarks.store');
     Route::delete('/bookmarks/delete', [BookmarkController::class, 'destroy'])->name('bookmarks.destroy');
     Route::post('/rating', [RatingController::class, 'store']);
@@ -61,33 +54,20 @@ Route::middleware('auth')->group(function () {
     Route::put('/recipes/update-recipe/{id}', [RecipesController::class, 'update'])->name('update-recipe');
     Route::delete('/recipes/delete-recipe/{id}', [RecipesController::class, 'destroy'])->name('delete-recipe');
 });
-Route::get('/breakfast',[GuestController::class,'breakfast'], function () {
-    return view('access.guest.breakfast');
-})->name('breakfast');
-Route::get('/lunch',[GuestController::class,'lunch'], function () {
-    return view('access.guest.lunch');
-})->name('lunch');
-Route::get('/dinner',[GuestController::class,'dinner'], function () {
-    return view('access.guest.dinner');
-})->name('dinner');
-Route::get('/dessert',[GuestController::class,'dessert'], function () {
-    return view('access.guest.dessert');
-})->name('dessert');
-Route::get('/drinks',[GuestController::class,'drinks'], function () {
-    return view('access.guest.drinks');
-})->name('drinks');
-Route::get('/snacks',[GuestController::class,'snacks'], function () {
-    return view('access.guest.snacks');
-})->name('snacks');
-Route::get('/all',[GuestController::class,'all'], function () {
-    return view('access.guest.all');
-})->name('all');
+Route::get('/breakfast',[GuestController::class,'breakfast'])->name('breakfast');
+Route::get('/lunch',[GuestController::class,'lunch'])->name('lunch');
+Route::get('/dinner',[GuestController::class,'dinner'])->name('dinner');
+Route::get('/dessert',[GuestController::class,'dessert'])->name('dessert');
+Route::get('/drinks',[GuestController::class,'drinks'])->name('drinks');
+Route::get('/snacks',[GuestController::class,'snacks'])->name('snacks');
+Route::get('/all',[GuestController::class,'all'])->name('all');
 
-Route::middleware(['auth','verified', 'role:Root'])->name('admin.')->prefix('admin')->group(function () {
-    Route::get('/control-recipe',[RecipesController::class,'control_recipes'], function () {
-        return view('access.admin.control-recipe');
-    })->name('control.recipe');
+Route::middleware(['auth','verified', 'role:Root'])->prefix('admin')->group(function () {
+
+    Route::get('/control-recipe',[RecipesController::class,'control_recipes'])->name('control.recipe');
+
     Route::resource('/roles', RolesController::class);
+
     Route::post('/roles/{role}/permissions', [RolesController::class, 'givePermission'])->name('roles.permissions');
     Route::delete('/roles/{role}/permissions/{permission}', [RolesController::class, 'revokePermission'])->name('roles.permissions.revoke');
     Route::resource('/permissions', PermissionsController::class);
@@ -101,6 +81,7 @@ Route::middleware(['auth','verified', 'role:Root'])->name('admin.')->prefix('adm
     Route::post('/user/{user}/permissions', [UserController::class, 'givePermission'])->name('users.permissions');
     Route::delete('/user/{user}/permissions/{permission}', [UserController::class, 'revokePermission'])->name('users.permissions.revoke');
 });
+
 Route::get('/fetch-comments/{id}', [CommentController::class, 'fetchComments'])->name('fetch.comments');
 Route::match(['post', 'put'], '/comments', [CommentController::class, 'store'])->name('comments.store');
 Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');

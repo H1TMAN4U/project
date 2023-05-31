@@ -26,7 +26,7 @@
                             @error('name')
                                 <span class="text-red-400 text-sm">{{ $message }}</span>
                             @enderror
-                            <x-primary-button>{{ __('Save') }}</x-primary-button>
+                            <x-buttons.primary-button>{{ __('Save') }}</x-buttons.primary-button>
                         </div>
                     </div>
                 </form>

@@ -11,27 +11,24 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ingredients_changes', function (Blueprint $table) {
-            $table->id();
+        Schema::create('recipes_reports', function (Blueprint $table) {
+            $table->unsignedBigInteger('report_id');
             $table->unsignedBigInteger('recipe_id');
-            $table->unsignedBigInteger('ingredient_id');
             $table->unsignedBigInteger('user_id');
-            $table->json('old');
-            $table->json('new');
-            $table->timestamps();
 
+            $table->timestamps();
+            $table->foreign('report_id')->references('id')->on('reports')->onDelete('cascade');
             $table->foreign('recipe_id')->references('id')->on('recipes')->onDelete('cascade');
-            $table->foreign('ingredient_id')->references('id')->on('ingredients')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
         });
     }
-
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('ingredients_changes');
+        Schema::dropIfExists('recipes_report');
     }
 };

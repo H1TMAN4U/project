@@ -21,8 +21,13 @@ class Comment extends Model
     {
         return $this->belongsTo(Recipe::class);
     }
+    public function parentComment()
+    {
+        return $this->belongsTo(Comment::class, 'parent_comment_id');
+    }
+
     public function childComments()
     {
-        return $this->hasMany(Comment::class, 'parent_comment_id');
+        return $this->hasMany(Comment::class, 'parent_comment_id')->orderBy('created_at', 'asc');
     }
 }

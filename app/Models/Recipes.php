@@ -17,7 +17,7 @@ class Recipes extends Model
     'id',
     'name',
     'duration',
-    'description',
+    'descriptions',
     'img',
     'category_id'
     ];
@@ -54,5 +54,9 @@ class Recipes extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class, 'recipes_id');
+    }
+    public function reports()
+    {
+        return $this->belongsToMany(Reports::class, 'recipes_reports', 'recipe_id', 'report_id');
     }
 }

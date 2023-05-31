@@ -41,8 +41,8 @@
         <div>
 
         </div>
-        <div class="flex items-center gap-4 justify-center">
-            <x-primary-button class="w-2/5 justify-center">{{ __('Save') }}</x-primary-button>
+        <div class="flex gap-4">
+            <x-buttons.primary-button class="w-1/5 justify-center">{{ __('Save') }}</x-buttons.primary-button>
             @if (session('status') === 'profile-updated')
                 <p
                     x-data="{ show: true }"

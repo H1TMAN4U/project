@@ -10,12 +10,12 @@
         <p class="mb-3 sm:my-5 text-lg font-normal text-gray-700 dark:text-gray-400">
             Want to learn how to cook but confused how to start? No need to worry again!
         </p>
-        <x-primary-button
+        <x-buttons.primary-button
             href="/dashboard"
             type="button"
             class="justify-center self-center w-3/5">
             {{__('Get Started')}}
-        </x-primary-button>
+        </x-buttons.primary-button>
     </div>
 
     <img

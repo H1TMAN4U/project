@@ -11,9 +11,9 @@ class GuestController extends Controller
     public function welcome(){
         $recipes = Recipes::with('ratings')
         ->whereHas('ratings', function ($query) {
-            $query->select('recipes_id', DB::raw('AVG(rating) as avg_rating'))
-            ->groupBy('recipes_id')
-            ->having('avg_rating', '>', 3);
+        $query->select('recipes_id', DB::raw('AVG(rating) as avg_rating'))
+        ->groupBy('recipes_id')
+        ->having('avg_rating', '>', 3);
         })->paginate(10);
         return view("welcome", compact("recipes"));
     }
@@ -49,7 +49,7 @@ class GuestController extends Controller
     }
     public function all()
     {
-        $recipes=Recipes::paginate(10);
+        $recipes=Recipes::paginate(5);
         return view("access.guest.all", compact("recipes"));
     }
     public function recipes_id($id)

@@ -16,7 +16,6 @@ class Rating extends Model
     protected $fillable =
     [
     'rating',
-    'review',
     'recipes_id',
     'users_id'
     ];

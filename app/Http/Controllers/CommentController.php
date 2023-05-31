@@ -8,19 +8,12 @@ use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
-    public function fetchComments($id)
-    {
-        $recipe = Recipes::with('comments.user')->findOrFail($id);
-        $recipe->orderBy('created_at', 'desc');
-        return view('access.admin.recipes.comment', compact('recipe'))->render();
-    }
     public function store(Request $request)
     {
         $request->validate([
             'content' => 'required',
             'users_id' => 'required',
             'recipes_id' => 'required',
-
         ]);
 
         $parentCommentId = $request->input('parent_comment_id');
@@ -32,17 +25,16 @@ class CommentController extends Controller
                 'content' => $request->input('content'),
                 'users_id' => $request->input('users_id'),
                 'recipes_id' => $request->input('recipes_id'), // Assign the recipes_id value
-
             ]);
 
             $parentComment->childComments()->save($childComment);
         } else {
             $comment = Comment::create($request->all());
-
         }
 
         return redirect()->back()->with('success', 'Comment posted successfully!');
     }
+
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -70,6 +62,7 @@ class CommentController extends Controller
 
         return redirect()->back()->with('success', 'Comment updated successfully!');
     }
+
     public function destroy($id)
     {
         $comment = Comment::findOrFail($id);
@@ -78,3 +71,4 @@ class CommentController extends Controller
         return response()->json(['message' => 'Comment deleted successfully']);
     }
 }
+

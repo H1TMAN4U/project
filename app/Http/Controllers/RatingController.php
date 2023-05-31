@@ -21,7 +21,7 @@ class RatingController extends Controller
         ->where('users_id', $userId)
         ->updateOrInsert(
             ['users_id' => $userId, 'recipes_id' => $recipeId],
-            ['rating' => $request->input('rating'), 'review' => $request->input('review')]
+            ['rating' => $request->rating]
         );
         return response()->json($rating);
     }

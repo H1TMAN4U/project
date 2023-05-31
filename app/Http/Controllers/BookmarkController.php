@@ -17,7 +17,7 @@ class BookmarkController extends Controller
         $query = DB::table('bookmarks');
         $query->where('bookmarks.users_id',Auth::id());
         $query->join('recipes','bookmarks.recipes_id','=','recipes.id');
-        $bookmarks = $query->paginate(10);
+        $bookmarks = $query->paginate(4);
 
         return view("access.user.bookmarks",compact('bookmarks'));
     }
@@ -25,8 +25,8 @@ class BookmarkController extends Controller
     {
         $bookmarks = new Bookmarks();
         $bookmarks = Bookmarks::updateOrCreate(
-            ['users_id' => $request->input('users_id'), 'recipes_id' => $request->input('recipes_id')],
-            ['users_id' => $request->input('users_id'), 'recipes_id' => $request->input('recipes_id')]
+            ['users_id' => $request->users_id, 'recipes_id' => $request->recipes_id],
+            ['users_id' => $request->users_id, 'recipes_id' => $request->recipes_id]
         );
         $bookmarks->save();
         return response()->json(['success' => true]);

@@ -25,7 +25,7 @@
                         <x-input-label for="name" :value=" __('Permissions Name')"/>
                         <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" placeholder="{{ __('Create New Permissions') }}"/>
                     </div>
-                    <x-primary-button class="flex w-full justify-center">{{ __('Create') }}</x-primary-button>
+                    <x-buttons.primary-button class="flex w-full justify-center">{{ __('Create') }}</x-buttons.primary-button>
                 </div>
             </div>
         </form>

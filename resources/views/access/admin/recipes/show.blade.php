@@ -1,6 +1,6 @@
 @extends('access.master')
 @section('content')
-<div class="flex flex-col p-2 items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-7xl dark:border-gray-700 dark:bg-gray-900">
+<div class="flex flex-col p-2 my-2 items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-7xl dark:border-gray-700 dark:bg-gray-900">
     <img class=" w-full rounded h-full md:h-[500px] md:w-[500px]" src="{{ asset('images/' . $recipe->img) }}" alt="">
     <div class="flex flex-col p-4 leading-normal items-center">
 
@@ -9,7 +9,6 @@
             @php
                 $averageRating = $rating->avg('rating');
             @endphp
-
             <div class="relative flex items-center justify-center">
                 <i class="fa-solid fa-star fa-5x"></i>
                 <h1 class="absolute text-white font-black text-xl mt-1.5">{{ $averageRating }}</h1>
@@ -31,10 +30,29 @@
             dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-blue-700">
             Bookmark
         </button>
+        <button type="button" data-modal-target="crypto-modal" data-modal-toggle="crypto-modal" class="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
+            <svg aria-hidden="true" class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+            Report
+        </button>
+        @include('access.admin.recipes.report-modal')
     </div>
 </div>
-
+@if(auth()->user()->hasRole('Root') || auth()->user()->hasRole('Admin') || auth()->user()->hasRole('Moderator') )
 <div class="block md:max-w-7xl my-1 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700">
+    <div class="my-5">
+        <h5 class="text-left my-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Report</h5>
+            @foreach ($reports as $value)
+            <div class="flex flex-row items-center">
+                <i class="fa-solid fa-triangle-exclamation text-red-600"></i>
+                <p class="font-semibold my-2 pl-4 text-gray-700 dark:text-gray-400">{{ $value->name }}</p>
+            </div>
+            @endforeach
+        </h5>
+    </div>
+</div>
+@endif
+
+<div class="block md:max-w-7xl my-2 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700">
     <div class="my-5">
         <h5 class="text-left mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Ingredients</h5>
         @if (count($ingredients) > 0)
@@ -47,7 +65,7 @@
     </div>
 </div>
 
-<div class="block md:max-w-7xl my-1 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700">
+<div class="block md:max-w-7xl my-2 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700">
     <div class="my-5">
         @if (count($instructions) > 0)
             <h5 class="text-left mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Instructions</h5>
@@ -62,7 +80,7 @@
     </div>
 </div>
 
-<div class="block w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700">
+<div class="block w-full my-2 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700">
     <div class="bg-gray-50 flex flex-col rounded-t-lg dark:bg-gray-800">
         <h5 class="border-b border-gray-300 p-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white dark:border-gray-600">Review</h5>
         <h1 class="bg-gray-100 border border-gray-200 font-normal text-gray-700 m-2 p-4 rounded-lg dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum, odio maxime. Sapiente distinctio pariatur
@@ -97,7 +115,7 @@
                 <h1 for="message" class="block mt-2 p-4 text-sm font-medium text-gray-900 dark:text-white">Your message</h1>
 
             </div>
-            <textarea id="message" rows="3" name="review" class="block p-2.5 w-1/2 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your thoughts here..."></textarea>                <input type="hidden" name="recipes_id" value="{{ $recipe->id }}">
+            <input type="hidden" name="recipes_id" value="{{ $recipe->id }}">
             <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold p-2 rounded-lg mt-2 w-1/2
             dark:bg-indigo-600 dark:hover:bg-indigo-700">
                 Post
@@ -106,114 +124,26 @@
     </div>
 </div>
 
-<div class="block w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-600">
+
+
+<div class="block w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-600 ">
     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy technology acquisitions 2021</h5>
     <p class="font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
 
-
-<form id="commentForm" action="{{ route('comments.store') }}" method="POST" class="my-4">
-    @csrf
-    <div class="mb-4">
-    <label for="content" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your message</label>
-    <textarea name="content" id="content" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your thoughts here..."></textarea>
+    <div id="comment-section">
+        @livewire('comments', ['recipeId' => $recipe->id], key($recipe->id))
+        @livewireScripts
     </div>
-    <input type="hidden" name="users_id" value="{{ Auth::id() }}">
-    <input type="hidden" name="recipes_id" value="{{ $recipe->id }}">
-    <input type="hidden" name="parent_comment_id" value="{{ $parentCommentId ?? null }}">
-    <button type="submit" class="btn btn-primary">Submit Comment</button>
-</form>
-
-<div id="comments-container" class="my-4">
-    @include('access.admin.recipes.comment', ['recipe' => $recipe])
 </div>
+
+
 
 <script src="{{ asset('js/design.js') }}"></script>
 <script src="{{ asset('js/rating.js') }}"></script>
 <script src="{{ asset('js/bookmarks.js') }}"></script>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
 <script>
-    // Update comment form
-    $(document).on('submit', 'form[id^="updateForm_"]', function (event) {
-        event.preventDefault();
 
-        var formId = $(this).attr('id');
-        var commentId = formId.split('_')[1];
-        var updateContentId = '#updateContent_' + commentId;
-
-        $.ajax({
-            url: $(this).attr('action'),
-            type: 'POST',
-            data: $(this).serialize(),
-            success: function (response) {
-                $(updateContentId).attr('readonly', true);
-                $('#update-' + commentId).addClass('hidden');
-                fetchComments(); // Fetch comments after successful update
-            }
-        });
-    });
-    // Submit comment form
-    $('#commentForm').submit(function (event) {
-        event.preventDefault();
-
-        $.ajax({
-            url: $(this).attr('action'),
-            type: 'POST',
-            data: $(this).serialize(),
-            success: function (response) {
-                $('#commentForm')[0].reset();
-                fetchComments(); // Fetch comments after successful submission
-            }
-        });
-    });
-     // Submit reply form
-    $(document).on('submit', '.reply-form', function (event) {
-        event.preventDefault();
-
-        var form = $(this);
-
-        $.ajax({
-            url: form.attr('action'),
-            type: 'POST',
-            data: form.serialize(),
-            success: function (response) {
-                form[0].reset();
-                fetchComments(); // Fetch comments after successful submission
-            }
-        });
-    });
-    function fetchComments() {
-        $.ajax({
-            url: '{{ route("fetch.comments", $recipe->id) }}',
-            type: 'GET',
-            success: function (response) {
-                var commentsContainer = $('#comments-container');
-                commentsContainer.empty();
-                commentsContainer.html(response);
-            }
-        });
-    }
-    function deleteComment(commentId) {
-        if (confirm('Are you sure you want to delete this comment?')) {
-            // Perform AJAX request to delete the comment
-            $.ajax({
-                url: '/comments/' + commentId.replace('parentComment_', '').replace('childComment_', ''),
-                type: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    // Remove the comment from the DOM
-                    $('#' + commentId).remove();
-
-                    // Remove child comments recursively
-                    $('.childComment_' + commentId).remove();
-                },
-                error: function(xhr) {
-                    console.log(xhr.responseText);
-                }
-            });
-        }
-    }
     function toggleReplyForm(commentId) {
         const formId = `#replyForm_${commentId}`;
         const formElement = document.querySelector(formId);

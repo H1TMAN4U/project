@@ -11,12 +11,14 @@ use App\Models\Measure;
 use App\Models\Rating;
 use App\Models\Recipes;
 use App\Models\RecipesChanges;
+use App\Models\Reports;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
@@ -24,7 +26,7 @@ class RecipesController extends Controller
 {
     public function index()
     {
-        $recipes = Recipes::where('users_id', Auth::id())->paginate(10);
+        $recipes = Recipes::where('users_id', Auth::id())->paginate(5);
         return view("access.admin.recipes.index", compact('recipes'));
     }
     public function create()
@@ -38,13 +40,22 @@ class RecipesController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'duration' => 'numeric',
+            'name' => 'required',
+            'descriptions' => 'required',
+            'duration' => 'required|numeric',
             'img' => 'required|image|mimetypes:image/jpeg,image/png,image/gif|dimensions:min_width=700,min_height=500',
-            'amount.*' => 'required|numeric', // Validation rule for amount field
-        ], [
+            'category_id' => 'required',
+            'ingredients.*' => 'required',
+            'amount.*' => 'required|numeric',
+            'measure.*' => 'required',
+            'instructions.*' => 'required',
+        ],
+        [
             'amount.*.required' => 'The :attribute field is required.',
             'amount.*.numeric' => 'The :attribute field must be a number.',
         ]);
+
+        // Log::debug('validate', $validator->);
 
         $ingredients = $request->ingredients;
         $amounts = $request->amount;
@@ -73,6 +84,7 @@ class RecipesController extends Controller
 
         // Redirect the user with validation errors
         if ($validator->fails()) {
+            Log::debug('fail');
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
@@ -120,10 +132,9 @@ class RecipesController extends Controller
     public function show(Request $request, $id)
     {
         $recipe = Recipes::findOrFail($id);
-
+        $reports = Reports::all();
         $comments = $recipe->comments()
             ->with('user')
-            ->orderBy('created_at', 'desc')
             ->get();
         $rating = DB::table('rating')
             ->join('users', 'users.id', '=', 'rating.users_id')
@@ -140,7 +151,8 @@ class RecipesController extends Controller
             ->get();
 
         $instructions = Instructions::where('recipe_id', $id)->get();
-        return view('access.admin.recipes.show', compact('recipe', 'ingredients', 'instructions', 'rating'));
+        return view('access.admin.recipes.show',
+        compact('recipe', 'ingredients', 'instructions', 'rating', 'reports'));
     }
     public function edit($id)
     {
@@ -175,7 +187,7 @@ class RecipesController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'duration' => 'numeric',
-            'img' => 'required|image|mimetypes:image/jpeg,image/png,image/gif|dimensions:min_width=700,min_height=10000',
+            'img' => 'required|image|mimetypes:image/jpeg,image/png,image/gif|dimensions:min_width=700,min_height=1000',
 
         ]);
 
@@ -247,10 +259,11 @@ class RecipesController extends Controller
         $recipes->delete();
         return response()->json(['message' => 'Recipe deleted successfully']);
     }
-    public function search_recipes()
+    public function search_recipes(Request $request)
     {
-        $search_text = $_GET["search-recipes"];
-        $recipes = Recipes::where('name', 'LIKE', '%' . $search_text . '%')->paginate(10);
+        Log::debug('pp', $request->all());
+        // $search_text = $_GET["search"];
+        $recipes = Recipes::where('name', 'LIKE', "%{$request->search}%")->paginate(10);
         return view(
             'access.guest.search-recipes',
             compact('recipes')
@@ -262,9 +275,8 @@ class RecipesController extends Controller
         $user = User::all();
         $recipes = Recipes::all();
         $ingredients = Ingredients::all();
-        return view(
-            'filtered-search',
-            compact('category', 'user', 'recipes', 'ingredients')
+        return view('filtered-search',
+        compact('category', 'user', 'recipes', 'ingredients')
         );
     }
     public function search(Request $request)
@@ -326,4 +338,5 @@ class RecipesController extends Controller
         return view("access.admin.control-recipe",
         compact('recipes'));
     }
+
 }

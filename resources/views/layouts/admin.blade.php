@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
+        @livewireStyles
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
-        @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/darkmode.js', 'resources/js/bookmarks.js' ])
+        @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/darkmode.js'])
 
         <!-- Fonts -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+
+        <script src="../path/to/flowbite/dist/flowbite.min.js"></script>
         <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -39,6 +44,8 @@
     </head>
 
     <body class="bg-gray-50 dark:bg-gray-900 font-sans antialiased">
+        @livewireScripts
+
         @if (Session::has('message'))
             <!-- This example requires Tailwind CSS v2.0+ -->
             <div class="bg-indigo-600" x-data="{open: true}" x-show="open">
